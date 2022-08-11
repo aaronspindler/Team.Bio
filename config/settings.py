@@ -1,15 +1,22 @@
 from pathlib import Path
+import os
 import environ
 
-env = environ.Env()
-# reading .env file
-environ.Env.read_env()
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-SECRET_KEY = "django-insecure-0peo@#x9jur3!h$ryje!$879xww8y1y66jx!%*#ymhg&jkozs2"
-DEBUG = True
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "team.bio", "www.team.bio"]
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env('DEBUG', False)
+
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "team.bio", "www.team.bio"]
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 INSTALLED_APPS = [
@@ -63,24 +70,7 @@ TEMPLATES = [
     },
 ]
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "postgres",
-#         "USER": "postgres",
-#         "PASSWORD": "postgres",
-#         "HOST": "db",
-#         "PORT": 5432,
-#     }
-# }
+DATABASES = {'default': env.db()}
 
 
 AUTH_PASSWORD_VALIDATORS = [
