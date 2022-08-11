@@ -1,0 +1,16 @@
+.DS_Store
+.env
+.coverage
+.idea/
+venv/
+env/
+*.pyc
+*.swp
+__pycache__
+*nohup.out*
+myvenv
+db.sqlite3
+dump.rdb
+allstaticfiles/
+node_modules/
+package-lock.json
