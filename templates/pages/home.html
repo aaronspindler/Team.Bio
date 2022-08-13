@@ -8,12 +8,20 @@
     <div class="row">
             <div class="col-md-12">
                 <h1>We are currently under construction!</h1>
-                <h2>Sign up now to access features while we are building out the app.</h2>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <p>Soon you will be able to get to know your team better than ever!</p>
+                <p>
+                    Soon you will be able to get to know your team better than ever!
+                    <br>
+                    Sign up today to try out our existing features.
+                </p>
+
+                {% if user.is_authenticated %}
+                    <p>It looks like you are already registered! Fantastic!</p>
+                    <a href="{% url 'create_company' %}" class="btn btn-primary">Create a Company Now</a>
+                {% endif %}
             </div>
         </div>
     </div>
