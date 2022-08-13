@@ -2,6 +2,10 @@ name: Test and Deploy
 
 on: [ push ]
 
+env:
+  SECRET_KEY: ${{secrets.SECRET_KEY}}
+  DATABASE_URL: ${{secrets.DATABASE_URL}}
+
 jobs:
   test:
     runs-on: ubuntu-latest
