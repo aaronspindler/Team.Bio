@@ -6,5 +6,3 @@ urlpatterns = [
     path("home", home, name="company_home"),
     path("create", create_company, name="create_company"),
 ]
-
-
