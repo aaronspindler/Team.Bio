@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     "pages",
     "companies",
     "utils",
-    "core",
 ]
 
 MIDDLEWARE = [
