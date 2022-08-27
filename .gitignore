@@ -12,5 +12,6 @@ myvenv
 db.sqlite3
 dump.rdb
 allstaticfiles/
+staticfiles/
 node_modules/
 package-lock.json

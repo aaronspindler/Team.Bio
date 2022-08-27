@@ -33,15 +33,6 @@
 
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link p-2 text-dark" href="{% url 'company_home' %}">Home</a>
-                    </li>
-                    {% if user.company == user.companies.first.company %}
-                        <li class="nav-item">
-                            <a class="nav-link p-2 text-dark" href="/admin">Company Admin</a>
-                        </li>
-                    {% endif %}
-
                     {% if user.is_superuser %}
                         <li class="nav-item">
                             <a class="nav-link p-2 text-danger" href="/admin">Admin</a>
@@ -49,13 +40,20 @@
                     {% endif %}
 
                     {% if user.is_authenticated %}
-
+                        <li class="nav-item">
+                            <a class="nav-link p-2 text-dark" href="{% url 'company_home' %}">Home</a>
+                        </li>
+                        {% if user.company == user.companies.first.company %}
+                        <li class="nav-item">
+                            <a class="nav-link p-2 text-dark" href="/admin">Company Admin</a>
+                        </li>
+                    {% endif %}
                     {% endif %}
                 </ul>
                 {% if user.is_authenticated == False %}
                     <a class="btn btn-outline-primary mx-2" href="{% url 'account_login' %}">Log In <span
                             class="oi oi-account-login"></span></a>
-                    <a class="btn btn-outline-primary mx-2" href="{% url 'account_signup' %}">Sign up</a>
+                    <a class="btn btn-outline-primary mx-2" href="{% url 'account_signup' %}">Sign Up</a>
                 {% else %}
                     <small>Logged in as : {{ user }} <a
                             href="{% url 'account_logout' %}">Logout</a></small>
