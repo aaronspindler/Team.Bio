@@ -8,3 +8,9 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+    @property
+    def is_member_of_company(self):
+        if self.company or self.companies.exists():
+            return True
+        return False

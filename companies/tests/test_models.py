@@ -5,7 +5,7 @@ from companies.factories import CompanyFactory
 from companies.models import CompanyOwner
 
 
-class TestFactories(TestCase):
+class TestModels(TestCase):
     def setUp(self):
         self.company = CompanyFactory()
         self.user = UserFactory(company=self.company)
