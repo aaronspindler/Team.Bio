@@ -11,12 +11,19 @@ class Company(models.Model):
     def __str__(self):
         return self.name
 
+    def get_owners(self):
+        company_owners = self.owners.all()
+        owners_list = []
+        for company_owner in company_owners:
+            owners_list.append(company_owner.owner)
+        return owners_list
+
     class Meta:
         verbose_name_plural = 'Companies'
 
 
 class CompanyOwner(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, related_name='owners', on_delete=models.CASCADE)
     owner = models.ForeignKey('accounts.CustomUser', related_name='companies', on_delete=models.CASCADE)
 
     class Meta:
