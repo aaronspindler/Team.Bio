@@ -32,4 +32,6 @@ def create_company(request):
 
 @login_required
 def home(request):
+    if request.user.is_member_of_company:
+        return redirect('company_home')
     return render(request, 'companies/home.html')
