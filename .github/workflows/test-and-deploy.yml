@@ -28,7 +28,7 @@ jobs:
           python manage.py collectstatic --no-input
       - name: Run Tests
         run: |
-          python manage.py test --keepdb
+          python manage.py test --no-input
   lint:
     runs-on: ubuntu-latest
     steps:
