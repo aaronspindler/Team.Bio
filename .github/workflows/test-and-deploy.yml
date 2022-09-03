@@ -38,7 +38,7 @@ jobs:
           python manage.py collectstatic --no-input
       - name: Run Tests
         env:
-          DATABASE_URL: postgres://postgres:postgres@localhost/teambio
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
         run: |
           python manage.py test --no-input
   lint:
