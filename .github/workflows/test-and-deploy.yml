@@ -8,6 +8,16 @@ env:
 
 jobs:
   test:
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 2
@@ -27,6 +37,8 @@ jobs:
         run: |
           python manage.py collectstatic --no-input
       - name: Run Tests
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost/teambio
         run: |
           python manage.py test --no-input
   lint:
