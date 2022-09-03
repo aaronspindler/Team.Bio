@@ -31,5 +31,10 @@ def create_company(request):
 
 
 @login_required
+def company_admin(request):
+    return render(request, 'companies/company_admin.html')
+
+
+@login_required
 def home(request):
     return render(request, 'companies/home.html')
