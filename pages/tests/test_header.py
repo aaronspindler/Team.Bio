@@ -21,7 +21,7 @@ class TestHeader(TestCase):
 
     def test_header_not_logged_in(self):
         self.client.logout()
-        response = self.client.get(reverse('home'))
+        response = self.client.get(reverse('home'), follow=True)
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(response, 'Log In')
@@ -30,7 +30,7 @@ class TestHeader(TestCase):
         self.assertNotContains(response, 'Company Admin')
 
     def test_header_logged_in_admin(self):
-        response = self.client.get(reverse('home'))
+        response = self.client.get(reverse('home'), follow=True)
         self.assertEqual(response.status_code, 200)
 
         self.assertNotContains(response, 'Log In')
@@ -42,7 +42,7 @@ class TestHeader(TestCase):
 
     def test_header_logged_in_none_admin(self):
         self.client.force_login(user=self.other_user)
-        response = self.client.get(reverse('home'))
+        response = self.client.get(reverse('home'), follow=True)
         self.assertEqual(response.status_code, 200)
 
         self.assertNotContains(response, 'Log In')
@@ -54,7 +54,7 @@ class TestHeader(TestCase):
 
     def test_header_logged_in_other_company(self):
         self.client.force_login(user=self.different_company_user)
-        response = self.client.get(reverse('home'))
+        response = self.client.get(reverse('home'), follow=True)
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(response, 'Home')
