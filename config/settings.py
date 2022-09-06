@@ -6,7 +6,6 @@ import environ
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
-    SECRET_KEY=(str, 'this-is-a-fake')
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
