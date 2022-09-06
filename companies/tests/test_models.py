@@ -10,7 +10,7 @@ class TestModels(TestCase):
         self.company = CompanyFactory()
         self.user = UserFactory(company=self.company)
         self.user2 = UserFactory(company=self.company)
-        CompanyOwner.objects.create(company=self.company, owner=self.user)
+        self.company_owner = CompanyOwner.objects.create(company=self.company, owner=self.user)
 
     def test_company_get_owners_single(self):
         expected_result = [self.user]
@@ -22,3 +22,9 @@ class TestModels(TestCase):
         expected_result = [self.user, self.user2]
         actual_result = self.company.get_owners()
         self.assertEqual(expected_result, actual_result)
+
+    def test_company_str(self):
+        self.assertEqual(str(self.company), self.company.name)
+
+    def test_company_owner_str(self):
+        self.assertEqual(str(self.company_owner), f'{self.company} {self.company_owner.owner}')
