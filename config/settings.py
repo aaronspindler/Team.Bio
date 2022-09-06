@@ -11,7 +11,7 @@ env = environ.Env(
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY', 'this-is-a-fake-key')
 DEBUG = env('DEBUG', False)
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "team.bio", "www.team.bio"]
