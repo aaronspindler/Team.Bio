@@ -34,6 +34,18 @@ class TestCompanyViews(TestCase):
         self.assertTemplateNotUsed(response, "companies/company_admin.html")
         self.assertTemplateUsed(response, "account/login.html")
 
+    def test_company_admin(self):
+        response = self.client.get(reverse('company_admin'), follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "companies/company_admin.html")
+        self.assertTemplateNotUsed(response, "account/login.html")
+
+    def test_company_home(self):
+        response = self.client.get(reverse('company_home'), follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "companies/home.html")
+        self.assertTemplateNotUsed(response, "account/login.html")
+
     def test_login_required_create_company(self):
         self.client.logout()
         response = self.client.get(reverse('create_company'), follow=True)
