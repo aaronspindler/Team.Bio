@@ -45,7 +45,7 @@
                         </li>
                         {% if user in user.company.get_owners %}
                         <li class="nav-item">
-                            <a class="nav-link p-2 text-dark" href="/admin">Company Admin</a>
+                            <a class="nav-link p-2 text-dark" href="{% url 'company_admin' %}">Company Admin</a>
                         </li>
                     {% endif %}
                     {% endif %}
