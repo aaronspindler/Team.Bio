@@ -27,7 +27,7 @@ class TestHeader(TestCase):
         self.assertContains(response, 'Log In')
         self.assertContains(response, 'Sign Up')
 
-        self.assertNotContains(response, 'Company Admin')
+        self.assertNotContains(response, 'Company Settings')
 
     def test_header_logged_in_admin(self):
         response = self.client.get(reverse('home'), follow=True)
@@ -37,7 +37,7 @@ class TestHeader(TestCase):
         self.assertNotContains(response, 'Sign Up')
 
         self.assertContains(response, 'Logout')
-        self.assertContains(response, 'Company Admin')
+        self.assertContains(response, 'Company Settings')
         self.assertContains(response, 'Home')
 
     def test_header_logged_in_none_admin(self):
@@ -47,7 +47,7 @@ class TestHeader(TestCase):
 
         self.assertNotContains(response, 'Log In')
         self.assertNotContains(response, 'Sign Up')
-        self.assertNotContains(response, 'Company Admin')
+        self.assertNotContains(response, 'Company Settings')
 
         self.assertContains(response, 'Home')
         self.assertContains(response, 'Logout')
@@ -62,4 +62,4 @@ class TestHeader(TestCase):
 
         self.assertNotContains(response, 'Log In')
         self.assertNotContains(response, 'Sign Up')
-        self.assertNotContains(response, 'Company Admin')
+        self.assertNotContains(response, 'Company Settings')
