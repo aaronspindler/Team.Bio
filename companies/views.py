@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from companies.decorators import is_company_owner
-from companies.forms import CompanyCreationForm
+from companies.forms import CompanyForm
 from companies.models import CompanyOwner
 
 
@@ -12,9 +12,9 @@ def create_company(request):
     if request.user.companies.exists():
         return redirect('company_home')
 
-    form = CompanyCreationForm()
+    form = CompanyForm()
     if request.method == "POST":
-        form = CompanyCreationForm(request.POST)
+        form = CompanyForm(request.POST)
         if form.is_valid():
             company = form.save()
             # Create a CompanyOwner object to track who owns the company
@@ -33,8 +33,16 @@ def create_company(request):
 
 @login_required
 @is_company_owner
-def company_admin(request):
-    return render(request, 'companies/company_admin.html')
+def company_settings(request):
+    company = request.user.company
+    company_users = company.customuser_set.all()
+    company_form = CompanyForm(instance=company)
+
+    context = {
+        'company_form': company_form,
+        'company_users': company_users,
+    }
+    return render(request, 'companies/company_settings.html', context)
 
 
 @login_required

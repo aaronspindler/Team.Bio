@@ -10,6 +10,10 @@ class CustomUser(AbstractUser):
         return self.email
 
     @property
+    def name(self):
+        return f'{self.first_name} {self.last_name}'
+
+    @property
     def is_member_of_company(self):
         if self.company or self.companies.exists():
             return True
