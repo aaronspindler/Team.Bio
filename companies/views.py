@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
+from companies.decorators import is_company_owner
 from companies.forms import CompanyCreationForm
 from companies.models import CompanyOwner
 
@@ -31,6 +32,7 @@ def create_company(request):
 
 
 @login_required
+@is_company_owner
 def company_admin(request):
     return render(request, 'companies/company_admin.html')
 

@@ -11,6 +11,7 @@ class TestCompanyViews(TestCase):
         # Create required models
         self.company = CompanyFactory()
         self.user = UserFactory(company=self.company)
+        self.company_user = UserFactory(company=self.company)
         self.other_user = UserFactory(company=None)
         self.different_company_user = UserFactory()
 
@@ -34,11 +35,19 @@ class TestCompanyViews(TestCase):
         self.assertTemplateNotUsed(response, "companies/company_admin.html")
         self.assertTemplateUsed(response, "account/login.html")
 
-    def test_company_admin(self):
+    def test_company_admin_is_admin(self):
         response = self.client.get(reverse('company_admin'), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "companies/company_admin.html")
         self.assertTemplateNotUsed(response, "account/login.html")
+
+    def test_company_admin_is_not_admin(self):
+        """
+        If the user is not an owner/admin of the company, they should be redirected to a 404 page
+        """
+        self.client.force_login(user=self.company_user)
+        response = self.client.get(reverse('company_admin'), follow=True)
+        self.assertEqual(response.status_code, 404)
 
     def test_company_home(self):
         response = self.client.get(reverse('company_home'), follow=True)
