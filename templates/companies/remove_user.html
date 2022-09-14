@@ -1,0 +1,20 @@
+{% extends '_base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+{% block title %}{{ user.company }} Settings{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Are you sure you want to remove {{ user_to_remove.name }}?</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                
+            </div>
+        </div>
+    </div>
+{% endblock content %}
