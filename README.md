@@ -3,3 +3,5 @@
 
 ### Icons
 Get icons from [iconoir](https://iconoir.com), make sure to create a normal (black) and light (white) version
+Size 24
+Stroke Width 1.5
