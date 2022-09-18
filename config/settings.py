@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     # Third-party
     "allauth",
     "allauth.account",
+    'allauth.socialaccount',
+    "allauth.socialaccount.providers.google",
     "crispy_forms",
     "debug_toolbar",
     # Local
@@ -108,7 +110,7 @@ INTERNAL_IPS = ["127.0.0.1"]
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 SITE_ID = 1
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "company_home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -118,5 +120,19 @@ ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_QUERY_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
