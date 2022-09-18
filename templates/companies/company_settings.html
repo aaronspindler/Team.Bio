@@ -38,7 +38,7 @@
                 <div class="card">
                     <h5 class="card-header d-flex justify-content-between align-items-center">
                         Users
-                        <button type="button" class="btn btn-sm btn-primary"><img src="{% static 'icons/plus-light.svg' %}"></button>
+                        <a href="#" class="btn btn-sm btn-primary"><img src="{% static 'icons/plus-light.svg' %}"></a>
                     </h5>
                     <div class="card-body">
                         <table class="table">
@@ -55,7 +55,7 @@
                                     <th scope="row">{{ company_user.name }}</th>
                                     <td>{{ company_user.email }}</td>
                                     <td>
-                                        <a class="btn btn-sm btn-danger"><img src="{% static 'icons/trash-light.svg' %}"></a>
+                                        <a href="{% url 'remove_user' company_user.pk %}" class="btn btn-sm btn-danger"><img src="{% static 'icons/trash-light.svg' %}"></a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -66,5 +66,4 @@
             </div>
         </div>
     </div>
-
 {% endblock content %}
