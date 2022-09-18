@@ -198,3 +198,31 @@ class TestCompanyViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "companies/company_settings.html")
         self.assertTrue(CustomUser.objects.filter(is_active=False).exists())
+
+    def test_login_required_invite_user_post(self):
+        self.client.logout()
+        response = self.client.post(reverse('invite_user'), follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateNotUsed(response, "companies/invite_user.html")
+        self.assertTemplateUsed(response, "account/login.html")
+
+    def test_login_required_invite_user_get(self):
+        self.client.logout()
+        response = self.client.get(reverse('invite_user'), follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateNotUsed(response, "companies/invite_user.html")
+        self.assertTemplateUsed(response, "account/login.html")
+
+    def test_invite_user_is_company_owner_post(self):
+        self.client.force_login(self.company_user)
+        response = self.client.post(reverse('invite_user'), follow=True)
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateNotUsed(response, "companies/invite_user.html")
+        self.assertTemplateUsed(response, "404.html")
+
+    def test_invite_user_is_company_owner_get(self):
+        self.client.force_login(self.company_user)
+        response = self.client.get(reverse('invite_user'), follow=True)
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateNotUsed(response, "companies/invite_user.html")
+        self.assertTemplateUsed(response, "404.html")
