@@ -60,12 +60,6 @@ def remove_user(request, user_to_remove_pk):
 
 @login_required
 @is_company_owner
-def invite_user(request):
-    return render(request, 'companies/invite_user.html')
-
-
-@login_required
-@is_company_owner
 def company_settings(request):
     company = request.user.company
     company_users = company.customuser_set.all()
