@@ -62,7 +62,7 @@ def remove_user(request, user_to_remove_pk):
 @is_company_owner
 def company_settings(request):
     company = request.user.company
-    company_users = company.customuser_set.all()
+    company_users = company.customuser_set.filter(is_active=True)
     company_form = CompanyForm(instance=company)
 
     context = {
