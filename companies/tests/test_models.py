@@ -28,3 +28,7 @@ class TestModels(TestCase):
 
     def test_company_owner_str(self):
         self.assertEqual(str(self.company_owner), f'{self.company} {self.company_owner.owner}')
+
+    def test_company_save_url_root(self):
+        company = CompanyFactory(url='https://www.spindlers.ca')
+        self.assertEqual(company.url_root, 'spindlers.ca')

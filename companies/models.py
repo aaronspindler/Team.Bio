@@ -1,3 +1,4 @@
+import tldextract as tldextract
 from django.db import models
 
 
@@ -11,6 +12,11 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        parsed = tldextract.extract(self.url)
+        self.url_root = parsed.domain + '.' + parsed.suffix
+        super().save(*args, **kwargs)
 
     def get_owners(self):
         company_owners = self.owners.all()

@@ -18,3 +18,7 @@ class CustomUser(AbstractUser):
         if self.company or self.companies.exists():
             return True
         return False
+
+    @property
+    def email_root(self):
+        return self.email.split('@')[1]
