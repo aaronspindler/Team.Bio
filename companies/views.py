@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from accounts.models import CustomUser
 from companies.decorators import is_company_owner
 from companies.forms import CompanyForm
-from companies.models import CompanyOwner
+from companies.models import CompanyOwner, Company
 
 
 @login_required
@@ -74,4 +74,14 @@ def company_settings(request):
 
 @login_required
 def home(request):
+    if request.user.company is None:
+        # Check if there is a company with the URL root equal to the users email root
+        company = Company.objects.filter(url_root=request.user.email_root)
+        # If the company exists, make the user a member of that company
+        if company:
+            user = request.user
+            user.company = company.first()
+            user.save()
+        else:
+            return redirect('create_company')
     return render(request, 'companies/home.html')

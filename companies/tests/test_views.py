@@ -56,6 +56,25 @@ class TestCompanyViews(TestCase):
         self.assertTemplateUsed(response, "companies/home.html")
         self.assertTemplateNotUsed(response, "account/login.html")
 
+    def test_company_home_no_company(self):
+        self.client.force_login(self.other_user)
+        response = self.client.get(reverse('company_home'), follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "companies/create_company.html")
+        self.assertTemplateNotUsed(response, "companies/home.html")
+
+    def test_company_home_company_exists_for_user(self):
+        user = UserFactory(email='aaron@spindlers.ca', company=None)
+        company = CompanyFactory(url='https://www.spindlers.ca')
+        self.client.force_login(user)
+        response = self.client.get(reverse('company_home'), follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateNotUsed(response, "companies/create_company.html")
+        self.assertTemplateUsed(response, "companies/home.html")
+
+        user.refresh_from_db()
+        self.assertEqual(user.company, company)
+
     def test_login_required_create_company(self):
         self.client.logout()
         response = self.client.get(reverse('create_company'), follow=True)
