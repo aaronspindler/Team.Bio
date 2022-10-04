@@ -5,3 +5,6 @@
 Get icons from [iconoir](https://iconoir.com), make sure to create a normal (black) and light (white) version
 Size 24
 Stroke Width 1.5
+
+### Environment Variables
+If you add a new environment variable to settings, you will also need to add the variable to https://github.com/aaronspindler/Team.Bio/blob/main/.github/workflows/test-and-deploy.yml in the env section
