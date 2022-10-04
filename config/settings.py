@@ -103,8 +103,8 @@ STATICFILES_DIRS = [str(BASE_DIR.joinpath("static"))]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # AWS
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', 'fake_key')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', 'fake_key')
 
 # S3
 AWS_STORAGE_BUCKET_NAME = 'team-bio'
