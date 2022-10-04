@@ -6,6 +6,8 @@ import environ
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
+    AWS_ACCESS_KEY_ID=(str, "fake_key"),
+    AWS_SECRET_ACCESS_KEY=(str, "fake_key"),
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
