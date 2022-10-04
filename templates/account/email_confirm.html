@@ -7,7 +7,7 @@
 
 
 {% block content %}
-    <h1>{% trans "Email Confirmation Expired/Invalid" %}</h1>
+    <h1>{% trans "Email Confirmation" %}</h1>
     {% if confirmation %}
         {% user_display confirmation.email_address.user as user_display %}
         <p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that
