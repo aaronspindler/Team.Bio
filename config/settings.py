@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "crispy_forms",
     "debug_toolbar",
+    "storages",
     # Local
     "accounts",
     "pages",
@@ -101,9 +102,23 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [str(BASE_DIR.joinpath("static"))]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+# AWS
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# S3
+AWS_STORAGE_BUCKET_NAME = 'team-bio'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+
+# SES
+EMAIL_BACKEND = 'django_ses.SESBackend'
+DEFAULT_FROM_EMAIL = '"Team Bio" <help@team.bio>'
+SERVER_EMAIL = 'help@team.bio'
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 INTERNAL_IPS = ["127.0.0.1"]
 
@@ -124,6 +139,7 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
