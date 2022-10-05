@@ -15,7 +15,7 @@ class Company(models.Model):
 
     def save(self, *args, **kwargs):
         parsed = tldextract.extract(self.url)
-        self.url_root = parsed.domain + '.' + parsed.suffix
+        self.url_root = (parsed.domain + '.' + parsed.suffix).lower()
         super().save(*args, **kwargs)
 
     def get_owners(self):
