@@ -31,4 +31,3 @@ class CustomUser(AbstractUser):
     @receiver(user_signed_up)
     def allauth_user_signed_up(sender, request, user, **kwargs):
         attempt_connect_user_to_a_company(user)
-
