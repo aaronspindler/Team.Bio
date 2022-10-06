@@ -10,6 +10,8 @@ from companies.models import Company
 
 class CustomUser(AbstractUser):
     company = models.ForeignKey("companies.Company", on_delete=models.CASCADE, blank=True, null=True)
+    profile_picture = models.ImageField(null=True, upload_to='profile_picture/')
+    short_bio = models.CharField(max_length=240, blank=True, null=True)
 
     def __str__(self):
         return self.email
