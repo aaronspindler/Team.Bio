@@ -7,8 +7,8 @@ class Company(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     name = models.TextField(unique=True)
-    url = models.URLField()
-    url_root = models.CharField(max_length=250)
+    url = models.URLField(unique=True)
+    url_root = models.CharField(max_length=250, unique=True)
 
     def __str__(self):
         return self.name

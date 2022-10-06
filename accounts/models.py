@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.dispatch import receiver
 
+from accounts.utils import attempt_connect_user_to_a_company
 from companies.models import Company
 
 
@@ -28,20 +29,6 @@ class CustomUser(AbstractUser):
         return self.email.split('@')[1].lower()
 
     @receiver(user_signed_up)
-    def attempt_connect_user_to_company_after_signup(sender, request, user, **kwargs):
-        # Get user email root
-        user_email_root = user.email_root
-        # look for companies with url=email_root
-        companies = Company.objects.filter(url_root=user_email_root)
-        # if only 1 company found, proceed
-        if companies.count() == 1:
-            # set the users company to the found company
-            user.company = companies.first()
-            user.save()
-        # if no company found, just continue
-        elif companies.count() == 0:
-            return
-        # if multiple found throw an error
-        else:
-            raise Exception(f'Too many companies found with the same url_root: {user_email_root}')
+    def allauth_user_signed_up(sender, request, user, **kwargs):
+        attempt_connect_user_to_a_company(user)
 
