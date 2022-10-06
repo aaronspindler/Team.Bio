@@ -3,6 +3,20 @@ from pathlib import Path
 
 import environ
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+from config.sentry import traces_sampler
+
+sentry_sdk.init(
+    dsn="https://7293ea960f6a43fba4b4f73fe60bb6bc@o555567.ingest.sentry.io/4503933521231872",
+    integrations=[
+        DjangoIntegration(),
+    ],
+    traces_sampler=traces_sampler,
+    send_default_pii=True
+)
+
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
@@ -31,8 +45,11 @@ INSTALLED_APPS = [
     # Third-party
     "allauth",
     "allauth.account",
+    'allauth.socialaccount',
+    "allauth.socialaccount.providers.google",
     "crispy_forms",
     "debug_toolbar",
+    "storages",
     # Local
     "accounts",
     "pages",
@@ -99,16 +116,30 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [str(BASE_DIR.joinpath("static"))]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+# AWS
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# S3
+AWS_STORAGE_BUCKET_NAME = 'team-bio'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+
+# SES
+EMAIL_BACKEND = 'django_ses.SESBackend'
+DEFAULT_FROM_EMAIL = '"Team Bio" <help@team.bio>'
+SERVER_EMAIL = 'help@team.bio'
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 INTERNAL_IPS = ["127.0.0.1"]
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 SITE_ID = 1
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "company_home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
@@ -118,5 +149,20 @@ ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_QUERY_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}

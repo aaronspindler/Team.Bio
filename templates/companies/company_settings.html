@@ -1,0 +1,65 @@
+{% extends '_base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+{% block title %}{{ user.company }} Settings{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{ user.company }} | Settings</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <h5 class="card-header d-flex justify-content-between align-items-center">
+                        Settings
+                    </h5>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {{ company_form.name | as_crispy_field }}
+                            </div>
+                            <button class="btn btn-primary" type='submit'>Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <h5 class="card-header d-flex justify-content-between align-items-center">
+                        Users
+                    </h5>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Controls</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for company_user in company_users %}
+                                <tr>
+                                    <th scope="row">{{ company_user.name }}</th>
+                                    <td>{{ company_user.email }}</td>
+                                    <td>
+                                        <a href="{% url 'remove_user' company_user.pk %}" class="btn btn-sm btn-danger"><img src="{% static 'icons/trash-light.svg' %}"></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

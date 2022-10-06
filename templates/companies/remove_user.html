@@ -1,0 +1,25 @@
+{% extends '_base.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+{% block title %}{{ user.company }} Settings{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Removing {{ user_to_remove.name }} from {{ user.company }}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p>Are you sure you want to remove {{ user_to_remove.name }}({{ user_to_remove.email }}) from {{ user.company }}?</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">I Am Sure</button>
+                    <a href="{% url 'company_settings' %}" class="btn btn-primary">Go Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

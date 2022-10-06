@@ -27,3 +27,7 @@ class TestModels(TestCase):
         expected_result = False
         actual_result = self.user.is_member_of_company
         self.assertEqual(expected_result, actual_result)
+
+    def test_user_email_root(self):
+        user = UserFactory(email='aaron@spindlers.ca')
+        self.assertEqual(user.email_root, 'spindlers.ca')

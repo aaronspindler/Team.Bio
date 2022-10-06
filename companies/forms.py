@@ -4,7 +4,7 @@ from django.forms import ModelForm
 from companies.models import Company
 
 
-class CompanyCreationForm(ModelForm):
+class CompanyForm(ModelForm):
     name = forms.CharField(label="Name", widget=forms.TextInput(attrs={'placeholder': 'Magma Health'}))
     url = forms.CharField(label="URL", widget=forms.TextInput(attrs={'placeholder': 'https://www.magmahealth.com'}))
 
