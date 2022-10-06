@@ -18,6 +18,7 @@ class TestFactories(TestCase):
         self.assertIsNotNone(user.username)
         self.assertIsNotNone(user.company)
         self.assertIsNotNone(user.email)
+        self.assertIsNotNone(user.short_bio)
 
     def test_multiple_users_creation(self):
         """
