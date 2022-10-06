@@ -69,6 +69,13 @@ def company_settings(request):
 
 
 @login_required
+def user_profile(request, email_prefix):
+    # Get the user requested for that company
+    user = get_object_or_404(CustomUser, company=request.user.company, email_prefix=email_prefix)
+    return render(request, 'companies/user_profile.html', {'user': user})
+
+
+@login_required
 def home(request):
     if request.user.company is None:
         # Check if there is a company with the URL root equal to the users email root

@@ -15,6 +15,7 @@ class CustomUser(AbstractUser):
     # Profile
     profile_picture = models.ImageField(null=True, upload_to='profile_picture/')
     short_bio = models.CharField(max_length=240, blank=True, null=True)
+    title = models.CharField(max_length=240, blank=True, null=True)
 
     class Meta:
         unique_together = ("company", "email_prefix")

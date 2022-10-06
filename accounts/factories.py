@@ -13,6 +13,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     email = factory.Faker('email')
     company = factory.SubFactory(CompanyFactory)
     short_bio = factory.Faker('text', max_nb_chars=240)
+    title = factory.Faker('job')
 
     @factory.lazy_attribute
     def username(self):
