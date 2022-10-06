@@ -6,5 +6,5 @@ urlpatterns = [
     path("home", home, name="company_home"),
     path("settings", company_settings, name="company_settings"),
     path("create", create_company, name="create_company"),
-    path("user/<int:user_to_remove_pk>/remove", remove_user, name='remove_user'),
+    path("user/<str:user_to_remove>/remove", remove_user, name='remove_user'),
 ]

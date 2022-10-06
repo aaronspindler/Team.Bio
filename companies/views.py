@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from accounts.models import CustomUser
 from companies.decorators import is_company_owner
@@ -35,12 +35,8 @@ def create_company(request):
 
 @login_required
 @is_company_owner
-def remove_user(request, user_to_remove_pk):
-    user_to_remove = CustomUser.objects.get(pk=user_to_remove_pk)
-
-    # Check to make sure the user exists in the company
-    if user_to_remove.company != request.user.company:
-        raise Http404
+def remove_user(request, user_to_remove):
+    user_to_remove = get_object_or_404(CustomUser, company=request.user.company, email_prefix=user_to_remove)
 
     # Check if the user is a company owner
     if user_to_remove in request.user.company.get_owners():

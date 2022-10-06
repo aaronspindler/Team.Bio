@@ -51,7 +51,7 @@
                                     <th scope="row">{{ company_user.name }}</th>
                                     <td>{{ company_user.email }}</td>
                                     <td>
-                                        <a href="{% url 'remove_user' company_user.pk %}" class="btn btn-sm btn-danger"><img src="{% static 'icons/trash-light.svg' %}"></a>
+                                        <a href="{% url 'remove_user' company_user.email_prefix %}" class="btn btn-sm btn-danger"><img src="{% static 'icons/trash-light.svg' %}"></a>
                                     </td>
                                 </tr>
                             {% endfor %}
