@@ -55,7 +55,7 @@
                             class="oi oi-account-login"></span></a>
                     <a class="btn btn-outline-primary mx-2" href="{% url 'account_signup' %}">Sign Up</a>
                 {% else %}
-                    <small>Logged in as : {{ user }} <a
+                    <small>Logged in as : {{ user.name }} <a
                             href="{% url 'account_logout' %}">Logout</a></small>
                 {% endif %}
             </div>

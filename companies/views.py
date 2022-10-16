@@ -71,8 +71,8 @@ def company_settings(request):
 @login_required
 def user_profile(request, email_prefix):
     # Get the user requested for that company
-    user = get_object_or_404(CustomUser, company=request.user.company, email_prefix=email_prefix)
-    return render(request, 'companies/user_profile.html', {'user': user})
+    profile = get_object_or_404(CustomUser, company=request.user.company, email_prefix=email_prefix)
+    return render(request, 'companies/user_profile.html', {'profile': profile})
 
 
 @login_required

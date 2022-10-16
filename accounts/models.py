@@ -13,9 +13,12 @@ class CustomUser(AbstractUser):
     email_root = models.CharField(max_length=250)
 
     # Profile
-    profile_picture = models.ImageField(null=True, upload_to='profile_picture/')
+    profile_picture = models.ImageField(blank=True, null=True, upload_to='profile_picture/')
     short_bio = models.CharField(max_length=240, blank=True, null=True)
     title = models.CharField(max_length=240, blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    team = models.ForeignKey("companies.Team", on_delete=models.CASCADE, blank=True, null=True)
+    general_location = models.ForeignKey("companies.Location", on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         unique_together = ("company", "email_prefix")
@@ -44,3 +47,10 @@ class CustomUser(AbstractUser):
     @receiver(user_signed_up)
     def allauth_user_signed_up(sender, request, user, **kwargs):
         attempt_connect_user_to_a_company(user)
+
+    @property
+    def profile_picture_url(self):
+        url = 'https://team-bio.s3.amazonaws.com/public/profile_picture/missing-profile-picture.jpg'
+        if self.profile_picture:
+            url = self.profile_picture.url
+        return url

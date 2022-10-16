@@ -40,3 +40,23 @@ class CompanyOwner(models.Model):
         unique_together = ('company', 'owner')
         verbose_name = 'Company Owner'
         verbose_name_plural = 'Company Owners'
+
+
+class Team(models.Model):
+    company = models.ForeignKey(Company, related_name='teams', on_delete=models.CASCADE)
+    name = models.CharField(max_length=60)
+
+    class Meta:
+        unique_together = ('company', 'name')
+        verbose_name = 'Team'
+        verbose_name_plural = 'Teams'
+
+
+class Location(models.Model):
+    company = models.ForeignKey(Company, related_name='locations', on_delete=models.CASCADE)
+    name = models.CharField(max_length=60)
+
+    class Meta:
+        unique_together = ('company', 'name')
+        verbose_name = 'Location'
+        verbose_name_plural = 'Locations'
