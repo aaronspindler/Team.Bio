@@ -39,7 +39,7 @@ def remove_user(request, user_to_remove):
     user_to_remove = get_object_or_404(CustomUser, company=request.user.company, email_prefix=user_to_remove)
 
     # Check if the user is a company owner
-    if user_to_remove in request.user.company.get_owners():
+    if user_to_remove in request.user.company.get_owners:
         raise Http404
 
     # Deactivate the user
@@ -58,7 +58,7 @@ def remove_user(request, user_to_remove):
 @is_company_owner
 def company_settings(request):
     company = request.user.company
-    company_users = company.customuser_set.filter(is_active=True)
+    company_users = company.get_active_users
     company_form = CompanyForm(instance=company)
 
     context = {

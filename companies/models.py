@@ -18,12 +18,17 @@ class Company(models.Model):
         self.url_root = (parsed.domain + '.' + parsed.suffix).lower()
         super().save(*args, **kwargs)
 
+    @property
     def get_owners(self):
         company_owners = self.owners.all()
         owners_list = []
         for company_owner in company_owners:
             owners_list.append(company_owner.owner)
         return owners_list
+
+    @property
+    def get_active_users(self):
+        return self.users.filter(is_active=True)
 
     class Meta:
         verbose_name_plural = 'Companies'

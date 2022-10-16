@@ -8,7 +8,7 @@ from accounts.utils import attempt_connect_user_to_a_company
 
 
 class CustomUser(AbstractUser):
-    company = models.ForeignKey("companies.Company", on_delete=models.CASCADE, blank=True, null=True)
+    company = models.ForeignKey("companies.Company", related_name="users", on_delete=models.CASCADE, blank=True, null=True)
     email_prefix = models.CharField(max_length=250)
     email_root = models.CharField(max_length=250)
 
