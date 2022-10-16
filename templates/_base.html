@@ -33,21 +33,20 @@
 
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <ul class="navbar-nav mr-auto">
-                    {% if user.is_superuser %}
-                        <li class="nav-item">
-                            <a class="nav-link p-2 text-danger" href="/admin">Admin</a>
-                        </li>
-                    {% endif %}
-
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link p-2 text-dark" href="{% url 'company_home' %}">Home</a>
                         </li>
                         {% if user in user.company.get_owners %}
-                        <li class="nav-item">
-                            <a class="nav-link p-2 text-dark" href="{% url 'company_settings' %}">Company Settings</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link p-2 text-dark" href="{% url 'company_settings' %}">Company Settings</a>
+                            </li>
+                        {% endif %}
                     {% endif %}
+                    {% if user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link p-2 text-danger" href="/admin">Admin</a>
+                        </li>
                     {% endif %}
                 </ul>
                 {% if user.is_authenticated == False %}
