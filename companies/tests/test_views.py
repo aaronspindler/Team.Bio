@@ -217,3 +217,48 @@ class TestCompanyViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "companies/company_settings.html")
         self.assertTrue(User.objects.filter(is_active=False).exists())
+
+    def test_user_profile_not_in_company(self):
+        response = self.client.get(reverse('user_profile', kwargs={'email_prefix': self.different_company_user.email_prefix}), follow=True)
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateNotUsed(response, "companies/user_profile.html")
+
+    def test_user_profile_does_not_exist(self):
+        response = self.client.get(reverse('user_profile', kwargs={'email_prefix': "this_does_not_exist"}), follow=True)
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateNotUsed(response, "companies/user_profile.html")
+
+    def test_user_profile(self):
+        response = self.client.get(reverse('user_profile', kwargs={'email_prefix': self.company_user.email_prefix}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "companies/user_profile.html")
+        self.assertContains(response, self.company_user.name)
+
+    def test_edit_profile_post(self):
+        new_short_bio = 'asdf'
+        self.assertIsNotNone(self.user.short_bio)
+        data = {'short_bio': new_short_bio}
+        response = self.client.post(reverse('edit_profile'), data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "companies/user_profile.html")
+        self.assertContains(response, new_short_bio)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.short_bio, new_short_bio)
+
+    def test_edit_profile_post_null(self):
+        new_short_bio = ''
+        old_short_bio = self.user.short_bio
+        self.assertIsNotNone(self.user.short_bio)
+        data = {'short_bio': new_short_bio}
+        response = self.client.post(reverse('edit_profile'), data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "companies/user_profile.html")
+        self.assertNotContains(response, old_short_bio)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.short_bio, new_short_bio)
+
+    def test_edit_profile_get(self):
+        response = self.client.get(reverse('edit_profile'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "companies/edit_profile.html")
+        self.assertContains(response, self.user.short_bio)
