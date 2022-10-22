@@ -1,12 +1,12 @@
 import factory
 
-from accounts.models import CustomUser
+from accounts.models import User
 from companies.factories import CompanyFactory
 
 
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = CustomUser
+        model = User
 
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')

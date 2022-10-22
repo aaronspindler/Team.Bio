@@ -19,7 +19,7 @@
                                 <h5 class="d-flex justify-content-between align-items-center">
                                     {{ company_user.name }}
                                 </h5>
-                                <small>{{ company_user.title }}</small>
+                                {% if company_user.title %}<small>{{ company_user.title }}</small>{% endif %}
                             </div>
                             <div class="card-body">
                                 <img class="card-img-top img-max d-block rounded"

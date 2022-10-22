@@ -2,7 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 
-from accounts.models import CustomUser
+from accounts.forms import UserProfileForm
+from accounts.models import User
 from companies.decorators import is_company_owner
 from companies.forms import CompanyForm
 from companies.models import CompanyOwner, Company
@@ -35,8 +36,8 @@ def create_company(request):
 
 @login_required
 @is_company_owner
-def remove_user(request, user_to_remove):
-    user_to_remove = get_object_or_404(CustomUser, company=request.user.company, email_prefix=user_to_remove)
+def remove_user(request, email_prefix):
+    user_to_remove = get_object_or_404(User, company=request.user.company, email_prefix=email_prefix)
 
     # Check if the user is a company owner
     if user_to_remove in request.user.company.get_owners:
@@ -71,8 +72,23 @@ def company_settings(request):
 @login_required
 def user_profile(request, email_prefix):
     # Get the user requested for that company
-    profile = get_object_or_404(CustomUser, company=request.user.company, email_prefix=email_prefix)
-    return render(request, 'companies/user_profile.html', {'profile': profile})
+    company_user = get_object_or_404(User, company=request.user.company, email_prefix=email_prefix)
+    return render(request, 'companies/user_profile.html', {'company_user': company_user})
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('user_profile', email_prefix=request.user.email_prefix)
+
+    form = UserProfileForm(
+        instance=request.user
+    )
+
+    return render(request, 'companies/edit_profile.html', {'form': form})
 
 
 @login_required

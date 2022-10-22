@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from accounts.factories import UserFactory
-from accounts.models import CustomUser
+from accounts.models import User
 
 
 class TestFactories(TestCase):
@@ -9,9 +9,9 @@ class TestFactories(TestCase):
         """
         User Factory
         """
-        pre_count = CustomUser.objects.count()
+        pre_count = User.objects.count()
         user = UserFactory()
-        post_count = CustomUser.objects.count()
+        post_count = User.objects.count()
         self.assertGreater(post_count, pre_count)
         self.assertIsNotNone(user.first_name)
         self.assertIsNotNone(user.last_name)

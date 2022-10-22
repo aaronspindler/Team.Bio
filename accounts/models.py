@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from accounts.utils import attempt_connect_user_to_a_company
 
 
-class CustomUser(AbstractUser):
+class User(AbstractUser):
     company = models.ForeignKey("companies.Company", related_name="users", on_delete=models.CASCADE, blank=True, null=True)
     email_prefix = models.CharField(max_length=250)
     email_root = models.CharField(max_length=250)
@@ -22,6 +22,13 @@ class CustomUser(AbstractUser):
     title = models.CharField(max_length=240, blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
     team = models.ForeignKey("companies.Team", on_delete=models.CASCADE, blank=True, null=True)
+
+    @property
+    def profile_picture_url(self):
+        url = 'https://team-bio.s3.amazonaws.com/public/profile_picture/missing-profile-picture.jpg'
+        if self.profile_picture:
+            url = self.profile_picture.url
+        return url
 
     class Meta:
         unique_together = ("company", "email_prefix")
@@ -53,9 +60,3 @@ class CustomUser(AbstractUser):
     def allauth_user_signed_up(sender, request, user, **kwargs):
         attempt_connect_user_to_a_company(user)
 
-    @property
-    def profile_picture_url(self):
-        url = 'https://team-bio.s3.amazonaws.com/public/profile_picture/missing-profile-picture.jpg'
-        if self.profile_picture:
-            url = self.profile_picture.url
-        return url

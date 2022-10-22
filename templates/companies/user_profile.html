@@ -2,7 +2,7 @@
 {% load crispy_forms_filters %}
 {% load static %}
 
-{% block title %}{{ profile.name }}{% endblock title %}
+{% block title %}{{ company_user.name }}{% endblock title %}
 
 {% block content %}
     <div class="container">
@@ -10,13 +10,23 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h1>{{ profile.name }}</h1>
-                        <h4>{{ profile.title }}</h4>
-                        <img class="card-img-top img-max d-block rounded" src="{{ profile.profile_picture_url }}"/>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h1>{{ company_user.name }}</h1>
+                                {% if company_user.title %}<h4>{{ company_user.title }}</h4>{% endif %}
+                                <img class="card-img-top img-max d-block rounded"
+                                     src="{{ company_user.profile_picture_url }}"/>
+                            </div>
+                            {% if company_user == user %}
+                            <div class="col-md-2 text-right">
+                                <a class="btn btn-primary btn-sm" href="{% url 'edit_profile' %}">Edit Profile</a>
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
                     <div class="card-body">
-                        {% if profile.short_bio %}
-                            <p>{{ profile.short_bio }}</p>
+                        {% if company_user.short_bio %}
+                            <p>{{ company_user.short_bio }}</p>
                         {% endif %}
                     </div>
                 </div>

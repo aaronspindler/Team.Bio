@@ -7,7 +7,7 @@ from config.views import health
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
-    path("c/", include("companies.urls")),
+    path("company/", include("companies.urls")),
     path("system/health", health, name="system_health"),
     path("", include("pages.urls")),
 ]

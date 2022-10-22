@@ -36,7 +36,7 @@ class Company(models.Model):
 
 class CompanyOwner(models.Model):
     company = models.ForeignKey(Company, related_name='owners', on_delete=models.CASCADE)
-    owner = models.ForeignKey('accounts.CustomUser', related_name='companies', on_delete=models.CASCADE)
+    owner = models.ForeignKey('accounts.User', related_name='companies', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.company} {self.owner}'

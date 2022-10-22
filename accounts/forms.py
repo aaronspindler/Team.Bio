@@ -1,24 +1,21 @@
 from django import forms
-from django.forms import ModelForm
 
-from accounts.models import CustomUser
+from accounts.models import User
 
 
-class UserProfileForm(ModelForm):
-    profile_picture = forms.ImageField(label="Profile Picture")
+class UserProfileForm(forms.ModelForm):
+    profile_picture = forms.ImageField(label="Profile Picture", required=False)
     short_bio = forms.CharField(
         label="Bio",
-        widget=forms.TextInput(
+        widget=forms.Textarea(
             attrs={'placeholder': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
-        )
-    )
-    title = forms.CharField(
-        label="Job Title",
-        widget=forms.TextInput(
-            attrs={'placeholder': 'Chief Fun Officer'}
-        )
+        ),
+        required=False
     )
 
     class Meta:
-        model = CustomUser
-        fields = ['profile_picture', 'short_bio', 'title']
+        model = User
+        fields = [
+            'profile_picture',
+            'short_bio',
+        ]
