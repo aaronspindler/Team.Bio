@@ -15,6 +15,9 @@
                         <img class="card-img-top img-max d-block rounded" src="{{ profile.profile_picture_url }}"/>
                     </div>
                     <div class="card-body">
+                        {% if profile.short_bio %}
+                            <p>{{ profile.short_bio }}</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
