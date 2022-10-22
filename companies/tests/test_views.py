@@ -145,28 +145,28 @@ class TestCompanyViews(TestCase):
 
     def test_remove_user_login_required_post(self):
         self.client.logout()
-        response = self.client.post(reverse('remove_user', kwargs={'user_to_remove_pk': self.company_user.pk}), follow=True)
+        response = self.client.post(reverse('remove_user', kwargs={'user_to_remove': self.company_user.email_prefix}), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateNotUsed(response, "companies/remove_user.html")
         self.assertTemplateUsed(response, "account/login.html")
 
     def test_remove_user_login_required_get(self):
         self.client.logout()
-        response = self.client.get(reverse('remove_user', kwargs={'user_to_remove_pk': self.company_user.pk}), follow=True)
+        response = self.client.get(reverse('remove_user', kwargs={'user_to_remove': self.company_user.email_prefix}), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateNotUsed(response, "companies/remove_user.html")
         self.assertTemplateUsed(response, "account/login.html")
 
     def test_remove_user_is_company_owner_post(self):
         self.client.force_login(self.company_user)
-        response = self.client.post(reverse('remove_user', kwargs={'user_to_remove_pk': self.company_user.pk}), follow=True)
+        response = self.client.post(reverse('remove_user', kwargs={'user_to_remove': self.company_user.email_prefix}), follow=True)
         self.assertEqual(response.status_code, 404)
         self.assertTemplateNotUsed(response, "companies/remove_user.html")
         self.assertTemplateUsed(response, "404.html")
 
     def test_remove_user_is_company_owner_get(self):
         self.client.force_login(self.company_user)
-        response = self.client.get(reverse('remove_user', kwargs={'user_to_remove_pk': self.company_user.pk}), follow=True)
+        response = self.client.get(reverse('remove_user', kwargs={'user_to_remove': self.company_user.email_prefix}), follow=True)
         self.assertEqual(response.status_code, 404)
         self.assertTemplateNotUsed(response, "companies/remove_user.html")
         self.assertTemplateUsed(response, "404.html")
@@ -174,7 +174,7 @@ class TestCompanyViews(TestCase):
     def test_remove_user_is_a_company_owner(self):
         # GET
         self.assertFalse(CustomUser.objects.filter(is_active=False).exists())
-        response = self.client.get(reverse('remove_user', kwargs={'user_to_remove_pk': self.user.pk}), follow=True)
+        response = self.client.get(reverse('remove_user', kwargs={'user_to_remove': self.user.email_prefix}), follow=True)
         self.assertEqual(response.status_code, 404)
         self.assertTemplateNotUsed(response, "companies/remove_user.html")
         self.assertTemplateUsed(response, "404.html")
@@ -182,7 +182,7 @@ class TestCompanyViews(TestCase):
 
         # POST
         self.assertFalse(CustomUser.objects.filter(is_active=False).exists())
-        response = self.client.post(reverse('remove_user', kwargs={'user_to_remove_pk': self.user.pk}), follow=True)
+        response = self.client.post(reverse('remove_user', kwargs={'user_to_remove': self.user.email_prefix}), follow=True)
         self.assertEqual(response.status_code, 404)
         self.assertTemplateNotUsed(response, "companies/remove_user.html")
         self.assertTemplateUsed(response, "404.html")
@@ -191,7 +191,7 @@ class TestCompanyViews(TestCase):
     def test_remove_user_not_in_company(self):
         # GET
         self.assertFalse(CustomUser.objects.filter(is_active=False).exists())
-        response = self.client.get(reverse('remove_user', kwargs={'user_to_remove_pk': self.different_company_user.pk}), follow=True)
+        response = self.client.get(reverse('remove_user', kwargs={'user_to_remove': self.different_company_user.email_prefix}), follow=True)
         self.assertEqual(response.status_code, 404)
         self.assertTemplateNotUsed(response, "companies/remove_user.html")
         self.assertTemplateUsed(response, "404.html")
@@ -199,21 +199,21 @@ class TestCompanyViews(TestCase):
 
         # POST
         self.assertFalse(CustomUser.objects.filter(is_active=False).exists())
-        response = self.client.post(reverse('remove_user', kwargs={'user_to_remove_pk': self.different_company_user.pk}), follow=True)
+        response = self.client.post(reverse('remove_user', kwargs={'user_to_remove': self.different_company_user.email_prefix}), follow=True)
         self.assertEqual(response.status_code, 404)
         self.assertTemplateNotUsed(response, "companies/remove_user.html")
         self.assertTemplateUsed(response, "404.html")
         self.assertFalse(CustomUser.objects.filter(is_active=False).exists())
 
     def test_remove_user_get(self):
-        response = self.client.get(reverse('remove_user', kwargs={'user_to_remove_pk': self.company_user.pk}), follow=True)
+        response = self.client.get(reverse('remove_user', kwargs={'user_to_remove': self.company_user.email_prefix}), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "companies/remove_user.html")
         self.assertFalse(CustomUser.objects.filter(is_active=False).exists())
 
     def test_remove_user_post(self):
         self.assertFalse(CustomUser.objects.filter(is_active=False).exists())
-        response = self.client.post(reverse('remove_user', kwargs={'user_to_remove_pk': self.company_user.pk}), follow=True)
+        response = self.client.post(reverse('remove_user', kwargs={'user_to_remove': self.company_user.email_prefix}), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "companies/company_settings.html")
         self.assertTrue(CustomUser.objects.filter(is_active=False).exists())

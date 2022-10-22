@@ -18,12 +18,17 @@ class Company(models.Model):
         self.url_root = (parsed.domain + '.' + parsed.suffix).lower()
         super().save(*args, **kwargs)
 
+    @property
     def get_owners(self):
         company_owners = self.owners.all()
         owners_list = []
         for company_owner in company_owners:
             owners_list.append(company_owner.owner)
         return owners_list
+
+    @property
+    def get_active_users(self):
+        return self.users.filter(is_active=True)
 
     class Meta:
         verbose_name_plural = 'Companies'
@@ -40,3 +45,23 @@ class CompanyOwner(models.Model):
         unique_together = ('company', 'owner')
         verbose_name = 'Company Owner'
         verbose_name_plural = 'Company Owners'
+
+
+class Team(models.Model):
+    company = models.ForeignKey(Company, related_name='teams', on_delete=models.CASCADE)
+    name = models.CharField(max_length=60)
+
+    class Meta:
+        unique_together = ('company', 'name')
+        verbose_name = 'Team'
+        verbose_name_plural = 'Teams'
+
+
+class Location(models.Model):
+    company = models.ForeignKey(Company, related_name='locations', on_delete=models.CASCADE)
+    name = models.CharField(max_length=60)
+
+    class Meta:
+        unique_together = ('company', 'name')
+        verbose_name = 'Location'
+        verbose_name_plural = 'Locations'

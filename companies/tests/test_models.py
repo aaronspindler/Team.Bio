@@ -14,13 +14,13 @@ class TestModels(TestCase):
 
     def test_company_get_owners_single(self):
         expected_result = [self.user]
-        actual_result = self.company.get_owners()
+        actual_result = self.company.get_owners
         self.assertEqual(expected_result, actual_result)
 
     def test_company_get_owners_multiple(self):
         CompanyOwner.objects.create(company=self.company, owner=self.user2)
         expected_result = [self.user, self.user2]
-        actual_result = self.company.get_owners()
+        actual_result = self.company.get_owners
         self.assertEqual(expected_result, actual_result)
 
     def test_company_str(self):

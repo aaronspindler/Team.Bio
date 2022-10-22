@@ -10,6 +10,11 @@ class TestModels(TestCase):
         self.company = CompanyFactory()
         self.user = UserFactory(company=self.company)
 
+    def test_overridden_save(self):
+        user = UserFactory(email='Aaron@Spindlers.ca')
+        self.assertEqual(user.email_root, 'spindlers.ca')
+        self.assertEqual(user.email_prefix, 'aaron')
+
     def test_user_member_of_company_member(self):
         expected_result = True
         actual_result = self.user.is_member_of_company
@@ -31,3 +36,7 @@ class TestModels(TestCase):
     def test_user_email_root(self):
         user = UserFactory(email='aaron@spindlers.ca')
         self.assertEqual(user.email_root, 'spindlers.ca')
+
+    def test_user_email_prefix(self):
+        user = UserFactory(email='aaron@spindlers.ca')
+        self.assertEqual(user.email_prefix, 'aaron')

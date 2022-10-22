@@ -126,6 +126,9 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
+PUBLIC_MEDIA_LOCATION = ''
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+DEFAULT_FILE_STORAGE = 'config.storage_backends.PublicStorage'
 
 # SES
 EMAIL_BACKEND = 'django_ses.SESBackend'
