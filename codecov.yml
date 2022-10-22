@@ -9,3 +9,7 @@ coverage:
 
 comment:
   require_changes: true
+
+ignore:
+  - "config"
+  - "manage.py"
