@@ -13,15 +13,20 @@ class CustomUser(AbstractUser):
     email_root = models.CharField(max_length=250)
 
     # Profile
+    #   User Editable
     profile_picture = models.ImageField(blank=True, null=True, upload_to='profile_picture/')
     short_bio = models.CharField(max_length=240, blank=True, null=True)
+    general_location = models.ForeignKey("companies.Location", on_delete=models.CASCADE, blank=True, null=True)
+
+    #   Non-User Editable
     title = models.CharField(max_length=240, blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
     team = models.ForeignKey("companies.Team", on_delete=models.CASCADE, blank=True, null=True)
-    general_location = models.ForeignKey("companies.Location", on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         unique_together = ("company", "email_prefix")
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
 
     def __str__(self):
         return f'{self.company}/{self.email}'
