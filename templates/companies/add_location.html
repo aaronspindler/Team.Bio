@@ -2,13 +2,13 @@
 {% load crispy_forms_filters %}
 {% load static %}
 
-{% block title %}{{ user.company }} Invite User{% endblock title %}
+{% block title %}{{ user.company }} Add Location{% endblock title %}
 
 {% block content %}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Invite user to {{ user.company }}</h1>
+                <h1>Add Location to {{ user.company }}</h1>
             </div>
         </div>
         <div class="row">
@@ -18,9 +18,9 @@
                         <form method="post">
                             {% csrf_token %}
                             <div class="form-group">
-                                {{ company_form.name}}
+                                {{ form.name | as_crispy_field }}
                             </div>
-                            <button class="btn btn-primary btn-sm" type='submit'>Invite</button>
+                            <button class="btn btn-primary btn-sm" type='submit'>Create</button>
                         </form>
                     </div>
                 </div>

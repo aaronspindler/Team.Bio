@@ -5,8 +5,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from accounts.forms import UserProfileForm
 from accounts.models import User
 from companies.decorators import is_company_owner
-from companies.forms import CompanyForm
-from companies.models import CompanyOwner, Company
+from companies.forms import CompanyForm, LocationForm
+from companies.models import CompanyOwner, Company, Location, Team
 
 
 @login_required
@@ -62,11 +62,31 @@ def company_settings(request):
     company_users = company.get_active_users
     company_form = CompanyForm(instance=company)
 
+    locations = Location.objects.filter(company=company).order_by('name')
+
+    teams = Team.objects.filter(company=company).order_by('name')
+
     context = {
         'company_form': company_form,
         'company_users': company_users,
+        'locations': locations,
+        'teams': teams,
     }
     return render(request, 'companies/company_settings.html', context)
+
+
+@login_required
+@is_company_owner
+def add_location(request):
+    form = LocationForm()
+    if request.method == 'POST':
+        form = LocationForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.company = request.user.company
+            instance.save()
+            return redirect('company_settings')
+    return render(request, 'companies/add_location.html', {'form': form})
 
 
 @login_required

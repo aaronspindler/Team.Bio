@@ -23,7 +23,7 @@
                             <div class="form-group">
                                 {{ company_form.name | as_crispy_field }}
                             </div>
-                            <button class="btn btn-primary" type='submit'>Save</button>
+                            <button class="btn btn-primary btn-sm" type='submit'>Save</button>
                         </form>
                     </div>
                 </div>
@@ -48,11 +48,52 @@
                             <tbody>
                             {% for company_user in company_users %}
                                 <tr>
-                                    <th scope="row"><a href="{% url 'user_profile' company_user.email_prefix %}">{{ company_user.name }}</a></th>
+                                    <th scope="row"><a
+                                            href="{% url 'user_profile' company_user.email_prefix %}">{{ company_user.name }}</a>
+                                    </th>
                                     <td>{{ company_user.email }}</td>
                                     <td>
-                                        <a href="{% url 'remove_user' company_user.email_prefix %}" class="btn btn-sm btn-danger"><img src="{% static 'icons/trash-light.svg' %}"></a>
+                                        <a href="{% url 'remove_user' company_user.email_prefix %}"
+                                           class="btn btn-sm btn-danger"><img
+                                                src="{% static 'icons/trash-light.svg' %}"></a>
                                     </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h5 class="d-flex justify-content-between align-items-center">
+                                    Locations
+                                </h5>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <a href="{% url 'add_location' %}" class="btn btn-primary btn-sm">Add Location</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Number of Employees</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for location in locations %}
+                                <tr>
+                                    <th scope="row">{{ location.name }}</th>
+                                    <td>{{ location.user_set.count }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

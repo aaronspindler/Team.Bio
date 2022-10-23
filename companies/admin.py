@@ -1,15 +1,23 @@
 from django.contrib import admin
 
-from companies.models import Company, CompanyOwner
+from companies.models import Company, CompanyOwner, Team, Location
 
 
+@admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
     model = Company
 
 
+@admin.register(CompanyOwner)
 class CompanyOwnerAdmin(admin.ModelAdmin):
     model = CompanyOwner
 
 
-admin.site.register(Company, CompanyAdmin)
-admin.site.register(CompanyOwner, CompanyOwnerAdmin)
+@admin.register(Location)
+class LocationAdmin(admin.ModelAdmin):
+    model = Location
+
+
+@admin.register(Team)
+class TeamAdmin(admin.ModelAdmin):
+    model = Team

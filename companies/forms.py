@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from companies.models import Company
+from companies.models import Company, Location
 
 
 class CompanyForm(ModelForm):
@@ -11,3 +11,11 @@ class CompanyForm(ModelForm):
     class Meta:
         model = Company
         fields = ['name', 'url']
+
+
+class LocationForm(ModelForm):
+    name = forms.CharField(label="Name", widget=forms.TextInput(attrs={'placeholder': 'NYC'}))
+
+    class Meta:
+        model = Location
+        fields = ['name']
