@@ -6,23 +6,39 @@
 
 {% block content %}
     <div class="container">
-    <div class="row">
+        <div class="row">
             <div class="col-md-12">
                 <h1>Editing your profile</h1>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        {{ form.profile_picture | as_crispy_field }}
+                <div class="card">
+                    <div class="card-header">
+                        General Bio
                     </div>
-                    <div class="form-group">
-                        {{ form.short_bio | as_crispy_field }}
+                    <div class="card-body">
+                        <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {{ form.profile_picture | as_crispy_field }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.title | as_crispy_field }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.general_location | as_crispy_field }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.team | as_crispy_field }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.short_bio | as_crispy_field }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </form>
                     </div>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </form>
+                </div>
             </div>
         </div>
     </div>

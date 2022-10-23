@@ -51,6 +51,9 @@ class Team(models.Model):
     company = models.ForeignKey(Company, related_name='teams', on_delete=models.CASCADE)
     name = models.CharField(max_length=60)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         unique_together = ('company', 'name')
         verbose_name = 'Team'
@@ -60,6 +63,9 @@ class Team(models.Model):
 class Location(models.Model):
     company = models.ForeignKey(Company, related_name='locations', on_delete=models.CASCADE)
     name = models.CharField(max_length=60)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         unique_together = ('company', 'name')

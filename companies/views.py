@@ -116,14 +116,16 @@ def user_profile(request, email_prefix):
 
 @login_required
 def edit_profile(request):
+    company = request.user.company
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user, company=company)
         if form.is_valid():
             form.save()
             return redirect('user_profile', email_prefix=request.user.email_prefix)
 
     form = UserProfileForm(
-        instance=request.user
+        instance=request.user,
+        company=company
     )
 
     return render(request, 'companies/edit_profile.html', {'form': form})

@@ -16,12 +16,12 @@ class User(AbstractUser):
     #   User Editable
     profile_picture = models.ImageField(blank=True, null=True, upload_to='profile_picture/')
     short_bio = models.CharField(max_length=240, blank=True, null=True)
+    title = models.CharField(max_length=240, blank=True, null=True)
     general_location = models.ForeignKey("companies.Location", on_delete=models.CASCADE, blank=True, null=True)
+    team = models.ForeignKey("companies.Team", on_delete=models.CASCADE, blank=True, null=True)
 
     #   Non-User Editable
-    title = models.CharField(max_length=240, blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
-    team = models.ForeignKey("companies.Team", on_delete=models.CASCADE, blank=True, null=True)
 
     @property
     def profile_picture_url(self):
