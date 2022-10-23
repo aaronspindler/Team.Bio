@@ -8,7 +8,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>{{ user.company }} | Settings</h1>
+                <h1>{{ user.company }} Settings</h1>
             </div>
         </div>
         <div class="row">
@@ -94,6 +94,43 @@
                                 <tr>
                                     <th scope="row">{{ location.name }}</th>
                                     <td>{{ location.user_set.count }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <br>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h5 class="d-flex justify-content-between align-items-center">
+                                    Teams
+                                </h5>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <a href="{% url 'add_team' %}" class="btn btn-primary btn-sm">Add Team</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Number of Employees</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for team in teams %}
+                                <tr>
+                                    <th scope="row">{{ team.name }}</th>
+                                    <td>{{ team.user_set.count }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from accounts.forms import UserProfileForm
 from accounts.models import User
 from companies.decorators import is_company_owner
-from companies.forms import CompanyForm, LocationForm
+from companies.forms import CompanyForm, LocationForm, TeamForm
 from companies.models import CompanyOwner, Company, Location, Team
 
 
@@ -83,10 +83,28 @@ def add_location(request):
         form = LocationForm(request.POST)
         if form.is_valid():
             instance = form.save(commit=False)
-            instance.company = request.user.company
-            instance.save()
+            # Check if this already exists
+            if not Location.objects.filter(company=request.user.company, name=instance.name).exists():
+                instance.company = request.user.company
+                instance.save()
             return redirect('company_settings')
     return render(request, 'companies/add_location.html', {'form': form})
+
+
+@login_required
+@is_company_owner
+def add_team(request):
+    form = TeamForm()
+    if request.method == 'POST':
+        form = TeamForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            # Check if this already exists
+            if not Team.objects.filter(company=request.user.company, name=instance.name).exists():
+                instance.company = request.user.company
+                instance.save()
+            return redirect('company_settings')
+    return render(request, 'companies/add_team.html', {'form': form})
 
 
 @login_required

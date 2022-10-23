@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from companies.models import Company, Location
+from companies.models import Company, Location, Team
 
 
 class CompanyForm(ModelForm):
@@ -18,4 +18,12 @@ class LocationForm(ModelForm):
 
     class Meta:
         model = Location
+        fields = ['name']
+
+
+class TeamForm(ModelForm):
+    name = forms.CharField(label="Name", widget=forms.TextInput(attrs={'placeholder': 'Engineering'}))
+
+    class Meta:
+        model = Team
         fields = ['name']
