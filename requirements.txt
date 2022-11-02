@@ -3,7 +3,7 @@ boto3
 botocore
 certifi==2022.9.24
 cffi==1.15.1
-cryptography==38.0.1
+cryptography==38.0.3
 defusedxml==0.7.1
 Django==4.1.2
 django-allauth==0.51.0
