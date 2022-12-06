@@ -15,7 +15,7 @@ django-ses==3.2.2
 django-storages==1.13.1
 factory-boy==3.2.1
 Faker==15.3.4
-filelock==3.8.0
+filelock==3.8.2
 gunicorn==20.1.0
 idna==3.4
 jmespath==1.0.1
