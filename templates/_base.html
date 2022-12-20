@@ -24,48 +24,51 @@
 
 <body>
 <main role="main">
-    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-        <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-white  border-bottom shadow-sm">
-            <a class="navbar-brand" href="{% url 'home' %}"><h2><img class="rounded" src="{% static 'images/logo.png' %}" height=40
-                                                                     width=140></h2></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <header class="bg-indigo-600">
+        <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
+            <div class="flex w-full items-center justify-between border-b border-indigo-500 py-6 lg:border-none">
+                <div class="flex items-center">
+                    <a href="{% url 'home' %}">
+                        <span class="sr-only">Team Bio</span>
+                        <img class="h-10 w-auto" src="{% static 'images/logo.png' %}" alt="">
+                    </a>
+                    <div class="ml-10 hidden space-x-8 lg:block">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'company_home' %}" class="text-base font-medium text-white hover:text-indigo-50">Home</a>
 
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <ul class="navbar-nav mr-auto">
-                    {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link p-2 text-dark" href="{% url 'company_home' %}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link p-2 text-dark" href="{% url 'user_profile' user.email_prefix %}">My Profile</a>
-                        </li>
-                        {% if user in user.company.get_owners %}
-                            <li class="nav-item">
-                                <a class="nav-link p-2 text-dark" href="{% url 'company_settings' %}">Company Settings</a>
-                            </li>
+                            <a href="{% url 'user_profile' user.email_prefix %}" class="text-base font-medium text-white hover:text-indigo-50">My Profile</a>
+                            {% if user in user.company.get_owners %}#}
+                                <a href="{% url 'company_settings' %}" class="text-base font-medium text-white hover:text-indigo-50">Settings</a>
+                            {% endif %}
+
+                            {% if user.is_superuser %}
+                                <a href="/admin" class="text-base font-medium text-white hover:text-indigo-50">Admin</a>
+                            {% endif %}
+
                         {% endif %}
+                    </div>
+                </div>
+                <div class="ml-10 space-x-4">
+                    {% if user.is_authenticated == False %}
+                        <a href="{% url 'account_login' %}" class="inline-block rounded-md border border-transparent bg-indigo-500 py-2 px-4 text-base font-medium text-white hover:bg-opacity-75">Log in</a>
+                        <a href="{% url 'account_signup' %}" class="inline-block rounded-md border border-transparent bg-white py-2 px-4 text-base font-medium text-indigo-600 hover:bg-indigo-50">Sign up</a>
+                    {% else %}
+                        <a href="{% url 'account_logout' %}" class="inline-block rounded-md border border-transparent bg-white py-2 px-4 text-base font-medium text-indigo-600 hover:bg-indigo-50">Log out</a>
+
                     {% endif %}
-                    {% if user.is_superuser %}
-                        <li class="nav-item">
-                            <a class="nav-link p-2 text-danger" href="/admin">Admin</a>
-                        </li>
+                </div>
+            </div>
+            <div class="flex flex-wrap justify-center space-x-6 py-4 lg:hidden">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'company_home' %}" class="text-base font-medium text-white hover:text-indigo-50">Home</a>
+                    <a href="{% url 'user_profile' user.email_prefix %}" class="text-base font-medium text-white hover:text-indigo-50">My Profile</a>
+                    {% if user in user.company.get_owners %}
+                        <a href="{% url 'company_settings' %}" class="text-base font-medium text-white hover:text-indigo-50">Settings</a>
                     {% endif %}
-                </ul>
-                {% if user.is_authenticated == False %}
-                    <a class="btn btn-outline-primary mx-2" href="{% url 'account_login' %}">Log In <span
-                            class="oi oi-account-login"></span></a>
-                    <a class="btn btn-outline-primary mx-2" href="{% url 'account_signup' %}">Sign Up</a>
-                {% else %}
-                    <small>Logged in as : {{ user.name }} <a
-                            href="{% url 'account_logout' %}">Logout</a></small>
                 {% endif %}
             </div>
         </nav>
-        <br>
-    </div>
+    </header>
 </main>
 
 <div class="container">
