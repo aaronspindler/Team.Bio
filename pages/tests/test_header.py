@@ -8,6 +8,9 @@ from companies.models import CompanyOwner
 
 class TestHeader(TestCase):
     def setUp(self):
+        self.login_text = 'Log in'
+        self.sign_up_text = 'Sign up'
+        self.logout_text = 'Log out'
         # Create required models
         self.company = CompanyFactory()
         self.user = UserFactory(company=self.company)
@@ -24,20 +27,20 @@ class TestHeader(TestCase):
         response = self.client.get(reverse('home'), follow=True)
         self.assertEqual(response.status_code, 200)
 
-        self.assertContains(response, 'Log In')
-        self.assertContains(response, 'Sign Up')
+        self.assertContains(response, self.login_text)
+        self.assertContains(response, self.sign_up_text)
 
-        self.assertNotContains(response, 'Company Settings')
+        self.assertNotContains(response, 'Settings')
 
     def test_header_logged_in_admin(self):
         response = self.client.get(reverse('home'), follow=True)
         self.assertEqual(response.status_code, 200)
 
-        self.assertNotContains(response, 'Log In')
-        self.assertNotContains(response, 'Sign Up')
+        self.assertNotContains(response, self.login_text)
+        self.assertNotContains(response, self.sign_up_text)
 
-        self.assertContains(response, 'Logout')
-        self.assertContains(response, 'Company Settings')
+        self.assertContains(response, self.logout_text)
+        self.assertContains(response, 'Settings')
         self.assertContains(response, 'Home')
 
     def test_header_logged_in_none_admin(self):
@@ -45,12 +48,12 @@ class TestHeader(TestCase):
         response = self.client.get(reverse('home'), follow=True)
         self.assertEqual(response.status_code, 200)
 
-        self.assertNotContains(response, 'Log In')
-        self.assertNotContains(response, 'Sign Up')
-        self.assertNotContains(response, 'Company Settings')
+        self.assertNotContains(response, self.login_text)
+        self.assertNotContains(response, self.sign_up_text)
+        self.assertNotContains(response, 'Settings')
 
         self.assertContains(response, 'Home')
-        self.assertContains(response, 'Logout')
+        self.assertContains(response, self.logout_text)
 
     def test_header_logged_in_other_company(self):
         self.client.force_login(user=self.different_company_user)
@@ -58,8 +61,8 @@ class TestHeader(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(response, 'Home')
-        self.assertContains(response, 'Logout')
+        self.assertContains(response, self.logout_text)
 
-        self.assertNotContains(response, 'Log In')
-        self.assertNotContains(response, 'Sign Up')
-        self.assertNotContains(response, 'Company Settings')
+        self.assertNotContains(response, self.login_text)
+        self.assertNotContains(response, self.sign_up_text)
+        self.assertNotContains(response, 'Settings')
