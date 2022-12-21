@@ -8,7 +8,7 @@
     <title>TeamBio - {% block title %}{% endblock title %}</title>
     <meta name="description" content="A resource to learn more about your team">
     <meta name="author" content="">
-    {#<link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">#}
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.png' %}">
 
     {% block css %}
         <!-- Bootstrap CSS -->
@@ -30,7 +30,7 @@
                 <div class="flex items-center">
                     <a href="{% url 'home' %}">
                         <span class="sr-only">Team Bio</span>
-                        <img class="h-10 w-auto" src="{% static 'images/logo.png' %}" alt="">
+                        <img class="h-10 w-auto" src="{% static 'images/logo-light.svg' %}" alt="">
                     </a>
                     <div class="ml-10 hidden space-x-8 lg:block">
                         {% if user.is_authenticated %}
