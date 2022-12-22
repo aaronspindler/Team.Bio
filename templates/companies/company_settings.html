@@ -1,10 +1,35 @@
 {% extends '_base.html' %}
-{% load crispy_forms_filters %}
 {% load static %}
 
 {% block title %}{{ user.company }} Settings{% endblock title %}
 
 {% block content %}
+    <main class="mx-auto max-w-6xl px-4 pt-10 pb-12 lg:pb-16">
+  <form>
+    <div class="space-y-6">
+      <div>
+        <h1 class="text-lg font-medium leading-6 text-gray-900">{{ user.company }} Settings</h1>
+        <p class="mt-1 text-sm text-gray-500">Fill in all relevant fields below!</p>
+      </div>
+
+      <div>
+        <label for="project-name" class="block text-sm font-medium text-gray-700">Company Name</label>
+        <div class="mt-1">
+          <input type="text" name="project-name" id="project-name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm" value="Project Nero">
+        </div>
+      </div>
+
+      <div>
+        <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
+        <input type="text" name="tags" id="tags" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm">
+      </div>
+
+      <div class="flex justify-end">
+        <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-sky-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">Save</button>
+      </div>
+    </div>
+  </form>
+</main>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -21,7 +46,7 @@
                         <form method="post">
                             {% csrf_token %}
                             <div class="form-group">
-                                {{ company_form.name | as_crispy_field }}
+                                {{ company_form.name }}
                             </div>
                             <button class="btn btn-primary btn-sm" type='submit'>Save</button>
                         </form>

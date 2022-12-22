@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     "allauth.account",
     'allauth.socialaccount',
     "allauth.socialaccount.providers.google",
-    "crispy_forms",
     "debug_toolbar",
     "storages",
     # Local
@@ -134,8 +133,6 @@ DEFAULT_FILE_STORAGE = 'config.storage_backends.PublicStorage'
 EMAIL_BACKEND = 'django_ses.SESBackend'
 DEFAULT_FROM_EMAIL = '"Team Bio" <help@team.bio>'
 SERVER_EMAIL = 'help@team.bio'
-
-CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 INTERNAL_IPS = ["127.0.0.1"]
 

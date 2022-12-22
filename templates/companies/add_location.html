@@ -1,5 +1,4 @@
 {% extends '_base.html' %}
-{% load crispy_forms_filters %}
 {% load static %}
 
 {% block title %}{{ user.company }} Add Location{% endblock title %}
@@ -18,7 +17,7 @@
                         <form method="post">
                             {% csrf_token %}
                             <div class="form-group">
-                                {{ form.name | as_crispy_field }}
+                                {{ form.name }}
                             </div>
                             <button class="btn btn-primary btn-sm" type='submit'>Create</button>
                         </form>
