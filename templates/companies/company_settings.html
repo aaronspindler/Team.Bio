@@ -48,10 +48,11 @@
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
                     <h2 class="text-lg font-medium text-gray-900">Locations</h2>
-                    <p class="mt-2 text-sm text-gray-700">A list of locations within the company.</p>
+                    <p class="mt-2 text-sm text-gray-700">A list of generalized locations within the company.</p>
                 </div>
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                    <a type="button" href="{% url 'add_location' %}" class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Add Location</a>
+                    <a type="button" href="{% url 'add_location' %}"
+                       class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Add Location</a>
                 </div>
             </div>
             <div class="mt-8 flex flex-col">
@@ -73,9 +74,9 @@
                                     <tr>
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ location.name }}</td>
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ location.user_set.count }}</td>
-{#                                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">#}
-{#                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Remove<span class="sr-only">, {{ location.name }}</span></a>#}
-{#                                        </td>#}
+                                        {#                                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">#}
+                                        {#                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Remove<span class="sr-only">, {{ location.name }}</span></a>#}
+                                        {#                                        </td>#}
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -84,13 +85,14 @@
                     </div>
                 </div>
             </div>
-        <div class="sm:flex sm:items-center">
+            <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
                     <h2 class="text-lg font-medium text-gray-900">Teams</h2>
                     <p class="mt-2 text-sm text-gray-700">A list of teams within the company.</p>
                 </div>
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                    <a type="button" href="{% url 'add_team' %}" class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Add Team</a>
+                    <a type="button" href="{% url 'add_team' %}"
+                       class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Add Team</a>
                 </div>
             </div>
             <div class="mt-8 flex flex-col">
@@ -112,9 +114,9 @@
                                     <tr>
                                         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ team.name }}</td>
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ team.user_set.count }}</td>
-{#                                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">#}
-{#                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Remove<span class="sr-only">, {{ location.name }}</span></a>#}
-{#                                        </td>#}
+                                        {#                                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">#}
+                                        {#                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Remove<span class="sr-only">, {{ location.name }}</span></a>#}
+                                        {#                                        </td>#}
                                     </tr>
                                 {% endfor %}
                                 </tbody>
