@@ -14,7 +14,10 @@ class CompanyForm(ModelForm):
 
 
 class LocationForm(ModelForm):
-    name = forms.CharField(label="Name", widget=forms.TextInput(attrs={'placeholder': 'NYC'}))
+    name = forms.CharField(label="Name", widget=forms.TextInput(attrs={
+        'placeholder': 'NYC',
+        'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+    }))
 
     class Meta:
         model = Location
@@ -22,7 +25,10 @@ class LocationForm(ModelForm):
 
 
 class TeamForm(ModelForm):
-    name = forms.CharField(label="Name", widget=forms.TextInput(attrs={'placeholder': 'Engineering'}))
+    name = forms.CharField(label="Name", widget=forms.TextInput(attrs={
+        'placeholder': 'Engineering',
+        'class': 'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+    }))
 
     class Meta:
         model = Team
