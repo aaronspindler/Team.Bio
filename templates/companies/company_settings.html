@@ -5,164 +5,124 @@
 
 {% block content %}
     <main class="mx-auto max-w-6xl px-4 pt-10 pb-12 lg:pb-16">
-  <form>
-    <div class="space-y-6">
-      <div>
-        <h1 class="text-lg font-medium leading-6 text-gray-900">{{ user.company }} Settings</h1>
-        <p class="mt-1 text-sm text-gray-500">Fill in all relevant fields below!</p>
-      </div>
-
-      <div>
-        <label for="project-name" class="block text-sm font-medium text-gray-700">Company Name</label>
-        <div class="mt-1">
-          <input type="text" name="project-name" id="project-name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm" value="Project Nero">
-        </div>
-      </div>
-
-      <div>
-        <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
-        <input type="text" name="tags" id="tags" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm">
-      </div>
-
-      <div class="flex justify-end">
-        <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-sky-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">Save</button>
-      </div>
-    </div>
-  </form>
-</main>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>{{ user.company }} Settings</h1>
+        <div class="space-y-6">
+            <div>
+                <h1 class="text-xl font-bold leading-6 text-gray-900">{{ user.company }} Settings</h1>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <h5 class="card-header d-flex justify-content-between align-items-center">
-                        Settings
-                    </h5>
-                    <div class="card-body">
-                        <form method="post">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                {{ company_form.name }}
-                            </div>
-                            <button class="btn btn-primary btn-sm" type='submit'>Save</button>
-                        </form>
-                    </div>
+            <div class="sm:flex sm:items-center">
+                <div class="sm:flex-auto">
+                    <h2 class="text-lg font-medium text-gray-900">Users</h2>
+                    <p class="mt-2 text-sm text-gray-700">A list of all the users in your account including their name and email.</p>
                 </div>
             </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <h5 class="card-header d-flex justify-content-between align-items-center">
-                        Users
-                    </h5>
-                    <div class="card-body">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Controls</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for company_user in company_users %}
+            <div class="mt-8 flex flex-col">
+                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-300">
+                                <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="row"><a
-                                            href="{% url 'user_profile' company_user.email_prefix %}">{{ company_user.name }}</a>
+                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
+                                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                        <span class="sr-only">Remove</span>
                                     </th>
-                                    <td>{{ company_user.email }}</td>
-                                    <td>
-                                        <a href="{% url 'remove_user' company_user.email_prefix %}"
-                                           class="btn btn-sm btn-danger"><img
-                                                src="{% static 'icons/trash-light.svg' %}"></a>
-                                    </td>
                                 </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-10">
-                                <h5 class="d-flex justify-content-between align-items-center">
-                                    Locations
-                                </h5>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <a href="{% url 'add_location' %}" class="btn btn-primary btn-sm">Add Location</a>
-                            </div>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200 bg-white">
+                                {% for company_user in company_users %}
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ company_user.name }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ company_user.email }}</td>
+                                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                            <a href="{% url 'remove_user' company_user.email_prefix %}" class="text-indigo-600 hover:text-indigo-900">Remove<span class="sr-only">, {{ company_user.name }}</span></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Number of Employees</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for location in locations %}
-                                <tr>
-                                    <th scope="row">{{ location.name }}</th>
-                                    <td>{{ location.user_set.count }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
-        </div>
-    <br>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-10">
-                                <h5 class="d-flex justify-content-between align-items-center">
-                                    Teams
-                                </h5>
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <a href="{% url 'add_team' %}" class="btn btn-primary btn-sm">Add Team</a>
-                            </div>
+            <div class="sm:flex sm:items-center">
+                <div class="sm:flex-auto">
+                    <h2 class="text-lg font-medium text-gray-900">Locations</h2>
+                    <p class="mt-2 text-sm text-gray-700">A list of locations within the company.</p>
+                </div>
+                <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                    <a type="button" href="{% url 'add_location' %}" class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Add Location</a>
+                </div>
+            </div>
+            <div class="mt-8 flex flex-col">
+                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-300">
+                                <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Number of Employees</th>
+                                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                        <span class="sr-only">Remove</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200 bg-white">
+                                {% for location in locations %}
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ location.name }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ location.user_set.count }}</td>
+{#                                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">#}
+{#                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Remove<span class="sr-only">, {{ location.name }}</span></a>#}
+{#                                        </td>#}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Number of Employees</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for team in teams %}
+                </div>
+            </div>
+        <div class="sm:flex sm:items-center">
+                <div class="sm:flex-auto">
+                    <h2 class="text-lg font-medium text-gray-900">Teams</h2>
+                    <p class="mt-2 text-sm text-gray-700">A list of teams within the company.</p>
+                </div>
+                <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                    <a type="button" href="{% url 'add_team' %}" class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Add Team</a>
+                </div>
+            </div>
+            <div class="mt-8 flex flex-col">
+                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-300">
+                                <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="row">{{ team.name }}</th>
-                                    <td>{{ team.user_set.count }}</td>
+                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Number of Employees</th>
+                                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                        <span class="sr-only">Remove</span>
+                                    </th>
                                 </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200 bg-white">
+                                {% for team in teams %}
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ team.name }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ team.user_set.count }}</td>
+{#                                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">#}
+{#                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Remove<span class="sr-only">, {{ location.name }}</span></a>#}
+{#                                        </td>#}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 {% endblock content %}

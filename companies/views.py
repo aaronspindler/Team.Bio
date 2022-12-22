@@ -60,14 +60,12 @@ def remove_user(request, email_prefix):
 def company_settings(request):
     company = request.user.company
     company_users = company.get_active_users
-    company_form = CompanyForm(instance=company)
 
     locations = Location.objects.filter(company=company).order_by('name')
 
     teams = Team.objects.filter(company=company).order_by('name')
 
     context = {
-        'company_form': company_form,
         'company_users': company_users,
         'locations': locations,
         'teams': teams,
