@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 
 import environ
-
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -154,6 +153,7 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
