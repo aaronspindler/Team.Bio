@@ -36,4 +36,4 @@ sqlparse==0.4.3
 tldextract==3.4.0
 types-cryptography==3.3.23.2
 urllib3==1.26.13
-whitenoise==6.2.0
+whitenoise==6.3.0
