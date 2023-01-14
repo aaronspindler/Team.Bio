@@ -48,12 +48,18 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "debug_toolbar",
     "storages",
+    "crispy_forms",
+    "crispy_tailwind",
     # Local
     "accounts",
     "pages",
     "companies",
     "utils",
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+
+CRISPY_TEMPLATE_PACK = "tailwind"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

@@ -18,19 +18,19 @@ class User(AbstractUser):
     general_location = models.ForeignKey("companies.Location", on_delete=models.CASCADE, blank=True, null=True)
     team = models.ForeignKey("companies.Team", on_delete=models.CASCADE, blank=True, null=True)
 
-    linkedin_url = models.TextField(blank=True, null=True)
-    twitter_url = models.TextField(blank=True, null=True)
-    github_url = models.TextField(blank=True, null=True)
+    linkedin = models.CharField(max_length=200, blank=True, null=True)
+    twitter = models.CharField(max_length=200, blank=True, null=True)
+    github = models.CharField(max_length=200, blank=True, null=True)
 
     # Address Info
     place_id = models.TextField(blank=True, null=True)
     lat = models.TextField(blank=True, null=True)
     lon = models.TextField(blank=True, null=True)
-    address_1 = models.TextField(blank=True, null=True)
-    city = models.TextField(blank=True, null=True)
-    prov_state = models.TextField(blank=True, null=True)
-    postal_code = models.TextField(blank=True, null=True)
-    country = models.TextField(blank=True, null=True)
+    address_1 = models.CharField(max_length=200, blank=True, null=True)
+    city = models.CharField(max_length=200, blank=True, null=True)
+    prov_state = models.CharField(max_length=200, blank=True, null=True)
+    postal_code = models.CharField(max_length=200, blank=True, null=True)
+    country = models.CharField(max_length=200, blank=True, null=True)
 
     #   Non-User Editable
     start_date = models.DateField(blank=True, null=True)
