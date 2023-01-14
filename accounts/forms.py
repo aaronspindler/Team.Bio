@@ -5,14 +5,8 @@ from companies.models import Location, Team
 
 
 class UserProfileForm(forms.ModelForm):
-    profile_picture = forms.ImageField(label="Profile Picture", required=False)
-    short_bio = forms.CharField(
-        label="Bio",
-        widget=forms.Textarea(
-            attrs={'placeholder': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
-        ),
-        required=False
-    )
+    profile_picture = forms.ImageField(required=False)
+    short_bio = forms.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company')
@@ -25,7 +19,17 @@ class UserProfileForm(forms.ModelForm):
         fields = [
             'profile_picture',
             'short_bio',
+            'first_name',
+            'last_name',
             'title',
             'general_location',
-            'team'
+            'team',
+            'linkedin_url',
+            'twitter_url',
+            'github_url',
+            'address_1',
+            'city',
+            'prov_state',
+            'postal_code',
+            'country',
         ]

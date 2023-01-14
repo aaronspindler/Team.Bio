@@ -1,6 +1,5 @@
 from allauth.account.signals import user_signed_up
 from django.contrib.auth.models import AbstractUser
-
 from django.db import models
 from django.dispatch import receiver
 
@@ -13,12 +12,25 @@ class User(AbstractUser):
     email_root = models.CharField(max_length=250)
 
     # Profile
-    #   User Editable
     profile_picture = models.ImageField(blank=True, null=True, upload_to='profile_picture/')
     short_bio = models.CharField(max_length=240, blank=True, null=True)
     title = models.CharField(max_length=240, blank=True, null=True)
     general_location = models.ForeignKey("companies.Location", on_delete=models.CASCADE, blank=True, null=True)
     team = models.ForeignKey("companies.Team", on_delete=models.CASCADE, blank=True, null=True)
+
+    linkedin_url = models.URLField(blank=True, null=True)
+    twitter_url = models.URLField(blank=True, null=True)
+    github_url = models.URLField(blank=True, null=True)
+
+    # Address Info
+    place_id = models.TextField(blank=True, null=True)
+    lat = models.TextField(blank=True, null=True)
+    lon = models.TextField(blank=True, null=True)
+    address_1 = models.TextField(blank=True, null=True)
+    city = models.TextField(blank=True, null=True)
+    prov_state = models.TextField(blank=True, null=True)
+    postal_code = models.TextField(blank=True, null=True)
+    country = models.TextField(blank=True, null=True)
 
     #   Non-User Editable
     start_date = models.DateField(blank=True, null=True)
@@ -56,6 +68,7 @@ class User(AbstractUser):
             return True
         return False
 
+    # This is a signal receiver to try to connect a user to an existing company
     @receiver(user_signed_up)
     def allauth_user_signed_up(sender, request, user, **kwargs):
         attempt_connect_user_to_a_company(user)

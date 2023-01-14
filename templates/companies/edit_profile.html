@@ -28,13 +28,13 @@
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
                         <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Title</label>
                         <div class="mt-1 sm:col-span-2 sm:mt-0">
-                            <input type="text" name="title" id="title" placeholder="CEO" class="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm">
+                            <input type="text" name="title" id="title" placeholder="CEO" class="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm" value="{{ form.title.value|default_if_none:"" }}">
                         </div>
                     </div>
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
                         <label for="about" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">About</label>
                         <div class="mt-1 sm:col-span-2 sm:mt-0">
-                            <textarea id="about" name="about" rows="3" class="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
+                            <textarea id="about" name="about" rows="3" class="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">{{ form.short_bio.value|default_if_none:"" }}</textarea>
                             <p class="mt-2 text-sm text-gray-500">Write a few sentences about yourself.</p>
                         </div>
                     </div>
@@ -95,14 +95,14 @@
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
                         <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">First name</label>
                         <div class="mt-1 sm:col-span-2 sm:mt-0">
-                            <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm">
+                            <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm" value="{{ form.first_name.value|default_if_none:"" }}">
                         </div>
                     </div>
 
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
                         <label for="last-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Last name</label>
                         <div class="mt-1 sm:col-span-2 sm:mt-0">
-                            <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm">
+                            <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm" value="{{ form.last_name.value|default_if_none:"" }}">
                         </div>
                     </div>
 
