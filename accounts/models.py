@@ -18,9 +18,9 @@ class User(AbstractUser):
     general_location = models.ForeignKey("companies.Location", on_delete=models.CASCADE, blank=True, null=True)
     team = models.ForeignKey("companies.Team", on_delete=models.CASCADE, blank=True, null=True)
 
-    linkedin_url = models.URLField(blank=True, null=True)
-    twitter_url = models.URLField(blank=True, null=True)
-    github_url = models.URLField(blank=True, null=True)
+    linkedin_url = models.TextField(blank=True, null=True)
+    twitter_url = models.TextField(blank=True, null=True)
+    github_url = models.TextField(blank=True, null=True)
 
     # Address Info
     place_id = models.TextField(blank=True, null=True)
