@@ -17,7 +17,7 @@ def create_company(request):
 
     form = CompanyForm()
     if request.method == "POST":
-        form = CompanyForm(request.POST)
+        form = CompanyForm(data=request.POST)
         if form.is_valid():
             company = form.save()
             # Create a CompanyOwner object to track who owns the company
@@ -115,16 +115,16 @@ def user_profile(request, email_prefix):
 @login_required
 def edit_profile(request):
     company = request.user.company
+    form = UserProfileForm(
+        instance=request.user,
+        company=company
+    )
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=request.user, company=company)
         if form.is_valid():
             form.save()
             return redirect('user_profile', email_prefix=request.user.email_prefix)
-
-    form = UserProfileForm(
-        instance=request.user,
-        company=company
-    )
+        print(form.errors)
 
     return render(request, 'companies/edit_profile.html', {'form': form})
 

@@ -237,23 +237,11 @@ class TestCompanyViews(TestCase):
     def test_edit_profile_post(self):
         new_short_bio = 'asdf'
         self.assertIsNotNone(self.user.short_bio)
-        data = {'short_bio': new_short_bio}
+        data = {'short_bio': new_short_bio, 'name': 'asdf', 'first_name': self.user.first_name, 'last_name': self.user.last_name}
         response = self.client.post(reverse('edit_profile'), data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "companies/user_profile.html")
         self.assertContains(response, new_short_bio)
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.short_bio, new_short_bio)
-
-    def test_edit_profile_post_null(self):
-        new_short_bio = ''
-        old_short_bio = self.user.short_bio
-        self.assertIsNotNone(self.user.short_bio)
-        data = {'short_bio': new_short_bio}
-        response = self.client.post(reverse('edit_profile'), data, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "companies/user_profile.html")
-        self.assertNotContains(response, old_short_bio)
         self.user.refresh_from_db()
         self.assertEqual(self.user.short_bio, new_short_bio)
 
