@@ -6,7 +6,7 @@ from companies.models import Location, Team
 
 class UserProfileForm(forms.ModelForm):
     short_bio = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": "3"}))
-    profile_picture = forms.ImageField(label='')
+    profile_picture = forms.ImageField(label='', required=False)
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company')

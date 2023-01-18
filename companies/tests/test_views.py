@@ -237,7 +237,7 @@ class TestCompanyViews(TestCase):
     def test_edit_profile_post(self):
         new_short_bio = 'asdf'
         self.assertIsNotNone(self.user.short_bio)
-        data = {'short_bio': new_short_bio, 'name': 'asdf', 'first_name': self.user.first_name, 'last_name': self.user.last_name}
+        data = {'short_bio': new_short_bio, 'name': 'Fred Flintstone'}
         response = self.client.post(reverse('edit_profile'), data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "companies/user_profile.html")
