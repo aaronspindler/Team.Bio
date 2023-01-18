@@ -172,3 +172,5 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+BLACKLISTED_DOMAIN_ROOTS = ['gmail.com', 'live.com', 'icloud.com', 'live.ca', 'proton.me']

@@ -1,10 +1,13 @@
+from django.conf import settings
+
 from companies.models import Company
 
 
 def attempt_connect_user_to_a_company(user):
-    # Get user email root
     user_email_root = user.email_root
-    # look for companies with url=email_root
+    # Don't auto connect users to a company if their email root is one of the popular free emails
+    if user_email_root in settings.BLACKLISTED_DOMAIN_ROOTS:
+        return False
     companies = Company.objects.filter(url_root=user_email_root)
     # if only 1 company found, proceed
     if companies.count() == 1:
