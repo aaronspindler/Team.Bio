@@ -149,24 +149,32 @@
                                     <dt class="text-sm font-medium text-gray-500">Email</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ company_user.email }}</dd>
                                 </div>
-                                <div class="sm:col-span-1">
-                                    <dt class="text-sm font-medium text-gray-500">Title</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ company_user.title }}</dd>
-                                </div>
-                                <div class="sm:col-span-1">
-                                    <dt class="text-sm font-medium text-gray-500">Team</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ company_user.team }}</dd>
-                                </div>
-                                <div class="sm:col-span-1">
-                                    <dt class="text-sm font-medium text-gray-500">Office</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ company_user.general_location }}</dd>
-                                </div>
-                                <div class="sm:col-span-2">
-                                    <dt class="text-sm font-medium text-gray-500">About</dt>
-                                    <dd class="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
-                                        {{ company_user.short_bio|linebreaks }}
-                                    </dd>
-                                </div>
+                                {% if company_user.title %}
+                                    <div class="sm:col-span-1">
+                                        <dt class="text-sm font-medium text-gray-500">Title</dt>
+                                        <dd class="mt-1 text-sm text-gray-900">{{ company_user.title }}</dd>
+                                    </div>
+                                {% endif %}
+                                {% if company_user.team %}
+                                    <div class="sm:col-span-1">
+                                        <dt class="text-sm font-medium text-gray-500">Team</dt>
+                                        <dd class="mt-1 text-sm text-gray-900">{{ company_user.team }}</dd>
+                                    </div>
+                                {% endif %}
+                                {% if company_user.general_location %}
+                                    <div class="sm:col-span-1">
+                                        <dt class="text-sm font-medium text-gray-500">Office</dt>
+                                        <dd class="mt-1 text-sm text-gray-900">{{ company_user.general_location }}</dd>
+                                    </div>
+                                {% endif %}
+                                {% if company_user.short_bio %}
+                                    <div class="sm:col-span-2">
+                                        <dt class="text-sm font-medium text-gray-500">About</dt>
+                                        <dd class="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
+                                            {{ company_user.short_bio|linebreaks }}
+                                        </dd>
+                                    </div>
+                                {% endif %}
                             </dl>
                         </div>
 

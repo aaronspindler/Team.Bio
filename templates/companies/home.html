@@ -22,7 +22,7 @@
                                     <a href="{% url 'user_profile' company_user.email_prefix %}">
                                         <div class="space-y-1 text-lg font-medium leading-6">
                                             <h3>{{ company_user.name }}</h3>
-                                            <p class="text-indigo-600">{{ company_user.title }}</p>
+                                            {% if company_user.title %}<p class="text-indigo-600">{{ company_user.title }}</p>{% endif %}
                                         </div>
                                     </a>
                                     <ul role="list" class="flex space-x-5">
