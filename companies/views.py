@@ -109,7 +109,8 @@ def add_team(request):
 def user_profile(request, email_prefix):
     # Get the user requested for that company
     company_user = get_object_or_404(User, company=request.user.company, email_prefix=email_prefix)
-    return render(request, 'companies/user_profile.html', {'company_user': company_user})
+    team_members = User.objects.filter(company=request.user.company, team=company_user.team)
+    return render(request, 'companies/user_profile.html', {'company_user': company_user, 'team_members': team_members})
 
 
 @login_required
