@@ -1,6 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.generic import UpdateView
 
 from accounts.forms import UserProfileForm
 from accounts.models import User
@@ -89,6 +92,21 @@ def add_location(request):
     return render(request, 'companies/add_location.html', {'form': form})
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(is_company_owner, name='dispatch')
+class UpdateLocationView(UpdateView):
+    model = Location
+    fields = ['name']
+    template_name = 'companies/update_location.html'
+    success_url = reverse_lazy("company_settings")
+
+    def get_object(self, *args, **kwargs):
+        obj = super(UpdateLocationView, self).get_object(*args, **kwargs)
+        if obj.company != self.request.user.company:
+            raise Http404
+        return obj
+
+
 @login_required
 @is_company_owner
 def add_team(request):
@@ -103,6 +121,21 @@ def add_team(request):
                 instance.save()
             return redirect('company_settings')
     return render(request, 'companies/add_team.html', {'form': form})
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(is_company_owner, name='dispatch')
+class UpdateTeamView(UpdateView):
+    model = Team
+    fields = ['name']
+    template_name = 'companies/update_team.html'
+    success_url = reverse_lazy("company_settings")
+
+    def get_object(self, *args, **kwargs):
+        obj = super(UpdateTeamView, self).get_object(*args, **kwargs)
+        if obj.company != self.request.user.company:
+            raise Http404
+        return obj
 
 
 @login_required
