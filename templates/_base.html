@@ -46,7 +46,9 @@
                             {% if user.is_superuser %}
                                 <a href="/admin" class="text-base font-medium text-white hover:text-indigo-50">Admin</a>
                             {% endif %}
-
+                        {% endif %}
+                        {% if user.is_authenticated == False %}
+                            <a href="{% url 'pricing' %}" class="text-base font-medium text-white hover:text-indigo-50">Pricing</a>
                         {% endif %}
                     </div>
                 </div>
@@ -86,12 +88,16 @@
             <div class="px-5 py-2">
                 <a href="mailto:support@team.bio" class="text-base text-gray-500 hover:text-gray-900">Support</a>
             </div>
+            <div class="px-5 py-2">
+                <a href="{% url 'pricing' %}" class="text-base text-gray-500 hover:text-gray-900">Pricing</a>
+            </div>
             {#            <div class="px-5 py-2">#}
             {#                <a href="{% url 'privacy_policy' %}" class="text-base text-gray-500 hover:text-gray-900">Privacy Policy</a>#}
             {#            </div>#}
             {#            <div class="px-5 py-2">#}
             {#                <a href="{% url 'terms_of_service' %}" class="text-base text-gray-500 hover:text-gray-900">Terms of Service</a>#}
             {#            </div>#}
+
         </nav>
         <div class="mt-8 flex justify-center space-x-6">
             {#      <a href="#" class="text-gray-400 hover:text-gray-500">#}

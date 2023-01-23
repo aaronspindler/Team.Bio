@@ -13,3 +13,7 @@ def privacy_policy(request):
 
 def terms_of_service(request):
     return render(request, "pages/terms_of_service.html")
+
+
+def pricing(request):
+    return render(request, "pages/pricing.html")
