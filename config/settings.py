@@ -175,3 +175,8 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 BLACKLISTED_DOMAIN_ROOTS = ['gmail.com', 'live.com', 'icloud.com', 'live.ca', 'proton.me']
+
+# Stripe
+STRIPE_PUBLISHABLE_KEY = env('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+STRIPE_PRICE_ID = env('STRIPE_PRICE_ID')
