@@ -40,7 +40,7 @@ class StripeCustomer(models.Model):
             quantity=num_users,
             currency='usd',
             customer=self.stripeCustomerId,
-            description=f'Per member, per month',
+            description='Per member, per month',
             invoice=invoice,
             tax_behavior='exclusive',
             tax_code='txcd_10103001'
