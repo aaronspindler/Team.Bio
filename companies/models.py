@@ -11,6 +11,10 @@ class Company(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    payment_failed = models.BooleanField(default=False)
+    payment_failed_count = models.IntegerField(default=0)
+    payment_failed_date = models.DateTimeField(null=True, blank=True)
+
     name = models.TextField(unique=True)
     url = models.URLField(unique=True)
     url_root = models.CharField(max_length=250, unique=True)
@@ -32,6 +36,14 @@ class Company(models.Model):
         return self.days_left_in_trial > 0
 
     @property
+    def is_billing_active(self):
+        if self.get_billing_users and self.payment_failed is False:
+            return True
+        if self.in_trial_period:
+            return True
+        return False
+
+    @property
     def get_owners(self):
         company_owners = self.owners.all()
         owners_list = []
@@ -41,7 +53,7 @@ class Company(models.Model):
 
     @property
     def get_billing_users(self):
-        users = StripeCustomer.objects.filter(user__in=self.get_active_users)
+        users = StripeCustomer.objects.filter(user__in=self.get_owners)
         if users:
             return users.first()
         return None

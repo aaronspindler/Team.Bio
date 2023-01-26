@@ -175,4 +175,5 @@ def home(request):
             user.save()
         else:
             return redirect('create_company')
+    
     return render(request, 'companies/home.html')
