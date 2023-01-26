@@ -2,11 +2,12 @@ import stripe
 from django.conf import settings
 from django.db import models
 
-from accounts.models import User
-
 
 class StripeCustomer(models.Model):
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    
+    user = models.OneToOneField("accounts.User", on_delete=models.CASCADE)
     stripeCustomerId = models.CharField(max_length=255)
     setupIntentId = models.CharField(max_length=255)
     paymentMethod = models.CharField(max_length=255)

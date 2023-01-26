@@ -10,11 +10,6 @@ from billing.models import StripeCustomer
 
 
 @login_required
-def home(request):
-    return render(request, 'billing/home.html')
-
-
-@login_required
 def success(request):
     return render(request, 'billing/success.html')
 

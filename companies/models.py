@@ -1,5 +1,10 @@
+from datetime import timedelta
+
 import tldextract as tldextract
 from django.db import models
+from django.utils import timezone
+
+from billing.models import StripeCustomer
 
 
 class Company(models.Model):
@@ -19,12 +24,27 @@ class Company(models.Model):
         super().save(*args, **kwargs)
 
     @property
+    def days_left_in_trial(self):
+        return (self.created + timedelta(days=30) - timezone.now()).days
+
+    @property
+    def in_trial_period(self):
+        return self.days_left_in_trial > 0
+
+    @property
     def get_owners(self):
         company_owners = self.owners.all()
         owners_list = []
         for company_owner in company_owners:
             owners_list.append(company_owner.owner)
         return owners_list
+
+    @property
+    def get_billing_users(self):
+        users = StripeCustomer.objects.filter(user__in=self.get_active_users)
+        if users:
+            return users.first()
+        return None
 
     @property
     def get_active_users(self):

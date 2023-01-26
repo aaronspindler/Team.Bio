@@ -7,7 +7,7 @@ fetch("/billing/config")
         // Initialize Stripe.js
         const stripe = Stripe(data.publicKey);
         // Event handler
-        let submitBtn = document.querySelector("#submitBtn");
+        let submitBtn = document.querySelector("#subscribeButton");
         if (submitBtn !== null) {
             submitBtn.addEventListener("click", () => {
                 // Get Checkout Session ID
