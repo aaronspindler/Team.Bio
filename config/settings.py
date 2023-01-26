@@ -27,6 +27,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG', False)
 
+PRICE_PER_USER = 100
+
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "team.bio", "www.team.bio"]
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -145,6 +147,7 @@ INTERNAL_IPS = ["127.0.0.1"]
 AUTH_USER_MODEL = "accounts.User"
 
 SITE_ID = 1
+BASE_URL = "https://team.bio"
 LOGIN_REDIRECT_URL = "company_home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 AUTHENTICATION_BACKENDS = (
@@ -181,3 +184,6 @@ STRIPE_PUBLISHABLE_KEY = env('STRIPE_PUBLISHABLE_KEY')
 STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 STRIPE_PRICE_ID = env('STRIPE_PRICE_ID')
 STRIPE_ENDPOINT_SECRET = env('STRIPE_ENDPOINT_SECRET')
+
+if debug:
+    BASE_URL = "http://localhost:8000/"

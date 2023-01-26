@@ -34,21 +34,16 @@ def stripe_config(request):
 @csrf_exempt
 def create_checkout_session(request):
     if request.method == 'GET':
-        domain_url = 'http://localhost:8000/'
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id=request.user.id if request.user.is_authenticated else None,
-                success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=domain_url + 'cancel/',
+                success_url=settings.BASE_URL + 'billing/success?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=settings.BASE_URL + 'billing/cancel',
                 payment_method_types=['card'],
-                mode='subscription',
-                line_items=[
-                    {
-                        'price': settings.STRIPE_PRICE_ID,
-                        'quantity': 1,
-                    }
-                ]
+                mode='setup',
+                customer_email=request.user.email if request.user.is_authenticated else None,
+                customer_creation='always'
             )
             return JsonResponse({'sessionId': checkout_session['id']})
         except Exception as e:
@@ -77,19 +72,21 @@ def stripe_webhook(request):
     # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-
         # Fetch all the required data from session
         client_reference_id = session.get('client_reference_id')
         stripe_customer_id = session.get('customer')
-        stripe_subscription_id = session.get('subscription')
+        setup_intent_id = session.get('setup_intent')
+
+        setup_intent = stripe.SetupIntent.retrieve(setup_intent_id)
+        payment_method = setup_intent.get('payment_method')
 
         # Get the user and create a new StripeCustomer
         user = User.objects.get(id=client_reference_id)
         StripeCustomer.objects.create(
             user=user,
             stripeCustomerId=stripe_customer_id,
-            stripeSubscriptionId=stripe_subscription_id,
+            setupIntentId=setup_intent_id,
+            paymentMethod=payment_method
         )
-        print(user.username + ' just subscribed.')
 
     return HttpResponse(status=200)
