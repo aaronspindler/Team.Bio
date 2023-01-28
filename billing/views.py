@@ -83,9 +83,9 @@ def stripe_webhook(request):
         user = User.objects.get(id=client_reference_id)
         StripeCustomer.objects.create(
             user=user,
-            stripeCustomerId=stripe_customer_id,
-            setupIntentId=setup_intent_id,
-            paymentMethod=payment_method,
+            stripe_customer_id=stripe_customer_id,
+            setup_intent_id=setup_intent_id,
+            payment_method=payment_method,
         )
 
     return HttpResponse(status=200)

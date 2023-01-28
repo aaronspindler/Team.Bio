@@ -1,0 +1,1 @@
+python manage.py process_payments_monthly

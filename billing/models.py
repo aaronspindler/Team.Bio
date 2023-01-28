@@ -7,12 +7,20 @@ class PaymentAttempt(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    customer = models.ForeignKey("billing.StripeCustomer", on_delete=models.CASCADE)
+    customer = models.ForeignKey(
+        "billing.StripeCustomer", on_delete=models.CASCADE, null=True, blank=True
+    )
     company = models.ForeignKey("companies.Company", on_delete=models.CASCADE)
     amount = models.IntegerField()
 
     failed = models.BooleanField(default=False)
     failed_message = models.TextField(blank=True, null=True)
+
+
+class CompanyMemberCount(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    company = models.ForeignKey("companies.Company", on_delete=models.CASCADE)
+    num_users = models.IntegerField()
 
 
 class StripeCustomer(models.Model):
@@ -67,6 +75,7 @@ class StripeCustomer(models.Model):
                 auto_advance=True,
                 collection_method="charge_automatically",
                 default_payment_method=self.payment_method,
+                currency="usd",
                 automatic_tax={"enabled": True},
             )
             stripe.InvoiceItem.create(
