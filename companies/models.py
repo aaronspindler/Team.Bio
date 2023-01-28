@@ -11,6 +11,7 @@ class Company(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    trial_days = models.IntegerField(default=30)
     payment_failed = models.BooleanField(default=False)
     payment_failed_count = models.IntegerField(default=0)
     payment_failed_date = models.DateTimeField(null=True, blank=True)
@@ -24,12 +25,12 @@ class Company(models.Model):
 
     def save(self, *args, **kwargs):
         parsed = tldextract.extract(self.url)
-        self.url_root = (parsed.domain + '.' + parsed.suffix).lower()
+        self.url_root = (parsed.domain + "." + parsed.suffix).lower()
         super().save(*args, **kwargs)
 
     @property
     def days_left_in_trial(self):
-        return (self.created + timedelta(days=30) - timezone.now()).days
+        return (self.created + timedelta(days=self.trial_days) - timezone.now()).days
 
     @property
     def in_trial_period(self):
@@ -63,43 +64,49 @@ class Company(models.Model):
         return self.users.filter(is_active=True)
 
     class Meta:
-        verbose_name_plural = 'Companies'
+        verbose_name_plural = "Companies"
 
 
 class CompanyOwner(models.Model):
-    company = models.ForeignKey(Company, related_name='owners', on_delete=models.CASCADE)
-    owner = models.ForeignKey('accounts.User', related_name='companies', on_delete=models.CASCADE)
+    company = models.ForeignKey(
+        Company, related_name="owners", on_delete=models.CASCADE
+    )
+    owner = models.ForeignKey(
+        "accounts.User", related_name="companies", on_delete=models.CASCADE
+    )
 
     def __str__(self):
-        return f'{self.company} {self.owner}'
+        return f"{self.company} {self.owner}"
 
     class Meta:
-        unique_together = ('company', 'owner')
-        verbose_name = 'Company Owner'
-        verbose_name_plural = 'Company Owners'
+        unique_together = ("company", "owner")
+        verbose_name = "Company Owner"
+        verbose_name_plural = "Company Owners"
 
 
 class Team(models.Model):
-    company = models.ForeignKey(Company, related_name='teams', on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, related_name="teams", on_delete=models.CASCADE)
     name = models.CharField(max_length=60)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        unique_together = ('company', 'name')
-        verbose_name = 'Team'
-        verbose_name_plural = 'Teams'
+        unique_together = ("company", "name")
+        verbose_name = "Team"
+        verbose_name_plural = "Teams"
 
 
 class Location(models.Model):
-    company = models.ForeignKey(Company, related_name='locations', on_delete=models.CASCADE)
+    company = models.ForeignKey(
+        Company, related_name="locations", on_delete=models.CASCADE
+    )
     name = models.CharField(max_length=60)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        unique_together = ('company', 'name')
-        verbose_name = 'Location'
-        verbose_name_plural = 'Locations'
+        unique_together = ("company", "name")
+        verbose_name = "Location"
+        verbose_name_plural = "Locations"
