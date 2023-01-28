@@ -12,9 +12,6 @@ class Company(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     trial_days = models.IntegerField(default=30)
-    payment_failed = models.BooleanField(default=False)
-    payment_failed_count = models.IntegerField(default=0)
-    payment_failed_date = models.DateTimeField(null=True, blank=True)
 
     name = models.TextField(unique=True)
     url = models.URLField(unique=True)
@@ -38,7 +35,7 @@ class Company(models.Model):
 
     @property
     def is_billing_active(self):
-        if self.get_billing_users and self.payment_failed is False:
+        if self.get_billing_users:
             return True
         if self.in_trial_period:
             return True
