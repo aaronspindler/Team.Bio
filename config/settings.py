@@ -13,7 +13,7 @@ sentry_sdk.init(
         DjangoIntegration(),
     ],
     traces_sampler=traces_sampler,
-    send_default_pii=True
+    send_default_pii=True,
 )
 
 env = environ.Env(
@@ -22,15 +22,15 @@ env = environ.Env(
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
-SECRET_KEY = env('SECRET_KEY')
-DEBUG = env('DEBUG', False)
+SECRET_KEY = env("SECRET_KEY")
+DEBUG = env("DEBUG", False)
 
 PRICE_PER_USER = 100
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "team.bio", "www.team.bio"]
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     # Third-party
     "allauth",
     "allauth.account",
-    'allauth.socialaccount',
+    "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "debug_toolbar",
     "storages",
@@ -95,7 +95,7 @@ TEMPLATES = [
     },
 ]
 
-DATABASES = {'default': env.db()}
+DATABASES = {"default": env.db()}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -124,23 +124,23 @@ STATICFILES_DIRS = [str(BASE_DIR.joinpath("static"))]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # AWS
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
 
 # S3
-AWS_STORAGE_BUCKET_NAME = 'team-bio'
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_STORAGE_BUCKET_NAME = "team-bio"
+AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
+    "CacheControl": "max-age=86400",
 }
-PUBLIC_MEDIA_LOCATION = ''
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
-DEFAULT_FILE_STORAGE = 'config.storage_backends.PublicStorage'
+PUBLIC_MEDIA_LOCATION = ""
+MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
+DEFAULT_FILE_STORAGE = "config.storage_backends.PublicStorage"
 
 # SES
-EMAIL_BACKEND = 'django_ses.SESBackend'
+EMAIL_BACKEND = "django_ses.SESBackend"
 DEFAULT_FROM_EMAIL = '"Team Bio" <help@team.bio>'
-SERVER_EMAIL = 'help@team.bio'
+SERVER_EMAIL = "help@team.bio"
 
 INTERNAL_IPS = ["127.0.0.1"]
 
@@ -163,27 +163,33 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
         ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
     }
 }
 
-BLACKLISTED_DOMAIN_ROOTS = ['gmail.com', 'live.com', 'icloud.com', 'live.ca', 'proton.me']
+BLACKLISTED_DOMAIN_ROOTS = [
+    "gmail.com",
+    "live.com",
+    "icloud.com",
+    "live.ca",
+    "proton.me",
+]
 
 # Stripe
-STRIPE_PUBLISHABLE_KEY = env('STRIPE_PUBLISHABLE_KEY')
-STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
-STRIPE_PRICE_ID = env('STRIPE_PRICE_ID')
-STRIPE_ENDPOINT_SECRET = env('STRIPE_ENDPOINT_SECRET')
+STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY")
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
+STRIPE_PRICE_ID = env("STRIPE_PRICE_ID")
+STRIPE_ENDPOINT_SECRET = env("STRIPE_ENDPOINT_SECRET")
 
 if DEBUG:
     BASE_URL = "http://localhost:8000/"
