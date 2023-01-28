@@ -182,7 +182,7 @@ def home(request):
         # Check if there is a company with the URL root equal to the users email root
         check_company = Company.objects.filter(url_root=user.email_root)
         # If the company exists, make the user a member of that company
-        if company:
+        if check_company:
             user.company = check_company.first()
             user.save()
         else:
