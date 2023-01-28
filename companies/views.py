@@ -184,6 +184,7 @@ def home(request):
         # If the company exists, make the user a member of that company
         if check_company:
             user.company = check_company.first()
+            company = user.company
             user.save()
         else:
             return redirect("create_company")
