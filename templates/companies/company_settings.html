@@ -21,13 +21,16 @@
                                     class=" inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Subscribe
                             </button>
-                            <p class="mt-2 ml-3 text-sm text-gray-700">
-                                {% if user.company.in_trial_period %}
+                            {% if user.company.in_trial_period %}
+                                <p class="mt-2 ml-3 text-sm text-gray-700">
                                     You have {{ user.company.days_left_in_trial }} days left in your trial. You can upgrade to a paid plan at any time.
-                                {% else %}
+                                <p>
+                                    {% else %}
+                                <p class="mt-2 ml-3 text-sm text-red-600">
                                     Your trial has ended. You must subscribe to continue using Team Bio!
-                                {% endif %}
-                            </p>
+                                </p>
+                            {% endif %}
+
                         {% else %}
                             <a type="button" href="https://billing.stripe.com/p/login/4gw8zp2YTeZmcta288"
                                class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Manage
