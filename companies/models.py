@@ -12,6 +12,7 @@ class Company(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     trial_days = models.IntegerField(default=30)
+    test_company = models.BooleanField(default=False)
 
     name = models.TextField(unique=True)
     url = models.URLField(unique=True)

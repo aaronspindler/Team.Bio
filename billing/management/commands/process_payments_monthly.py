@@ -16,6 +16,8 @@ class Command(BaseCommand):
             print(f"{company} (PK: {company.pk})")
             if company.in_trial_period:
                 print(f"\t In trial period")
+            if company.test_company:
+                print(f"\t Is a test company")
             else:
                 # Calculate the average number of users the company had in the last 30 days
                 average_num_users = int(
