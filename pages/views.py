@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 
+from config import settings
 from pages.utils import get_dog_image
 
 
@@ -18,7 +19,8 @@ def terms_of_service(request):
 
 
 def pricing(request):
-    return render(request, "pages/pricing.html")
+    price = round(settings.PRICE_PER_USER / 100, 2)
+    return render(request, "pages/pricing.html", {"price": price})
 
 
 def billing_inactive(request):
