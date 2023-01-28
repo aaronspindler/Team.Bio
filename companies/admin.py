@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from companies.models import Company, CompanyOwner, Team, Location
+from companies.models import Company, CompanyOwner, Location, Team
 
 
 @admin.register(Company)

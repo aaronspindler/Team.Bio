@@ -2,12 +2,39 @@
 {% load static %}
 
 {% block title %}{{ user.company }} Settings{% endblock title %}
-
 {% block content %}
     <main class="mx-auto max-w-6xl px-4 pb-12 lg:pb-16">
         <div class="space-y-6">
             <div>
                 <h1 class="text-3xl font-bold leading-6 text-gray-900">{{ user.company }} Settings</h1>
+            </div>
+            <div class="sm:flex sm:items-center">
+                <div class="sm:flex-auto">
+                    <h2 class="text-lg font-medium text-gray-900">Billing</h2>
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                        {% if not user.company.get_billing_users %}
+                            <button type="submit" id="subscribeButton"
+                                    class=" inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                Subscribe
+                            </button>
+                            <p class="mt-2 ml-3 text-sm text-gray-700">
+                                {% if user.company.in_trial_period %}
+                                    You have {{ user.company.days_left_in_trial }} days left in your trial. You can upgrade to a paid plan at any time.
+                                {% else %}
+                                    Your trial has ended. You must subscribe to continue using Team Bio!
+                                {% endif %}
+                            </p>
+                        {% else %}
+                            <a type="button" href="https://billing.stripe.com/p/login/4gw8zp2YTeZmcta288"
+                               class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Manage
+                                Billing</a>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
