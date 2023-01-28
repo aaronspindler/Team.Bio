@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render
 
+from pages.utils import get_dog_image
+
 
 def home(request):
     if request.user.is_authenticated and request.user.is_member_of_company:
@@ -17,3 +19,8 @@ def terms_of_service(request):
 
 def pricing(request):
     return render(request, "pages/pricing.html")
+
+
+def billing_inactive(request):
+    image = get_dog_image()
+    return render(request, "pages/billing_inactive.html", {"image": image})

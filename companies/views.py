@@ -176,15 +176,23 @@ def edit_profile(request):
 
 @login_required
 def home(request):
-    if request.user.company is None:
+    user = request.user
+    company = request.user.company
+    if company is None:
         # Check if there is a company with the URL root equal to the users email root
-        company = Company.objects.filter(url_root=request.user.email_root)
+        check_company = Company.objects.filter(url_root=user.email_root)
         # If the company exists, make the user a member of that company
         if company:
-            user = request.user
-            user.company = company.first()
+            user.company = check_company.first()
             user.save()
         else:
             return redirect("create_company")
+
+    # If the user is a company owner and their billing is inactive, redirect them to the settings page
+    if user in company.get_owners and company.is_billing_active is False:
+        return redirect("company_settings")
+    # if the user is not a company owner and their billing is inactive, redirect them to billing inactive page
+    elif user not in company.get_owners and company.is_billing_active is False:
+        return redirect("billing_inactive")
 
     return render(request, "companies/home.html")
