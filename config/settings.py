@@ -147,7 +147,7 @@ INTERNAL_IPS = ["127.0.0.1"]
 AUTH_USER_MODEL = "accounts.User"
 
 SITE_ID = 1
-BASE_URL = "https://team.bio"
+BASE_URL = "https://team.bio/"
 LOGIN_REDIRECT_URL = "company_home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 AUTHENTICATION_BACKENDS = (
