@@ -15,7 +15,7 @@ class Command(BaseCommand):
         for company in Company.objects.all():
             print(f"{company} (PK: {company.pk})")
             if company.in_trial_period:
-                print(f"\t In trial period")
+                print("\t In trial period")
             else:
                 # Calculate the average number of users the company had in the last 30 days
                 average_num_users = int(
@@ -33,7 +33,7 @@ class Command(BaseCommand):
 
                 billing_user = company.get_billing_users
                 if not billing_user:
-                    print(f"\t Has no billing user")
+                    print("\t Has no billing user")
                     # Create a failed payment attempt
                     PaymentAttempt.objects.create(
                         company=company,

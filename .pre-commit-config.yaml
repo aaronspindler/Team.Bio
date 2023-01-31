@@ -5,8 +5,13 @@ repos:
       - id: black
         exclude: migrations
   - repo: https://github.com/pycqa/isort
-    rev: 5.10.1
+    rev: 5.12.0
     hooks:
       - id: isort
         args: [ "--profile", "black", "--filter-files", "--skip", "migrations" ]
         name: isort (python)
+  - repo: https://github.com/PyCQA/flake8
+    rev: 3.9.2
+    hooks:
+      - id: flake8
+        args: [ "--max-line-length=350", "--ignore=W605,W291,W503,E203" ]
