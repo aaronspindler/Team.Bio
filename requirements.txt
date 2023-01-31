@@ -20,7 +20,7 @@ factory-boy==3.2.1
 Faker==16.6.1
 filelock==3.9.0
 gunicorn==20.1.0
-identify==2.5.15
+identify==2.5.17
 idna==3.4
 jmespath==1.0.1
 nodeenv==1.7.0
