@@ -61,6 +61,8 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install pre-commit
+        run: pip install pre-commit
       - name: Lint with pre-commit
         run: |
           pre-commit install
