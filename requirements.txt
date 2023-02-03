@@ -19,6 +19,7 @@ django_debug_toolbar==3.8.1
 factory-boy==3.2.1
 Faker==16.6.1
 filelock==3.9.0
+googlemaps==4.10.0
 gunicorn==20.1.0
 identify==2.5.17
 idna==3.4
