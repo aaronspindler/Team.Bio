@@ -19,6 +19,32 @@ class UserProfileForm(forms.ModelForm):
     )
     profile_picture = forms.ImageField(label="", required=False)
 
+    class Meta:
+        model = User
+        fields = [
+            "profile_picture",
+            "short_bio",
+            "first_name",
+            "last_name",
+            "title",
+            "general_location",
+            "team",
+            "personality_type",
+            "linkedin",
+            "twitter",
+            "github",
+            "chinese_zodiac",
+            "zodiac_sign",
+            "favourite_food",
+            "favourite_movie",
+            "favourite_travel_destination",
+            "address_1",
+            "city",
+            "prov_state",
+            "postal_code",
+            "country",
+        ]
+
     def __init__(self, *args, **kwargs):
         company = kwargs.pop("company")
         super(UserProfileForm, self).__init__(*args, **kwargs)
@@ -152,29 +178,3 @@ class UserProfileForm(forms.ModelForm):
                 "class": "ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             }
         )
-
-    class Meta:
-        model = User
-        fields = [
-            "profile_picture",
-            "short_bio",
-            "first_name",
-            "last_name",
-            "title",
-            "general_location",
-            "team",
-            "personality_type",
-            "linkedin",
-            "twitter",
-            "github",
-            "chinese_zodiac",
-            "zodiac_sign",
-            "favourite_food",
-            "favourite_movie",
-            "favourite_travel_destination",
-            "address_1",
-            "city",
-            "prov_state",
-            "postal_code",
-            "country",
-        ]
