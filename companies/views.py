@@ -69,11 +69,51 @@ def company_settings(request):
     teams = Team.objects.filter(company=company).order_by("name")
 
     context = {
+        "owners": company.get_owners,
         "company_users": company_users,
         "locations": locations,
         "teams": teams,
     }
     return render(request, "companies/company_settings.html", context)
+
+
+@login_required
+@is_company_owner
+def make_owner(request, email_prefix):
+    user = get_object_or_404(
+        User, company=request.user.company, email_prefix=email_prefix
+    )
+
+    # Check if the user is already an owner
+    if user in request.user.company.get_owners:
+        raise Http404
+
+    # Make the user an owner
+    if request.method == "POST":
+        CompanyOwner.objects.create(company=request.user.company, owner=user)
+
+    return redirect("company_settings")
+
+
+@login_required
+@is_company_owner
+def remove_owner(request, email_prefix):
+    user = get_object_or_404(
+        User, company=request.user.company, email_prefix=email_prefix
+    )
+
+    # Check if the user is already an owner
+    if user not in request.user.company.get_owners:
+        raise Http404
+
+    if user == request.user:
+        raise Http404
+
+    # Remove the user as an owner
+    if request.method == "POST":
+        CompanyOwner.objects.filter(company=request.user.company, owner=user).delete()
+
+    return redirect("company_settings")
 
 
 @login_required

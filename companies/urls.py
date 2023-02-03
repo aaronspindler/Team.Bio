@@ -9,6 +9,8 @@ from companies.views import (
     create_company,
     edit_profile,
     home,
+    make_owner,
+    remove_owner,
     remove_user,
     user_profile,
 )
@@ -16,6 +18,8 @@ from companies.views import (
 urlpatterns = [
     path("home", home, name="company_home"),
     path("settings", company_settings, name="company_settings"),
+    path("make-owner/<str:email_prefix>", make_owner, name="make_owner"),
+    path("remove-owner/<str:email_prefix>", remove_owner, name="remove_owner"),
     path("create", create_company, name="create_company"),
     path("location/add", add_location, name="add_location"),
     path(

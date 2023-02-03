@@ -303,3 +303,154 @@ class TestCompanyViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "companies/edit_profile.html")
         self.assertContains(response, self.user.short_bio)
+
+    def test_make_owner_get(self):
+        self.assertNotIn(self.company_user, self.company.get_owners)
+        response = self.client.get(
+            reverse(
+                "make_owner", kwargs={"email_prefix": self.company_user.email_prefix}
+            ),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn(self.company_user, self.company.get_owners)
+
+    def test_make_owner_post(self):
+        self.assertNotIn(self.company_user, self.company.get_owners)
+        response = self.client.post(
+            reverse(
+                "make_owner", kwargs={"email_prefix": self.company_user.email_prefix}
+            ),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.company_user, self.company.get_owners)
+
+    def test_make_owner_not_an_admin(self):
+        self.client.force_login(self.company_user)
+        self.assertNotIn(self.company_user, self.company.get_owners)
+        response = self.client.post(
+            reverse(
+                "make_owner", kwargs={"email_prefix": self.company_user.email_prefix}
+            ),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertNotIn(self.company_user, self.company.get_owners)
+
+    def test_make_owner_not_in_company(self):
+        self.assertNotIn(self.company_user, self.company.get_owners)
+        response = self.client.post(
+            reverse(
+                "make_owner",
+                kwargs={"email_prefix": self.different_company_user.email_prefix},
+            ),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertNotIn(self.company_user, self.company.get_owners)
+
+    def test_make_owner_does_not_exist(self):
+        self.assertNotIn(self.company_user, self.company.get_owners)
+        response = self.client.post(
+            reverse("make_owner", kwargs={"email_prefix": "fred.flintstone"}),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertNotIn(self.company_user, self.company.get_owners)
+
+    def test_make_owner_already_owner(self):
+        self.assertIn(self.user, self.company.get_owners)
+        response = self.client.post(
+            reverse("make_owner", kwargs={"email_prefix": self.user.email_prefix}),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertIn(self.user, self.company.get_owners)
+
+    def test_make_owner_not_logged_in(self):
+        self.client.logout()
+        self.assertNotIn(self.company_user, self.company.get_owners)
+        response = self.client.post(
+            reverse(
+                "make_owner", kwargs={"email_prefix": self.company_user.email_prefix}
+            ),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn(self.company_user, self.company.get_owners)
+
+    def test_remove_owner_get(self):
+        CompanyOwner.objects.create(company=self.company, owner=self.company_user)
+        self.assertIn(self.company_user, self.company.get_owners)
+        response = self.client.get(
+            reverse(
+                "remove_owner", kwargs={"email_prefix": self.company_user.email_prefix}
+            ),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.company_user, self.company.get_owners)
+
+    def test_remove_owner_post(self):
+        CompanyOwner.objects.create(company=self.company, owner=self.company_user)
+        self.assertIn(self.company_user, self.company.get_owners)
+        response = self.client.post(
+            reverse(
+                "remove_owner", kwargs={"email_prefix": self.company_user.email_prefix}
+            ),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn(self.company_user, self.company.get_owners)
+
+    def test_remove_owner_not_an_admin(self):
+        self.client.force_login(self.company_user)
+        self.assertIn(self.user, self.company.get_owners)
+        response = self.client.post(
+            reverse("remove_owner", kwargs={"email_prefix": self.user.email_prefix}),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertIn(self.user, self.company.get_owners)
+
+    def test_remove_owner_not_in_company(self):
+        pre = self.company.get_owners
+        response = self.client.post(
+            reverse(
+                "remove_owner",
+                kwargs={"email_prefix": self.different_company_user.email_prefix},
+            ),
+            follow=True,
+        )
+        post = self.company.get_owners
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(pre, post)
+
+    def test_remove_owner_does_not_exist(self):
+        self.assertNotIn(self.company_user, self.company.get_owners)
+        response = self.client.post(
+            reverse("remove_owner", kwargs={"email_prefix": "fred.flintstone"}),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertNotIn(self.company_user, self.company.get_owners)
+
+    def test_remove_owner_self(self):
+        self.assertIn(self.user, self.company.get_owners)
+        response = self.client.post(
+            reverse("remove_owner", kwargs={"email_prefix": self.user.email_prefix}),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertIn(self.user, self.company.get_owners)
+
+    def test_remove_owner_not_logged_in(self):
+        self.client.logout()
+        self.assertIn(self.user, self.company.get_owners)
+        response = self.client.post(
+            reverse("remove_owner", kwargs={"email_prefix": self.user.email_prefix}),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.user, self.company.get_owners)
