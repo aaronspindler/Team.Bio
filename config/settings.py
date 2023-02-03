@@ -28,6 +28,7 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG", False)
 
 PRICE_PER_USER = 200
+DEFAULT_TRIAL_DAYS = 30
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "team.bio", "www.team.bio"]
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
