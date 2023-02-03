@@ -145,14 +145,16 @@
                         <!-- Description list -->
                         <div class="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
                             <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                                <div class="sm:col-span-1">
-                                    <dt class="text-sm font-medium text-gray-500">Email</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ company_user.email }}</dd>
-                                </div>
                                 {% if company_user.title %}
                                     <div class="sm:col-span-1">
                                         <dt class="text-sm font-medium text-gray-500">Title</dt>
                                         <dd class="mt-1 text-sm text-gray-900">{{ company_user.title }}</dd>
+                                    </div>
+                                {% endif %}
+                                {% if company_user.team %}
+                                    <div class="sm:col-span-1">
+                                        <dt class="text-sm font-medium text-gray-500">Team</dt>
+                                        <dd class="mt-1 text-sm text-gray-900">{{ company_user.team }}</dd>
                                     </div>
                                 {% endif %}
                                 {% if company_user.personality_type %}
@@ -161,10 +163,40 @@
                                         <dd class="mt-1 text-sm text-gray-900">{{ company_user.personality_type_name }} ({{ company_user.personality_type }})</dd>
                                     </div>
                                 {% endif %}
-                                {% if company_user.team %}
+                                {% if company_user.chinese_zodiac %}
                                     <div class="sm:col-span-1">
-                                        <dt class="text-sm font-medium text-gray-500">Team</dt>
-                                        <dd class="mt-1 text-sm text-gray-900">{{ company_user.team }}</dd>
+                                        <dt class="text-sm font-medium text-gray-500">Chinese Zodiac</dt>
+                                        <dd class="mt-1 text-sm text-gray-900">{{ company_user.chinese_zodiac }}</dd>
+                                    </div>
+                                {% endif %}
+                                {% if company_user.zodiac_sign %}
+                                    <div class="sm:col-span-1">
+                                        <dt class="text-sm font-medium text-gray-500">Zodiac Sign</dt>
+                                        <dd class="mt-1 text-sm text-gray-900">{{ company_user.zodiac_sign }}</dd>
+                                    </div>
+                                {% endif %}
+                                {% if company_user.favourite_food %}
+                                    <div class="sm:col-span-1">
+                                        <dt class="text-sm font-medium text-gray-500">Favourite Food</dt>
+                                        <dd class="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
+                                            {{ company_user.favourite_food|linebreaks }}
+                                        </dd>
+                                    </div>
+                                {% endif %}
+                                {% if company_user.favourite_movie %}
+                                    <div class="sm:col-span-1">
+                                        <dt class="text-sm font-medium text-gray-500">Favourite Movie</dt>
+                                        <dd class="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
+                                            {{ company_user.favourite_movie|linebreaks }}
+                                        </dd>
+                                    </div>
+                                {% endif %}
+                                {% if company_user.favourite_travel_destination %}
+                                    <div class="sm:col-span-1">
+                                        <dt class="text-sm font-medium text-gray-500">Favourite Travel Destination</dt>
+                                        <dd class="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
+                                            {{ company_user.favourite_travel_destination|linebreaks }}
+                                        </dd>
                                     </div>
                                 {% endif %}
                                 {% if company_user.general_location %}
