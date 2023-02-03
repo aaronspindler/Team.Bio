@@ -48,10 +48,49 @@ class User(AbstractUser):
         ("ESTP", "ESTP"),
         ("ESFP", "ESFP"),
     )
-
     personality_type = models.CharField(
         max_length=240, blank=True, null=True, choices=PERSONALITY_TYPE_CHOICES
     )
+
+    CHINESE_ZODIAC_CHOICES = (
+        ("Rat", "Rat"),
+        ("Ox", "Ox"),
+        ("Tiger", "Tiger"),
+        ("Rabbit", "Rabbit"),
+        ("Dragon", "Dragon"),
+        ("Snake", "Snake"),
+        ("Horse", "Horse"),
+        ("Goat", "Goat"),
+        ("Monkey", "Monkey"),
+        ("Rooster", "Rooster"),
+        ("Dog", "Dog"),
+        ("Pig", "Pig"),
+    )
+    chinese_zodiac = models.CharField(
+        max_length=240, blank=True, null=True, choices=CHINESE_ZODIAC_CHOICES
+    )
+
+    ZODIAC_SIGN_CHOICES = (
+        ("Aries", "Aries"),
+        ("Taurus", "Taurus"),
+        ("Gemini", "Gemini"),
+        ("Cancer", "Cancer"),
+        ("Leo", "Leo"),
+        ("Virgo", "Virgo"),
+        ("Libra", "Libra"),
+        ("Scorpio", "Scorpio"),
+        ("Sagittarius", "Sagittarius"),
+        ("Capricorn", "Capricorn"),
+        ("Aquarius", "Aquarius"),
+        ("Pisces", "Pisces"),
+    )
+    zodiac_sign = models.CharField(
+        max_length=240, blank=True, null=True, choices=ZODIAC_SIGN_CHOICES
+    )
+
+    favourite_food = models.TextField(blank=True, null=True)
+    favourite_movie = models.TextField(blank=True, null=True)
+    favourite_travel_destination = models.TextField(blank=True, null=True)
 
     linkedin = models.CharField(max_length=200, blank=True, null=True)
     twitter = models.CharField(max_length=200, blank=True, null=True)

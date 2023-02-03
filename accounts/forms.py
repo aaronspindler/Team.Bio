@@ -8,6 +8,15 @@ class UserProfileForm(forms.ModelForm):
     short_bio = forms.CharField(
         required=False, widget=forms.Textarea(attrs={"rows": "3"})
     )
+    favourite_food = forms.CharField(
+        required=False, widget=forms.Textarea(attrs={"rows": "2"})
+    )
+    favourite_movie = forms.CharField(
+        required=False, widget=forms.Textarea(attrs={"rows": "2"})
+    )
+    favourite_travel_destination = forms.CharField(
+        required=False, widget=forms.Textarea(attrs={"rows": "2"})
+    )
     profile_picture = forms.ImageField(label="", required=False)
 
     def __init__(self, *args, **kwargs):
@@ -32,6 +41,36 @@ class UserProfileForm(forms.ModelForm):
         self.fields["personality_type"].widget.attrs.update(
             {
                 "class": "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
+            }
+        )
+
+        self.fields["chinese_zodiac"].widget.attrs.update(
+            {
+                "class": "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
+            }
+        )
+
+        self.fields["zodiac_sign"].widget.attrs.update(
+            {
+                "class": "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
+            }
+        )
+
+        self.fields["favourite_food"].widget.attrs.update(
+            {
+                "class": "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            }
+        )
+
+        self.fields["favourite_movie"].widget.attrs.update(
+            {
+                "class": "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            }
+        )
+
+        self.fields["favourite_travel_destination"].widget.attrs.update(
+            {
+                "class": "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             }
         )
 
@@ -128,6 +167,11 @@ class UserProfileForm(forms.ModelForm):
             "linkedin",
             "twitter",
             "github",
+            "chinese_zodiac",
+            "zodiac_sign",
+            "favourite_food",
+            "favourite_movie",
+            "favourite_travel_destination",
             "address_1",
             "city",
             "prov_state",
