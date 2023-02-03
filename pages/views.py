@@ -7,7 +7,13 @@ from pages.utils import get_dog_image
 def home(request):
     if request.user.is_authenticated and request.user.is_member_of_company:
         return redirect("company_home")
-    return render(request, "pages/home.html")
+    price = round(settings.PRICE_PER_USER / 100, 2)
+    default_trial_days = settings.DEFAULT_TRIAL_DAYS
+    context = {
+        "price": price,
+        "default_trial_days": default_trial_days,
+    }
+    return render(request, "pages/home.html", context)
 
 
 def privacy_policy(request):

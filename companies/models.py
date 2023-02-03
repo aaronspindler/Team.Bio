@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 import tldextract as tldextract
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
@@ -11,7 +12,7 @@ class Company(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    trial_days = models.IntegerField(default=30)
+    trial_days = models.IntegerField(default=settings.DEFAULT_TRIAL_DAYS)
     test_company = models.BooleanField(default=False)
 
     name = models.TextField(unique=True)
