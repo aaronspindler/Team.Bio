@@ -30,6 +30,29 @@ class User(AbstractUser):
         "companies.Team", on_delete=models.CASCADE, blank=True, null=True
     )
 
+    PERSONALITY_TYPE_CHOICES = (
+        ("INTJ", "INTJ"),
+        ("INTP", "INTP"),
+        ("ENTJ", "ENTJ"),
+        ("ENTP", "ENTP"),
+        ("INFJ", "INFJ"),
+        ("INFP", "INFP"),
+        ("ENFJ", "ENFJ"),
+        ("ENFP", "ENFP"),
+        ("ISTJ", "ISTJ"),
+        ("ISFJ", "ISFJ"),
+        ("ESTJ", "ESTJ"),
+        ("ESFJ", "ESFJ"),
+        ("ISTP", "ISTP"),
+        ("ISFP", "ISFP"),
+        ("ESTP", "ESTP"),
+        ("ESFP", "ESFP"),
+    )
+
+    personality_type = models.CharField(
+        max_length=240, blank=True, null=True, choices=PERSONALITY_TYPE_CHOICES
+    )
+
     linkedin = models.CharField(max_length=200, blank=True, null=True)
     twitter = models.CharField(max_length=200, blank=True, null=True)
     github = models.CharField(max_length=200, blank=True, null=True)
@@ -69,6 +92,29 @@ class User(AbstractUser):
         self.email_root = split_email[1].lower()
 
         super().save(*args, **kwargs)
+
+    def personality_type_name(self):
+        types = {
+            "INTJ": "Architect",
+            "INTP": "Logician",
+            "ENTJ": "Commander",
+            "ENTP": "Debater",
+            "INFJ": "Advocate",
+            "INFP": "Mediator",
+            "ENFJ": "Protagonist",
+            "ENFP": "Campaigner",
+            "ISTJ": "Logistician",
+            "ISFJ": "Defender",
+            "ESTJ": "Executive",
+            "ESFJ": "Consul",
+            "ISTP": "Virtuoso",
+            "ISFP": "Adventurer",
+            "ESTP": "Entrepreneur",
+            "ESFP": "Entertainer",
+        }
+        if self.personality_type:
+            return types[self.personality_type]
+        return ""
 
     @property
     def name(self):

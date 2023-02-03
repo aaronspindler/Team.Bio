@@ -155,6 +155,12 @@
                                         <dd class="mt-1 text-sm text-gray-900">{{ company_user.title }}</dd>
                                     </div>
                                 {% endif %}
+                                {% if company_user.personality_type %}
+                                    <div class="sm:col-span-1">
+                                        <dt class="text-sm font-medium text-gray-500">Personality Type</dt>
+                                        <dd class="mt-1 text-sm text-gray-900">{{ company_user.personality_type_name }} ({{ company_user.personality_type }})</dd>
+                                    </div>
+                                {% endif %}
                                 {% if company_user.team %}
                                     <div class="sm:col-span-1">
                                         <dt class="text-sm font-medium text-gray-500">Team</dt>

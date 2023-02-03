@@ -82,6 +82,14 @@
                     </div>
 
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+                        <label for="about" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Personality Type</label>
+                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                            {{ form.personality_type }}
+                            <p class="mt-2 text-sm text-gray-500">If you are unsure about which personality type you are, find out <a href="https://www.16personalities.com/free-personality-test">here</a></p>
+                        </div>
+                    </div>
+
+                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
                         <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">First name</label>
                         <div class="mt-1 sm:col-span-2 sm:mt-0">
                             {{ form.first_name }}
