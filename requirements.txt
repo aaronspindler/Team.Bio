@@ -28,7 +28,7 @@ nodeenv==1.7.0
 oauthlib==3.2.2
 Pillow==9.4.0
 platformdirs==2.6.2
-pre-commit==3.0.3
+pre-commit==3.0.4
 psycopg2-binary==2.9.5
 pycparser==2.21
 PyJWT==2.6.0
@@ -43,9 +43,9 @@ s3transfer==0.6.0
 sentry-sdk
 six==1.16.0
 sqlparse==0.4.3
-stripe==5.0.0
+stripe==5.1.1
 tldextract==3.4.0
 types-cryptography==3.3.23.2
 urllib3==1.26.14
-virtualenv==20.17.1
+virtualenv==20.18.0
 whitenoise==6.3.0
