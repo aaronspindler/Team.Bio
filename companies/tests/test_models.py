@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.test import TestCase
 
 from accounts.factories import UserFactory
@@ -36,3 +38,23 @@ class TestModels(TestCase):
     def test_company_save_url_root(self):
         company = CompanyFactory(url="https://www.spindlers.ca")
         self.assertEqual(company.url_root, "spindlers.ca")
+
+    def test_calculate_geo_midpoint(self):
+        result = self.company.calculate_geo_midpoint()
+        self.assertEqual(result, (0.0, 0.0))
+
+        UserFactory(
+            address_1="123 Main St",
+            city="Toronto",
+            country="Canada",
+            company=self.company,
+        )
+        UserFactory(
+            address_1="123 Main St",
+            city="Edmonton",
+            country="Canada",
+            company=self.company,
+        )
+
+        result = self.company.calculate_geo_midpoint()
+        self.assertEqual(result, (Decimal("48.6143971"), Decimal("-96.3965717")))

@@ -1,4 +1,6 @@
+import googlemaps
 from allauth.account.signals import user_signed_up
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.dispatch import receiver
@@ -99,7 +101,8 @@ class User(AbstractUser):
     # Address Info
     place_id = models.TextField(blank=True, null=True)
     lat = models.TextField(blank=True, null=True)
-    lon = models.TextField(blank=True, null=True)
+    lng = models.TextField(blank=True, null=True)
+
     address_1 = models.CharField(max_length=200, blank=True, null=True)
     city = models.CharField(max_length=200, blank=True, null=True)
     prov_state = models.CharField(max_length=200, blank=True, null=True)
@@ -130,7 +133,45 @@ class User(AbstractUser):
         self.email_prefix = split_email[0].lower()
         self.email_root = split_email[1].lower()
 
+        # Geocode the address
+        self.lat, self.lng, self.place_id = self.geo_code_address()
+
         super().save(*args, **kwargs)
+
+    @property
+    def address_string(self):
+        address = ""
+        if self.address_1:
+            address = self.address_1.strip()
+        if self.city:
+            address = f"{address} {self.city.strip()}"
+        if self.prov_state:
+            address = f"{address} {self.prov_state.strip()}"
+        if self.country:
+            address = f"{address} {self.country.strip()}"
+        if self.postal_code:
+            address = f"{address} {self.postal_code.strip()}"
+
+        return address
+
+    def geo_code_address(self):
+        lat = None
+        lng = None
+        place_id = None
+
+        # If there is no city or country, we can't geocode
+        if not self.city or not self.country:
+            return lat, lng, place_id
+
+        gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
+        address = self.address_string
+        geocode_result = gmaps.geocode(address)
+        if geocode_result:
+            lat = geocode_result[0]["geometry"]["location"]["lat"]
+            lng = geocode_result[0]["geometry"]["location"]["lng"]
+            place_id = geocode_result[0]["place_id"]
+
+        return lat, lng, place_id
 
     def personality_type_name(self):
         types = {

@@ -40,3 +40,39 @@ class TestModels(TestCase):
     def test_user_email_prefix(self):
         user = UserFactory(email="aaron@spindlers.ca")
         self.assertEqual(user.email_prefix, "aaron")
+
+    def test_user_address_string(self):
+        user = UserFactory(address_1="123 Main St")
+        self.assertEqual(user.address_string, "123 Main St")
+
+        user = UserFactory(address_1=" 123 Main St   ", city="   Toronto ")
+        self.assertEqual(user.address_string, "123 Main St Toronto")
+
+        user = UserFactory(
+            address_1=" 123 Main St   ", city="   Toronto ", prov_state="   ON "
+        )
+        self.assertEqual(user.address_string, "123 Main St Toronto ON")
+
+        user = UserFactory(
+            address_1=" 123 Main St   ",
+            city="   Toronto ",
+            prov_state="   ON ",
+            country="   Canada ",
+        )
+        self.assertEqual(user.address_string, "123 Main St Toronto ON Canada")
+
+        user = UserFactory(
+            address_1=" 123 Main St   ",
+            city="   Toronto ",
+            prov_state="   ON ",
+            country="   Canada ",
+            postal_code="   M1M 1M1 ",
+        )
+        self.assertEqual(user.address_string, "123 Main St Toronto ON Canada M1M 1M1")
+
+    def test_user_geo_code_address(self):
+        user = UserFactory(address_1="123 Main St", city="Toronto", country="Canada")
+        lat, lng, place_id = user.geo_code_address()
+        self.assertEqual(lat, 43.6826959)
+        self.assertEqual(lng, -79.2994168)
+        self.assertEqual(place_id, "ChIJP_BKRhrM1IkRuTDbHDrQNhw")

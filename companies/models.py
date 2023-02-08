@@ -1,4 +1,5 @@
 from datetime import timedelta
+from decimal import Decimal
 
 import tldextract as tldextract
 from django.conf import settings
@@ -19,6 +20,9 @@ class Company(models.Model):
     url = models.URLField(unique=True)
     url_root = models.CharField(max_length=250, unique=True)
 
+    midpoint_lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+    midpoint_lng = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+
     def __str__(self):
         return self.name
 
@@ -26,6 +30,23 @@ class Company(models.Model):
         parsed = tldextract.extract(self.url)
         self.url_root = (parsed.domain + "." + parsed.suffix).lower()
         super().save(*args, **kwargs)
+
+    def calculate_geo_midpoint(self):
+        users = self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False)
+        lat_sum = Decimal(0.0)
+        lng_sum = Decimal(0.0)
+        if users.count() == 0:
+            return 0.0, 0.0
+
+        for user in users:
+            lat_sum += Decimal(user.lat)
+            lng_sum += Decimal(user.lng)
+
+        self.midpoint_lat = lat_sum / users.count()
+        self.midpoint_lng = lng_sum / users.count()
+        self.save()
+
+        return self.midpoint_lat, self.midpoint_lng
 
     @property
     def days_left_in_trial(self):
