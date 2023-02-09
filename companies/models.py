@@ -104,6 +104,24 @@ class CompanyOwner(models.Model):
         verbose_name_plural = "Company Owners"
 
 
+class Invite(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    company = models.ForeignKey(
+        Company, related_name="invites", on_delete=models.CASCADE
+    )
+    email = models.EmailField()
+
+    def __str__(self):
+        return f"{self.company} {self.email}"
+
+    class Meta:
+        unique_together = ("company", "email")
+        verbose_name = "Invite"
+        verbose_name_plural = "Invites"
+
+
 class Team(models.Model):
     company = models.ForeignKey(Company, related_name="teams", on_delete=models.CASCADE)
     name = models.CharField(max_length=60)

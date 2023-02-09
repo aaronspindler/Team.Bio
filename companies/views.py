@@ -8,8 +8,8 @@ from django.views.generic import UpdateView
 from accounts.forms import UserProfileForm
 from accounts.models import User
 from companies.decorators import is_company_owner
-from companies.forms import CompanyForm, LocationForm, TeamForm
-from companies.models import Company, CompanyOwner, Location, Team
+from companies.forms import CompanyForm, InviteForm, LocationForm, TeamForm
+from companies.models import Company, CompanyOwner, Invite, Location, Team
 
 
 @login_required
@@ -35,6 +35,25 @@ def create_company(request):
             return redirect("company_home")
 
     return render(request, "companies/create_company.html", {"form": form})
+
+
+@login_required
+@is_company_owner
+def invite(request):
+    form = InviteForm()
+    if request.method == "POST":
+        form = InviteForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            # Check if this user already exists as a user or a previous invite
+            if (
+                not User(email=instance.email).exists()
+                and not Invite.objects.filter(email=instance.email).exists()
+            ):
+                instance.company = request.user.company
+                instance.save()
+            return redirect("company_settings")
+    return render(request, "companies/invite.html", {"form": form})
 
 
 @login_required

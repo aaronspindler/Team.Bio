@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from companies.models import Company, Location, Team
+from companies.models import Company, Invite, Location, Team
 
 
 class CompanyForm(ModelForm):
@@ -16,6 +16,12 @@ class CompanyForm(ModelForm):
     class Meta:
         model = Company
         fields = ["name", "url"]
+
+
+class InviteForm(ModelForm):
+    class Meta:
+        model = Invite
+        fields = ["email"]
 
 
 class LocationForm(ModelForm):

@@ -9,6 +9,7 @@ from companies.views import (
     create_company,
     edit_profile,
     home,
+    invite,
     make_owner,
     remove_owner,
     remove_user,
@@ -30,4 +31,5 @@ urlpatterns = [
     path("profile/<str:email_prefix>/remove", remove_user, name="remove_user"),
     path("profile/edit", edit_profile, name="edit_profile"),
     path("profile/<str:email_prefix>", user_profile, name="user_profile"),
+    path("invite", invite, name="invite"),
 ]
