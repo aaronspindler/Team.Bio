@@ -17,7 +17,7 @@ django-ses==3.3.0
 django-storages==1.13.2
 django_debug_toolbar==3.8.1
 factory-boy==3.2.1
-Faker==16.7.0
+Faker==16.8.1
 filelock==3.9.0
 googlemaps==4.10.0
 gunicorn==20.1.0
