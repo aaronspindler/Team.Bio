@@ -83,6 +83,10 @@ class Company(models.Model):
     def get_active_users(self):
         return self.users.filter(is_active=True)
 
+    @property
+    def get_invited_users(self):
+        return self.invites.all()
+
     class Meta:
         verbose_name_plural = "Companies"
 

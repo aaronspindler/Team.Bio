@@ -48,7 +48,7 @@ def invite(request):
             instance = form.save(commit=False)
             # Check if this user already exists as a user or a previous invite
             if (
-                not User(email=instance.email).exists()
+                not User.objects.filter(email=instance.email).exists()
                 and not Invite.objects.filter(email=instance.email).exists()
             ):
                 instance.company = request.user.company
@@ -68,6 +68,16 @@ def invite(request):
                 email.send(parameters)
             return redirect("company_settings")
     return render(request, "companies/invite.html", {"form": form})
+
+
+@login_required
+@is_company_owner
+def revoke_invite(request, email):
+    email = str(email)
+    invite = get_object_or_404(Invite, company=request.user.company, email=email)
+    if request.method == "POST":
+        invite.delete()
+        return redirect("company_settings")
 
 
 @login_required
@@ -96,6 +106,7 @@ def remove_user(request, email_prefix):
 def company_settings(request):
     company = request.user.company
     company_users = company.get_active_users
+    invited_users = company.get_invited_users
 
     locations = Location.objects.filter(company=company).order_by("name")
 
@@ -104,6 +115,7 @@ def company_settings(request):
     context = {
         "owners": company.get_owners,
         "company_users": company_users,
+        "invited_users": invited_users,
         "locations": locations,
         "teams": teams,
     }
