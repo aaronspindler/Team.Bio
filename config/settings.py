@@ -140,8 +140,8 @@ DEFAULT_FILE_STORAGE = "config.storage_backends.PublicStorage"
 
 # SES
 EMAIL_BACKEND = "django_ses.SESBackend"
-DEFAULT_FROM_EMAIL = '"Team Bio" <help@team.bio>'
-SERVER_EMAIL = "help@team.bio"
+DEFAULT_FROM_EMAIL = '"Team Bio" <support@team.bio>'
+SERVER_EMAIL = "support@team.bio"
 
 INTERNAL_IPS = ["127.0.0.1"]
 

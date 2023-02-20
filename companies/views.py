@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
 
@@ -10,6 +10,7 @@ from accounts.models import User
 from companies.decorators import is_company_owner
 from companies.forms import CompanyForm, InviteForm, LocationForm, TeamForm
 from companies.models import Company, CompanyOwner, Invite, Location, Team
+from utils.models import Email
 
 
 @login_required
@@ -52,6 +53,19 @@ def invite(request):
             ):
                 instance.company = request.user.company
                 instance.save()
+
+                # Send an invitation email
+                email = Email.objects.create(
+                    recipient=instance.email,
+                    template="invite",
+                    subject=f"You have been invited by {request.user.name} to join your co-workers on Team Bio",
+                )
+                parameters = {
+                    "invite_sender_name": request.user.name,
+                    "invite_sender_organization_name": request.user.company.name,
+                    "action_url": f"https://www.team.bio{reverse('account_signup')}",
+                }
+                email.send(parameters)
             return redirect("company_settings")
     return render(request, "companies/invite.html", {"form": form})
 
@@ -157,9 +171,9 @@ def add_location(request):
 @method_decorator(is_company_owner, name="dispatch")
 class UpdateLocationView(UpdateView):
     model = Location
-    fields = ["name"]
     template_name = "companies/update_location.html"
     success_url = reverse_lazy("company_settings")
+    form_class = LocationForm
 
     def get_object(self, *args, **kwargs):
         obj = super(UpdateLocationView, self).get_object(*args, **kwargs)
@@ -190,9 +204,9 @@ def add_team(request):
 @method_decorator(is_company_owner, name="dispatch")
 class UpdateTeamView(UpdateView):
     model = Team
-    fields = ["name"]
     template_name = "companies/update_team.html"
     success_url = reverse_lazy("company_settings")
+    form_class = TeamForm
 
     def get_object(self, *args, **kwargs):
         obj = super(UpdateTeamView, self).get_object(*args, **kwargs)
