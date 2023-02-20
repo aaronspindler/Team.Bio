@@ -115,7 +115,7 @@ class Invite(models.Model):
     company = models.ForeignKey(
         Company, related_name="invites", on_delete=models.CASCADE
     )
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
 
     def __str__(self):
         return f"{self.company} {self.email}"
