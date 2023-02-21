@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from companies.models import Company, CompanyOwner, Location, Team
+from companies.models import Company, CompanyOwner, Invite, Location, Team
 
 
 @admin.register(Company)
@@ -21,3 +21,8 @@ class LocationAdmin(admin.ModelAdmin):
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
     model = Team
+
+
+@admin.register(Invite)
+class InviteAdmin(admin.ModelAdmin):
+    model = Invite

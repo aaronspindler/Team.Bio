@@ -15,7 +15,7 @@
                 <p>Are you sure you want to remove {{ user_to_remove.name }}({{ user_to_remove.email }}) from {{ user.company }}?</p>
                 <form method="post">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">I Am Sure</button>
+                    <button type="submit" class="btn btn-danger">Yes</button>
                     <a href="{% url 'company_settings' %}" class="btn btn-primary">Go Back</a>
                 </form>
             </div>

@@ -1,6 +1,6 @@
 from django.conf import settings
 
-from companies.models import Company
+from companies.models import Company, Invite
 
 
 def attempt_connect_user_to_a_company(user):
@@ -17,4 +17,16 @@ def attempt_connect_user_to_a_company(user):
         return True
     # if no company found, just return false
     # urls are restricted to be unique so there cannot be multiple companies with the same URL root / url
+    return False
+
+
+def attempt_connect_user_with_invites(user):
+    invites = Invite.objects.filter(email=user.email)
+    if invites:
+        invite = invites.first()
+        company = invite.company
+        user.company = company
+        user.save()
+        invite.delete()
+        return True
     return False

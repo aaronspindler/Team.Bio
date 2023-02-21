@@ -1,15 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
 
 from accounts.forms import UserProfileForm
 from accounts.models import User
 from companies.decorators import is_company_owner
-from companies.forms import CompanyForm, LocationForm, TeamForm
-from companies.models import Company, CompanyOwner, Location, Team
+from companies.forms import CompanyForm, InviteForm, LocationForm, TeamForm
+from companies.models import Company, CompanyOwner, Invite, Location, Team
+from utils.models import Email
 
 
 @login_required
@@ -39,6 +40,48 @@ def create_company(request):
 
 @login_required
 @is_company_owner
+def invite(request):
+    form = InviteForm()
+    if request.method == "POST":
+        form = InviteForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            # Check if this user already exists as a user or a previous invite
+            if (
+                not User.objects.filter(email=instance.email).exists()
+                and not Invite.objects.filter(email=instance.email).exists()
+            ):
+                instance.company = request.user.company
+                instance.save()
+
+                # Send an invitation email
+                email = Email.objects.create(
+                    recipient=instance.email,
+                    template="invite",
+                    subject=f"You have been invited by {request.user.name} to join your co-workers on Team Bio",
+                )
+                parameters = {
+                    "invite_sender_name": request.user.name,
+                    "invite_sender_organization_name": request.user.company.name,
+                    "action_url": f"https://www.team.bio{reverse('account_signup')}",
+                }
+                email.send(parameters)
+            return redirect("company_settings")
+    return render(request, "companies/invite.html", {"form": form})
+
+
+@login_required
+@is_company_owner
+def revoke_invite(request, email):
+    email = str(email)
+    invite = get_object_or_404(Invite, company=request.user.company, email=email)
+    if request.method == "POST":
+        invite.delete()
+        return redirect("company_settings")
+
+
+@login_required
+@is_company_owner
 def remove_user(request, email_prefix):
     user_to_remove = get_object_or_404(
         User, company=request.user.company, email_prefix=email_prefix
@@ -63,6 +106,7 @@ def remove_user(request, email_prefix):
 def company_settings(request):
     company = request.user.company
     company_users = company.get_active_users
+    invited_users = company.get_invited_users
 
     locations = Location.objects.filter(company=company).order_by("name")
 
@@ -71,6 +115,7 @@ def company_settings(request):
     context = {
         "owners": company.get_owners,
         "company_users": company_users,
+        "invited_users": invited_users,
         "locations": locations,
         "teams": teams,
     }
@@ -138,9 +183,9 @@ def add_location(request):
 @method_decorator(is_company_owner, name="dispatch")
 class UpdateLocationView(UpdateView):
     model = Location
-    fields = ["name"]
     template_name = "companies/update_location.html"
     success_url = reverse_lazy("company_settings")
+    form_class = LocationForm
 
     def get_object(self, *args, **kwargs):
         obj = super(UpdateLocationView, self).get_object(*args, **kwargs)
@@ -171,9 +216,9 @@ def add_team(request):
 @method_decorator(is_company_owner, name="dispatch")
 class UpdateTeamView(UpdateView):
     model = Team
-    fields = ["name"]
     template_name = "companies/update_team.html"
     success_url = reverse_lazy("company_settings")
+    form_class = TeamForm
 
     def get_object(self, *args, **kwargs):
         obj = super(UpdateTeamView, self).get_object(*args, **kwargs)

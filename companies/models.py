@@ -83,6 +83,10 @@ class Company(models.Model):
     def get_active_users(self):
         return self.users.filter(is_active=True)
 
+    @property
+    def get_invited_users(self):
+        return self.invites.all()
+
     class Meta:
         verbose_name_plural = "Companies"
 
@@ -102,6 +106,24 @@ class CompanyOwner(models.Model):
         unique_together = ("company", "owner")
         verbose_name = "Company Owner"
         verbose_name_plural = "Company Owners"
+
+
+class Invite(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    company = models.ForeignKey(
+        Company, related_name="invites", on_delete=models.CASCADE
+    )
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return f"{self.company} {self.email}"
+
+    class Meta:
+        unique_together = ("company", "email")
+        verbose_name = "Invite"
+        verbose_name_plural = "Invites"
 
 
 class Team(models.Model):
