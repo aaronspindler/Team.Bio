@@ -46,11 +46,13 @@ def invite(request):
         form = InviteForm(request.POST)
         if form.is_valid():
             instance = form.save(commit=False)
+            email = instance.email.lower()
             # Check if this user already exists as a user or a previous invite
             if (
-                not User.objects.filter(email=instance.email).exists()
-                and not Invite.objects.filter(email=instance.email).exists()
+                not User.objects.filter(email=email).exists()
+                and not Invite.objects.filter(email=email).exists()
             ):
+                instance.email = email
                 instance.company = request.user.company
                 instance.save()
 

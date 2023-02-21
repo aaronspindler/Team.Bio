@@ -21,7 +21,8 @@ def attempt_connect_user_to_a_company(user):
 
 
 def attempt_connect_user_with_invites(user):
-    invites = Invite.objects.filter(email=user.email)
+    email = user.email.lower()
+    invites = Invite.objects.filter(email=email)
     if invites:
         invite = invites.first()
         company = invite.company
