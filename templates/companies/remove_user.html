@@ -4,21 +4,23 @@
 {% block title %}{{ user.company }} Settings{% endblock title %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Removing {{ user_to_remove.name }} from {{ user.company }}</h1>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <p>Are you sure you want to remove {{ user_to_remove.name }}({{ user_to_remove.email }}) from {{ user.company }}?</p>
-                <form method="post">
+    <main class="mx-auto max-w-6xl px-4 pb-12 lg:pb-16">
+        <div class="bg-white shadow sm:rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg font-medium leading-6 text-gray-900">Removing {{ user_to_remove.name }} from {{ user.company }}</h3>
+                <div class="mt-2 max-w-xl text-sm text-gray-500">
+                    <p>Are you sure you want to remove {{ user_to_remove.name }}({{ user_to_remove.email }}) from {{ user.company }}?</p>
+                </div>
+                <form class="mt-3 sm:flex sm:items-center" method="post">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Yes</button>
-                    <a href="{% url 'company_settings' %}" class="btn btn-primary">Go Back</a>
+                    <button type="submit"
+                            class="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Yes
+                    </button>
+                    <a href="{% url 'company_settings' %}"
+                       class="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">No</a>
                 </form>
             </div>
         </div>
-    </div>
+    </main>
 {% endblock content %}
