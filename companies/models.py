@@ -48,6 +48,9 @@ class Company(models.Model):
 
         return self.midpoint_lat, self.midpoint_lng
 
+    def get_map_data(self):
+        pass
+
     @property
     def days_left_in_trial(self):
         return (self.created + timedelta(days=self.trial_days) - timezone.now()).days
