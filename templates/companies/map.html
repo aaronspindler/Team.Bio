@@ -41,7 +41,25 @@
                                     ]
                                 }
                             });
-                            map.addControl(new mapboxgl.NavigationControl());
+                            map.addSource('midpoint', {
+                                'type': 'geojson',
+                                'data': {
+                                    'type': 'FeatureCollection',
+                                    'features': [
+                                        {
+                                            'type': 'Feature',
+                                            'properties': {
+                                                'description':
+                                                    '<strong>Company Midpoint ({{ mid_lng|floatformat:4 }}, {{ mid_lat|floatformat:4 }})</strong>'
+                                            },
+                                            'geometry': {
+                                                'type': 'Point',
+                                                'coordinates': [{{ mid_lng }}, {{ mid_lat }}]
+                                            }
+                                        },
+                                    ]
+                                }
+                            });
                             // Add a layer showing the places.
                             map.addLayer({
                                 'id': 'places',
@@ -49,6 +67,17 @@
                                 'source': 'places',
                                 'paint': {
                                     'circle-color': '#4264fb',
+                                    'circle-radius': 6,
+                                    'circle-stroke-width': 2,
+                                    'circle-stroke-color': '#ffffff'
+                                }
+                            });
+                            map.addLayer({
+                                'id': 'midpoint',
+                                'type': 'circle',
+                                'source': 'midpoint',
+                                'paint': {
+                                    'circle-color': '#ff1f1f',
                                     'circle-radius': 6,
                                     'circle-stroke-width': 2,
                                     'circle-stroke-color': '#ffffff'
@@ -62,7 +91,6 @@
                             });
 
                             map.on('mouseenter', 'places', (e) => {
-                                // Change the cursor style as a UI indicator.
                                 map.getCanvas().style.cursor = 'pointer';
 
                                 // Copy coordinates array.
@@ -81,6 +109,29 @@
                             });
 
                             map.on('mouseleave', 'places', () => {
+                                map.getCanvas().style.cursor = '';
+                                popup.remove();
+                            });
+
+                            map.on('mouseenter', 'midpoint', (e) => {
+                                map.getCanvas().style.cursor = 'pointer';
+
+                                // Copy coordinates array.
+                                const coordinates = e.features[0].geometry.coordinates.slice();
+                                const description = e.features[0].properties.description;
+
+                                // Ensure that if the map is zoomed out such that multiple
+                                // copies of the feature are visible, the popup appears
+                                // over the copy being pointed to.
+                                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                                }
+
+                                // Populate the popup and set its coordinates// based on the feature found.
+                                popup.setLngLat(coordinates).setHTML(description).addTo(map);
+                            });
+
+                            map.on('mouseleave', 'midpoint', () => {
                                 map.getCanvas().style.cursor = '';
                                 popup.remove();
                             });

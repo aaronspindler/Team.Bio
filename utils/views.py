@@ -7,6 +7,7 @@ from django.shortcuts import render
 @login_required
 def test_template(request):
     if request.user.is_superuser:
+        request.user.company.calculate_geo_midpoint()
         mid_lat, mid_lng = (
             request.user.company.midpoint_lat,
             request.user.company.midpoint_lng,
