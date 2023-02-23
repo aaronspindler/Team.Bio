@@ -7,10 +7,17 @@ from django.shortcuts import render
 @login_required
 def test_template(request):
     if request.user.is_superuser:
-        mid_lat, mid_lng = request.user.company.calculate_geo_midpoint()
-        user_points = request.user.company.users.filter(
-            is_active=True, lat__isnull=False, lng__isnull=False
-        ).values("lng", "lat", "team__name")
+        mid_lat, mid_lng = (
+            request.user.company.midpoint_lat,
+            request.user.company.midpoint_lng,
+        )
+        user_points = (
+            request.user.company.users.filter(
+                is_active=True, lat__isnull=False, lng__isnull=False
+            )
+            .select_related("team__name")
+            .values("lng", "lat", "team__name")
+        )
         cleaned_user_points = []
         for user in user_points:
             cleaned_user_points.append(
