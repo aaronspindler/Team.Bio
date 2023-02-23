@@ -10,9 +10,9 @@
                 <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
                     <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">Our Team</h2>
                 </div>
-                <ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8">
+                <ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:space-y-0 sm:space-b-2 lg:grid-cols-3 lg:gap-x-8">
                     {% for company_user in user.company.get_active_users %}
-                        <li>
+                        <li class="pt-2">
                             <div class="space-y-4">
                                 <div class="aspect-w-4 aspect-h-3">
                                     <img class="rounded-lg object-cover shadow-lg" src="{{ company_user.profile_picture_url }}" alt="">
