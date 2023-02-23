@@ -134,7 +134,7 @@ class Team(models.Model):
     name = models.CharField(max_length=60)
 
     def __str__(self):
-        return f"{self.company} {self.name}"
+        return f"{self.name}"
 
     class Meta:
         unique_together = ("company", "name")
@@ -149,7 +149,7 @@ class Location(models.Model):
     name = models.CharField(max_length=60)
 
     def __str__(self):
-        return f"{self.company} {self.name}"
+        return f"{self.name}"
 
     class Meta:
         unique_together = ("company", "name")

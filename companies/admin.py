@@ -15,14 +15,20 @@ class CompanyOwnerAdmin(admin.ModelAdmin):
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
+    list_display = ["company", "name"]
+    list_filter = ["company"]
     model = Location
 
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
+    list_display = ["company", "name"]
+    list_filter = ["company"]
     model = Team
 
 
 @admin.register(Invite)
 class InviteAdmin(admin.ModelAdmin):
+    list_display = ["company", "email"]
+    list_filter = ["company"]
     model = Invite
