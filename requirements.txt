@@ -48,4 +48,4 @@ tldextract==3.4.0
 types-cryptography==3.3.23.2
 urllib3==1.26.14
 virtualenv==20.19.0
-whitenoise==6.3.0
+whitenoise==6.4.0
