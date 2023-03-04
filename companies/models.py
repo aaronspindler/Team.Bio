@@ -55,14 +55,14 @@ class Company(models.Model):
 
     def calculate_map_bounds(self):
         users = self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False)
-        min_lat = float(10000)
-        max_lat = float(-10000)
-        min_lng = float(10000)
-        max_lng = float(-10000)
+        min_lat = Decimal(1000)
+        max_lat = Decimal(-1000)
+        min_lng = Decimal(1000)
+        max_lng = Decimal(-1000)
 
         for user in users:
-            lng = float(user.lng)
-            lat = float(user.lat)
+            lng = Decimal(user.lng)
+            lat = Decimal(user.lat)
 
             if lat < min_lat:
                 min_lat = lat
@@ -73,10 +73,10 @@ class Company(models.Model):
             if lng > max_lng:
                 max_lng = lng
 
-        self.min_lat = min_lat
-        self.max_lat = max_lat
-        self.min_lng = min_lng
-        self.max_lng = max_lng
+        self.min_lat = min_lat.quantize(Decimal("0.0001"))
+        self.max_lat = max_lat.quantize(Decimal("0.0001"))
+        self.min_lng = min_lng.quantize(Decimal("0.0001"))
+        self.max_lng = max_lng.quantize(Decimal("0.0001"))
         self.save()
 
         return ([min_lng, min_lat], [max_lng, max_lat])
