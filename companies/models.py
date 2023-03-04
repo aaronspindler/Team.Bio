@@ -108,6 +108,9 @@ class Company(models.Model):
         return f"[{lng}, {lat}]"
 
     def get_map_data(self):
+        if not self.should_show_map():
+            return {"show_map": False}
+
         self.calculate_geo_midpoint()
         self.calculate_map_bounds()
 
@@ -140,6 +143,7 @@ class Company(models.Model):
             "ne_corner": self.get_map_ne_corner(),
             "user_points": cleaned_user_points,
             "api_key": settings.MAPBOX_API_KEY,
+            "show_map": True,
         }
         return data
 
