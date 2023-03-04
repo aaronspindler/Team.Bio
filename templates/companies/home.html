@@ -18,7 +18,8 @@
                             container: 'map',
                             style: 'mapbox://styles/mapbox/streets-v12',
                             center: [{{ mid_lng }}, {{ mid_lat }}],
-                            zoom: 6
+                            zoom: 6,
+                            maxZoom: 12,
                         });
 
                         map.on('load', () => {
