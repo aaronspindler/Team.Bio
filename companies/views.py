@@ -283,6 +283,9 @@ def home(request):
     elif user not in company.get_owners and company.is_billing_active is False:
         return redirect("billing_inactive")
 
-    map_data = company.get_map_data()
+    data = {"show_map": False}
+    if company.should_show_map():
+        data.update(company.get_map_data())
+        data["show_map"] = True
 
-    return render(request, "companies/home.html", map_data)
+    return render(request, "companies/home.html", data)

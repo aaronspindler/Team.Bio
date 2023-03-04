@@ -21,12 +21,24 @@ class Company(models.Model):
     url_root = models.CharField(max_length=250, unique=True)
 
     # Map Stuff
-    midpoint_lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
-    midpoint_lng = models.DecimalField(max_digits=9, decimal_places=6, null=True)
-    max_lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
-    min_lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
-    max_lng = models.DecimalField(max_digits=9, decimal_places=6, null=True)
-    min_lng = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+    midpoint_lat = models.DecimalField(
+        max_digits=12, decimal_places=6, null=True, blank=True
+    )
+    midpoint_lng = models.DecimalField(
+        max_digits=12, decimal_places=6, null=True, blank=True
+    )
+    max_lat = models.DecimalField(
+        max_digits=12, decimal_places=6, null=True, blank=True
+    )
+    min_lat = models.DecimalField(
+        max_digits=12, decimal_places=6, null=True, blank=True
+    )
+    max_lng = models.DecimalField(
+        max_digits=12, decimal_places=6, null=True, blank=True
+    )
+    min_lng = models.DecimalField(
+        max_digits=12, decimal_places=6, null=True, blank=True
+    )
 
     def __str__(self):
         return self.name
@@ -35,6 +47,11 @@ class Company(models.Model):
         parsed = tldextract.extract(self.url)
         self.url_root = (parsed.domain + "." + parsed.suffix).lower()
         super().save(*args, **kwargs)
+
+    def should_show_map(self):
+        return self.users.filter(
+            is_active=True, lat__isnull=False, lng__isnull=False
+        ).exists()
 
     def calculate_geo_midpoint(self):
         users = self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False)
@@ -63,7 +80,6 @@ class Company(models.Model):
         for user in users:
             lng = Decimal(user.lng)
             lat = Decimal(user.lat)
-
             if lat < min_lat:
                 min_lat = lat
             if lat > max_lat:
@@ -73,19 +89,23 @@ class Company(models.Model):
             if lng > max_lng:
                 max_lng = lng
 
-        self.min_lat = min_lat.quantize(Decimal("0.0001"))
-        self.max_lat = max_lat.quantize(Decimal("0.0001"))
-        self.min_lng = min_lng.quantize(Decimal("0.0001"))
-        self.max_lng = max_lng.quantize(Decimal("0.0001"))
+        self.min_lat = min_lat.quantize(Decimal("0.001"))
+        self.max_lat = max_lat.quantize(Decimal("0.001"))
+        self.min_lng = min_lng.quantize(Decimal("0.001"))
+        self.max_lng = max_lng.quantize(Decimal("0.001"))
         self.save()
 
         return ([min_lng, min_lat], [max_lng, max_lat])
 
     def get_map_sw_corner(self):
-        return [self.max_lng, self.min_lat]
+        lng = str(self.min_lng)
+        lat = str(self.min_lat)
+        return f"[{lng}, {lat}]"
 
     def get_map_ne_corner(self):
-        return [self.min_lng, self.max_lat]
+        lng = str(self.max_lng)
+        lat = str(self.max_lat)
+        return f"[{lng}, {lat}]"
 
     def get_map_data(self):
         self.calculate_geo_midpoint()
