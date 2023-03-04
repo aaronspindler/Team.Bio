@@ -20,8 +20,25 @@ class Company(models.Model):
     url = models.URLField(unique=True)
     url_root = models.CharField(max_length=250, unique=True)
 
-    midpoint_lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
-    midpoint_lng = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+    # Map Stuff
+    midpoint_lat = models.DecimalField(
+        max_digits=12, decimal_places=6, null=True, blank=True
+    )
+    midpoint_lng = models.DecimalField(
+        max_digits=12, decimal_places=6, null=True, blank=True
+    )
+    max_lat = models.DecimalField(
+        max_digits=12, decimal_places=6, null=True, blank=True
+    )
+    min_lat = models.DecimalField(
+        max_digits=12, decimal_places=6, null=True, blank=True
+    )
+    max_lng = models.DecimalField(
+        max_digits=12, decimal_places=6, null=True, blank=True
+    )
+    min_lng = models.DecimalField(
+        max_digits=12, decimal_places=6, null=True, blank=True
+    )
 
     def __str__(self):
         return self.name
@@ -30,6 +47,11 @@ class Company(models.Model):
         parsed = tldextract.extract(self.url)
         self.url_root = (parsed.domain + "." + parsed.suffix).lower()
         super().save(*args, **kwargs)
+
+    def should_show_map(self):
+        return self.users.filter(
+            is_active=True, lat__isnull=False, lng__isnull=False
+        ).exists()
 
     def calculate_geo_midpoint(self):
         users = self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False)
@@ -47,6 +69,83 @@ class Company(models.Model):
         self.save()
 
         return self.midpoint_lat, self.midpoint_lng
+
+    def calculate_map_bounds(self):
+        users = self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False)
+        min_lat = Decimal(1000)
+        max_lat = Decimal(-1000)
+        min_lng = Decimal(1000)
+        max_lng = Decimal(-1000)
+
+        for user in users:
+            lng = Decimal(user.lng)
+            lat = Decimal(user.lat)
+            if lat < min_lat:
+                min_lat = lat
+            if lat > max_lat:
+                max_lat = lat
+            if lng < min_lng:
+                min_lng = lng
+            if lng > max_lng:
+                max_lng = lng
+
+        self.min_lat = min_lat.quantize(Decimal("0.001"))
+        self.max_lat = max_lat.quantize(Decimal("0.001"))
+        self.min_lng = min_lng.quantize(Decimal("0.001"))
+        self.max_lng = max_lng.quantize(Decimal("0.001"))
+        self.save()
+
+        return ([min_lng, min_lat], [max_lng, max_lat])
+
+    def get_map_sw_corner(self):
+        lng = str(self.min_lng)
+        lat = str(self.min_lat)
+        return f"[{lng}, {lat}]"
+
+    def get_map_ne_corner(self):
+        lng = str(self.max_lng)
+        lat = str(self.max_lat)
+        return f"[{lng}, {lat}]"
+
+    def get_map_data(self):
+        if not self.should_show_map():
+            return {"show_map": False}
+
+        self.calculate_geo_midpoint()
+        self.calculate_map_bounds()
+
+        mid_lat, mid_lng = (
+            self.midpoint_lat,
+            self.midpoint_lng,
+        )
+        user_points = (
+            self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False)
+            .select_related("team__name")
+            .values("lng", "lat", "team__name")
+        )
+
+        cleaned_user_points = []
+        for user in user_points:
+            lng = float(user["lng"])
+            lat = float(user["lat"])
+
+            cleaned_user_points.append(
+                [
+                    lng,
+                    lat,
+                    user["team__name"] if user["team__name"] else "No Team",
+                ]
+            )
+        data = {
+            "mid_lng": mid_lng,
+            "mid_lat": mid_lat,
+            "sw_corner": self.get_map_sw_corner(),
+            "ne_corner": self.get_map_ne_corner(),
+            "user_points": cleaned_user_points,
+            "api_key": settings.MAPBOX_API_KEY,
+            "show_map": True,
+        }
+        return data
 
     @property
     def days_left_in_trial(self):
