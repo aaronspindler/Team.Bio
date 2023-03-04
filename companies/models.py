@@ -20,8 +20,13 @@ class Company(models.Model):
     url = models.URLField(unique=True)
     url_root = models.CharField(max_length=250, unique=True)
 
+    # Map Stuff
     midpoint_lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
     midpoint_lng = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+    max_lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+    min_lat = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+    max_lng = models.DecimalField(max_digits=9, decimal_places=6, null=True)
+    min_lng = models.DecimalField(max_digits=9, decimal_places=6, null=True)
 
     def __str__(self):
         return self.name
@@ -48,8 +53,75 @@ class Company(models.Model):
 
         return self.midpoint_lat, self.midpoint_lng
 
+    def calculate_map_bounds(self):
+        users = self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False)
+        min_lat = float(10000)
+        max_lat = float(-10000)
+        min_lng = float(10000)
+        max_lng = float(-10000)
+
+        for user in users:
+            lng = float(user.lng)
+            lat = float(user.lat)
+
+            if lat < min_lat:
+                min_lat = lat
+            if lat > max_lat:
+                max_lat = lat
+            if lng < min_lng:
+                min_lng = lng
+            if lng > max_lng:
+                max_lng = lng
+
+        self.min_lat = min_lat
+        self.max_lat = max_lat
+        self.min_lng = min_lng
+        self.max_lng = max_lng
+        self.save()
+
+        return ([min_lng, min_lat], [max_lng, max_lat])
+
+    def get_map_sw_corner(self):
+        return [self.max_lng, self.min_lat]
+
+    def get_map_ne_corner(self):
+        return [self.min_lng, self.max_lat]
+
     def get_map_data(self):
-        pass
+        self.calculate_geo_midpoint()
+        self.calculate_map_bounds()
+
+        mid_lat, mid_lng = (
+            self.midpoint_lat,
+            self.midpoint_lng,
+        )
+        user_points = (
+            self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False)
+            .select_related("team__name")
+            .values("lng", "lat", "team__name")
+        )
+
+        cleaned_user_points = []
+        for user in user_points:
+            lng = float(user["lng"])
+            lat = float(user["lat"])
+
+            cleaned_user_points.append(
+                [
+                    lng,
+                    lat,
+                    user["team__name"] if user["team__name"] else "No Team",
+                ]
+            )
+        data = {
+            "mid_lng": mid_lng,
+            "mid_lat": mid_lat,
+            "sw_corner": self.get_map_sw_corner(),
+            "ne_corner": self.get_map_ne_corner(),
+            "user_points": cleaned_user_points,
+            "api_key": settings.MAPBOX_API_KEY,
+        }
+        return data
 
     @property
     def days_left_in_trial(self):
