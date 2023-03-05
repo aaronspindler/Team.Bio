@@ -7,11 +7,11 @@ class PagesSitemap(Sitemap):
         return [
             "home",
             "pricing",
-            "robotstxt",
             "account_signup",
             "account_login",
             "privacy_policy",
             "terms_of_service",
+            "robotstxt",
         ]
 
     def location(self, item):
