@@ -9,3 +9,11 @@ class CompanyFactory(factory.django.DjangoModelFactory):
 
     name = factory.Faker("company")
     url = factory.Faker("url")
+
+
+class InviteFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "companies.Invite"
+
+    company = factory.SubFactory(CompanyFactory)
+    email = factory.Faker("email")
