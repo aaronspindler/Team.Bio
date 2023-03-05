@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "django.contrib.sitemaps",
     # Third-party
     "allauth",
     "allauth.account",
@@ -102,6 +103,9 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": env("REDIS_URL"),
+        "OPTIONS": {
+            "CONNECTION_POOL_KWARGS": {"ssl_cert_reqs": None},
+        },
     },
 }
 
