@@ -20,6 +20,9 @@ class Company(models.Model):
     url = models.URLField(unique=True)
     url_root = models.CharField(max_length=250, unique=True)
 
+    # Company Features
+    map_enabled = models.BooleanField(default=True)
+
     # Map Stuff
     midpoint_lat = models.DecimalField(
         max_digits=12, decimal_places=6, null=True, blank=True
