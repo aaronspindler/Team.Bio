@@ -131,7 +131,6 @@ def company_settings(request):
         if company_feature_form.is_valid():
             company_feature_form.save()
 
-
     context = {
         "owners": company.get_owners,
         "company_users": company_users,
