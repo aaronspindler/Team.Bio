@@ -186,7 +186,7 @@ class Company(models.Model):
 
     @property
     def get_active_users(self):
-        return self.users.filter(is_active=True)
+        return self.users.filter(is_active=True).order_by("first_name", "last_name")
 
     @property
     def get_invited_users(self):
