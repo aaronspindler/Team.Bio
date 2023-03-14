@@ -31,7 +31,7 @@ class Command(BaseCommand):
                     f"\t Amount to bill: ${round(Decimal(amount_to_bill_int / 100), 2)}"
                 )
 
-                billing_user = company.get_billing_users
+                billing_user = company.get_billing_user
                 if not billing_user:
                     print("\t Has no billing user")
                     # Create a failed payment attempt

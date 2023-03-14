@@ -14,9 +14,9 @@
                 </div>
             </div>
             <div class="flex flex-col">
-                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="-my-8 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                        {% if not user.company.get_billing_users %}
+                        {% if not billing_email %}
                             <button type="submit" id="subscribeButton"
                                     class=" inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                 Subscribe
@@ -30,8 +30,10 @@
                                     Your trial has ended. You must subscribe to continue using Team Bio!
                                 </p>
                             {% endif %}
-
                         {% else %}
+                            <p class="mt-1 mb-1 ml-1 text-sm text-gray-700">
+                                {{ billing_email }} is the billing contact for your account.
+                            <p>
                             <a type="button" href="https://billing.stripe.com/p/login/4gw8zp2YTeZmcta288"
                                class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Manage
                                 Billing</a>

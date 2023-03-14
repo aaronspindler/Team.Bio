@@ -160,7 +160,7 @@ class Company(models.Model):
 
     @property
     def is_billing_active(self):
-        if self.get_billing_users:
+        if self.get_billing_user:
             return True
         if self.in_trial_period:
             return True
@@ -175,7 +175,7 @@ class Company(models.Model):
         return owners_list
 
     @property
-    def get_billing_users(self):
+    def get_billing_user(self):
         users = StripeCustomer.objects.filter(user__in=self.get_owners)
         if users:
             return users.first()

@@ -114,12 +114,18 @@ def company_settings(request):
 
     teams = Team.objects.filter(company=company).order_by("name")
 
+    billing_user = company.get_billing_user
+    billing_email = None
+    if billing_user:
+        billing_email = billing_user.user.email
+
     context = {
         "owners": company.get_owners,
         "company_users": company_users,
         "invited_users": invited_users,
         "locations": locations,
         "teams": teams,
+        "billing_email": billing_email,
     }
     return render(request, "companies/company_settings.html", context)
 
