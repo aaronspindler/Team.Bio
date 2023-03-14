@@ -52,9 +52,12 @@ class Company(models.Model):
         super().save(*args, **kwargs)
 
     def should_show_map(self):
-        return self.users.filter(
-            is_active=True, lat__isnull=False, lng__isnull=False
-        ).exists()
+        return (
+            self.users.filter(
+                is_active=True, lat__isnull=False, lng__isnull=False
+            ).exists()
+            and self.map_enabled
+        )
 
     def calculate_geo_midpoint(self):
         users = self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False)
