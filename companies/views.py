@@ -8,7 +8,13 @@ from django.views.generic import UpdateView
 from accounts.forms import UserProfileForm
 from accounts.models import User
 from companies.decorators import is_company_owner
-from companies.forms import CompanyForm, InviteForm, LocationForm, TeamForm
+from companies.forms import (
+    CompanyFeatureForm,
+    CompanyForm,
+    InviteForm,
+    LocationForm,
+    TeamForm,
+)
 from companies.models import Company, CompanyOwner, Invite, Location, Team
 from utils.models import Email
 
@@ -114,12 +120,20 @@ def company_settings(request):
 
     teams = Team.objects.filter(company=company).order_by("name")
 
+    company_feature_form = CompanyFeatureForm(instance=company)
+
+    if request.method == "POST":
+        company_feature_form = CompanyFeatureForm(request.POST, instance=company)
+        if company_feature_form.is_valid():
+            company_feature_form.save()
+
     context = {
         "owners": company.get_owners,
         "company_users": company_users,
         "invited_users": invited_users,
         "locations": locations,
         "teams": teams,
+        "company_feature_form": company_feature_form,
     }
     return render(request, "companies/company_settings.html", context)
 
