@@ -181,7 +181,7 @@
                                     {% for location in locations %}
                                         <tr>
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ location.name }}</td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ location.user_set.count }}</td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ location.user__count }}</td>
 
                                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                                 <a href="{% url 'update_location' location.pk %}" class="text-indigo-600 hover:text-indigo-900">Update<span class="sr-only">, {{ location.name }}</span></a>
@@ -223,7 +223,7 @@
                                     {% for team in teams %}
                                         <tr>
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ team.name }}</td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ team.user_set.count }}</td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ team.user__count }}</td>
                                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                                 <a href="{% url 'update_team' team.pk %}" class="text-indigo-600 hover:text-indigo-900">Update<span class="sr-only">, {{ team.name }}</span></a>
                                             </td>

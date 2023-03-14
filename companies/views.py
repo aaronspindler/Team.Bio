@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -116,9 +117,16 @@ def company_settings(request):
     company_users = company.get_active_users
     invited_users = company.get_invited_users
 
-    locations = Location.objects.filter(company=company).order_by("name")
-
-    teams = Team.objects.filter(company=company).order_by("name")
+    locations = (
+        Location.objects.filter(company=company)
+        .order_by("name")
+        .annotate(Count("user", distinct=True))
+    )
+    teams = (
+        Team.objects.filter(company=company)
+        .order_by("name")
+        .annotate(Count("user", distinct=True))
+    )
 
     billing_user = company.get_billing_user
     billing_email = None
