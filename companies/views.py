@@ -120,8 +120,12 @@ def company_settings(request):
 
     teams = Team.objects.filter(company=company).order_by("name")
 
-    company_feature_form = CompanyFeatureForm(instance=company)
+    billing_user = company.get_billing_user
+    billing_email = None
+    if billing_user:
+        billing_email = billing_user.user.email
 
+    company_feature_form = CompanyFeatureForm(instance=company)
     if request.method == "POST":
         company_feature_form = CompanyFeatureForm(request.POST, instance=company)
         if company_feature_form.is_valid():
@@ -133,6 +137,7 @@ def company_settings(request):
         "invited_users": invited_users,
         "locations": locations,
         "teams": teams,
+        "billing_email": billing_email,
         "company_feature_form": company_feature_form,
     }
     return render(request, "companies/company_settings.html", context)
