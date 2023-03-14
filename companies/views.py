@@ -214,6 +214,18 @@ def add_team(request):
     return render(request, "companies/add_team.html", {"form": form})
 
 
+@login_required
+@is_company_owner
+def delete_team(request, name):
+    if request.method == "POST":
+        try:
+            team = Team.objects.get(company=request.user.company, name=name)
+        except Team.DoesNotExist():
+            raise Http404
+        team.delete()
+        return redirect("company_settings")
+
+
 @method_decorator(login_required, name="dispatch")
 @method_decorator(is_company_owner, name="dispatch")
 class UpdateTeamView(UpdateView):

@@ -7,6 +7,7 @@ from companies.views import (
     add_team,
     company_settings,
     create_company,
+    delete_team,
     edit_profile,
     home,
     invite,
@@ -29,6 +30,7 @@ urlpatterns = [
         "location/<str:pk>/update", UpdateLocationView.as_view(), name="update_location"
     ),
     path("team/add", add_team, name="add_team"),
+    path("team/<str:name>/delete", delete_team, name="delete_team"),
     path("team/<str:pk>/update", UpdateTeamView.as_view(), name="update_team"),
     path("profile/<str:email_prefix>/remove", remove_user, name="remove_user"),
     path("profile/edit", edit_profile, name="edit_profile"),
