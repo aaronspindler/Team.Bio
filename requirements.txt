@@ -13,6 +13,7 @@ Django==4.1.7
 django-allauth==0.52.0
 django-crispy-forms==1.14.0
 django-environ==0.10.0
+django-redis==5.2.0
 django-ses==3.3.0
 django-storages==1.13.2
 django_debug_toolbar==3.8.1
