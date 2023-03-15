@@ -216,12 +216,9 @@ def add_team(request):
 
 @login_required
 @is_company_owner
-def delete_team(request, name):
+def delete_team(request, pk):
     if request.method == "POST":
-        try:
-            team = Team.objects.get(company=request.user.company, name=name)
-        except Team.DoesNotExist():
-            raise Http404
+        team = get_object_or_404(Team, company=request.user.company, pk=pk)
         team.delete()
         return redirect("company_settings")
 
