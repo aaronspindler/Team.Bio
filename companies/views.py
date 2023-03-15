@@ -245,7 +245,10 @@ def add_team(request):
 @is_company_owner
 def delete_team(request, pk):
     if request.method == "POST":
-        team = get_object_or_404(Team, company=request.user.company, pk=pk)
+        company = request.user.company
+        team = get_object_or_404(Team, company=company, pk=pk)
+        # Find users that are in this team and remove them from the team
+        User.objects.filter(company=company, team=team).update(team=None)
         team.delete()
         return redirect("company_settings")
 
