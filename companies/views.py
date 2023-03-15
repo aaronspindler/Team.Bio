@@ -241,6 +241,15 @@ def add_team(request):
     return render(request, "companies/add_team.html", {"form": form})
 
 
+@login_required
+@is_company_owner
+def delete_team(request, pk):
+    if request.method == "POST":
+        team = get_object_or_404(Team, company=request.user.company, pk=pk)
+        team.delete()
+        return redirect("company_settings")
+
+
 @method_decorator(login_required, name="dispatch")
 @method_decorator(is_company_owner, name="dispatch")
 class UpdateTeamView(UpdateView):
