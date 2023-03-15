@@ -101,12 +101,14 @@ DATABASES = {"default": env.db()}
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": env("REDIS_URL"),
         "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "CONNECTION_POOL_KWARGS": {"ssl_cert_reqs": None},
         },
-    },
+        "KEY_PREFIX": "teambio",
+    }
 }
 
 AUTH_PASSWORD_VALIDATORS = [

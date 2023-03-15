@@ -20,6 +20,9 @@ class Company(models.Model):
     url = models.URLField(unique=True)
     url_root = models.CharField(max_length=250, unique=True)
 
+    # Company Features
+    map_enabled = models.BooleanField(default=True)
+
     # Map Stuff
     midpoint_lat = models.DecimalField(
         max_digits=12, decimal_places=6, null=True, blank=True
@@ -49,9 +52,12 @@ class Company(models.Model):
         super().save(*args, **kwargs)
 
     def should_show_map(self):
-        return self.users.filter(
-            is_active=True, lat__isnull=False, lng__isnull=False
-        ).exists()
+        return (
+            self.users.filter(
+                is_active=True, lat__isnull=False, lng__isnull=False
+            ).exists()
+            and self.map_enabled
+        )
 
     def calculate_geo_midpoint(self):
         users = self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False)
@@ -157,7 +163,7 @@ class Company(models.Model):
 
     @property
     def is_billing_active(self):
-        if self.get_billing_users:
+        if self.get_billing_user:
             return True
         if self.in_trial_period:
             return True
@@ -172,7 +178,7 @@ class Company(models.Model):
         return owners_list
 
     @property
-    def get_billing_users(self):
+    def get_billing_user(self):
         users = StripeCustomer.objects.filter(user__in=self.get_owners)
         if users:
             return users.first()
@@ -180,7 +186,7 @@ class Company(models.Model):
 
     @property
     def get_active_users(self):
-        return self.users.filter(is_active=True)
+        return self.users.filter(is_active=True).order_by("first_name", "last_name")
 
     @property
     def get_invited_users(self):
