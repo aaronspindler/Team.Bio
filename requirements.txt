@@ -10,7 +10,7 @@ cryptography==39.0.2
 defusedxml==0.7.1
 distlib==0.3.6
 Django==4.1.7
-django-allauth==0.52.0
+django-allauth==0.53.0
 django-crispy-forms==1.14.0
 django-environ==0.10.0
 django-redis==5.2.0
