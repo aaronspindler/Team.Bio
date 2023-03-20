@@ -56,7 +56,7 @@ jobs:
       - name: Run Tests
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/teambio
-          REDIS_URL: rediss://redis:6379
+          REDIS_URL: redis://redis:6379
         run: |
           coverage run --source='.' manage.py test --no-input
       - name: Upload coverage reports to Codecov
