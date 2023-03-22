@@ -258,3 +258,17 @@ class Location(models.Model):
         unique_together = ("company", "name")
         verbose_name = "Location"
         verbose_name_plural = "Locations"
+
+
+class Link(models.Model):
+    company = models.ForeignKey(Company, related_name="links", on_delete=models.CASCADE)
+    name = models.CharField(max_length=60)
+    url = models.URLField()
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        unique_together = ("company", "name")
+        verbose_name = "Link"
+        verbose_name_plural = "Links"
