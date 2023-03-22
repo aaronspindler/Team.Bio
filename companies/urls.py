@@ -7,6 +7,7 @@ from companies.views import (
     add_team,
     company_settings,
     create_company,
+    delete_location,
     delete_team,
     edit_profile,
     home,
@@ -26,6 +27,7 @@ urlpatterns = [
     path("revoke-invite/<str:email>", revoke_invite, name="revoke_invite"),
     path("create", create_company, name="create_company"),
     path("location/add", add_location, name="add_location"),
+    path("location/<str:pk>/delete", delete_location, name="delete_location"),
     path(
         "location/<str:pk>/update", UpdateLocationView.as_view(), name="update_location"
     ),
