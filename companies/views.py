@@ -312,7 +312,7 @@ def add_link(request):
         if form.is_valid():
             instance = form.save(commit=False)
             # Check if this already exists
-            if not LinkForm.objects.filter(
+            if not Link.objects.filter(
                 company=request.user.company, name=instance.name
             ).exists():
                 instance.company = request.user.company

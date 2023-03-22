@@ -98,7 +98,7 @@ class LinkForm(ModelForm):
         widget=forms.TextInput(
             attrs={
                 "placeholder": "PTO Policy",
-                "class": "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+                "class": "block w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
             }
         ),
     )
@@ -107,7 +107,7 @@ class LinkForm(ModelForm):
         widget=forms.TextInput(
             attrs={
                 "placeholder": "https://www.magmahealth.com/pto-policy",
-                "class": "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+                "class": "block w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
             }
         ),
     )
