@@ -29,9 +29,19 @@ class CompanyFeatureForm(ModelForm):
         ),
     )
 
+    links_enabled = forms.BooleanField(
+        label="Enabled / Disable the display of links on your company home page",
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={
+                "class": "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600",
+            }
+        ),
+    )
+
     class Meta:
         model = Company
-        fields = ["map_enabled"]
+        fields = ["map_enabled", "links_enabled"]
 
 
 class InviteForm(ModelForm):
