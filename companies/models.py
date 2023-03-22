@@ -95,10 +95,11 @@ class Company(models.Model):
             if lng > max_lng:
                 max_lng = lng
 
-        self.min_lat = min_lat.quantize(Decimal("0.001"))
-        self.max_lat = max_lat.quantize(Decimal("0.001"))
-        self.min_lng = min_lng.quantize(Decimal("0.001"))
-        self.max_lng = max_lng.quantize(Decimal("0.001"))
+        padding = Decimal("0.25")
+        self.min_lat = min_lat.quantize(Decimal("0.001")) - padding
+        self.max_lat = max_lat.quantize(Decimal("0.001")) + padding
+        self.min_lng = min_lng.quantize(Decimal("0.001")) - padding
+        self.max_lng = max_lng.quantize(Decimal("0.001")) + padding
         self.save()
 
         return ([min_lng, min_lat], [max_lng, max_lat])
