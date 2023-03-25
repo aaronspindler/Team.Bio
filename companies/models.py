@@ -277,6 +277,11 @@ class Link(models.Model):
     name = models.CharField(max_length=60)
     url = models.CharField(max_length=500)
 
+    def save(self, *args, **kwargs):
+        if not self.url.startswith("http"):
+            self.url = f"http://{self.url}"
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.name}"
 
