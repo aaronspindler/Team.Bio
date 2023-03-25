@@ -208,6 +208,15 @@ def add_location(request):
     return render(request, "companies/add_location.html", {"form": form})
 
 
+@login_required
+@is_company_owner
+def delete_location(request, pk):
+    if request.method == "POST":
+        location = get_object_or_404(Location, pk=pk)
+        location.delete()
+        return redirect("company_settings")
+
+
 @method_decorator(login_required, name="dispatch")
 @method_decorator(is_company_owner, name="dispatch")
 class UpdateLocationView(UpdateView):
