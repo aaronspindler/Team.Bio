@@ -180,6 +180,8 @@ class Company(models.Model):
             return True
         if self.in_trial_period:
             return True
+        if self.test_company:
+            return True
         return False
 
     @property

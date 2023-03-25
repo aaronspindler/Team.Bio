@@ -211,6 +211,21 @@ def add_location(request):
     return render(request, "companies/add_location.html", {"form": form})
 
 
+@login_required
+@is_company_owner
+def delete_location(request, pk):
+    if request.method == "POST":
+        company = request.user.company
+        location = get_object_or_404(Location, pk=pk, company=company)
+        # Find users that are in this location and remove them from the location
+        # This prevents any cascading deletes
+        User.objects.filter(company=company, general_location=location).update(
+            general_location=None
+        )
+        location.delete()
+        return redirect("company_settings")
+
+
 @method_decorator(login_required, name="dispatch")
 @method_decorator(is_company_owner, name="dispatch")
 class UpdateLocationView(UpdateView):
