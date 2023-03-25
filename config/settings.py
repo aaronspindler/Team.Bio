@@ -30,7 +30,13 @@ DEBUG = env("DEBUG", False)
 PRICE_PER_USER = 100
 DEFAULT_TRIAL_DAYS = 30
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "team.bio", "www.team.bio"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "team.bio",
+    "www.team.bio",
+    "*.up.railway.app",
+]
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
