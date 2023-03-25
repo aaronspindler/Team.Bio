@@ -331,21 +331,6 @@ def delete_link(request, pk):
         return redirect("company_settings")
 
 
-@method_decorator(login_required, name="dispatch")
-@method_decorator(is_company_owner, name="dispatch")
-class UpdateLinkView(UpdateView):
-    model = Link
-    template_name = "companies/update_link.html"
-    success_url = reverse_lazy("company_settings")
-    form_class = LinkForm
-
-    def get_object(self, *args, **kwargs):
-        obj = super(UpdateTeamView, self).get_object(*args, **kwargs)
-        if obj.company != self.request.user.company:
-            raise Http404
-        return obj
-
-
 @login_required
 def home(request):
     user = request.user

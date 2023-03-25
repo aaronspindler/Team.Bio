@@ -264,7 +264,7 @@ class Location(models.Model):
 class Link(models.Model):
     company = models.ForeignKey(Company, related_name="links", on_delete=models.CASCADE)
     name = models.CharField(max_length=60)
-    url = models.URLField()
+    url = models.CharField(max_length=500)
 
     def __str__(self):
         return f"{self.name}"

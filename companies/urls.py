@@ -1,7 +1,6 @@
 from django.urls import path
 
 from companies.views import (
-    UpdateLinkView,
     UpdateLocationView,
     UpdateTeamView,
     add_link,
@@ -37,7 +36,6 @@ urlpatterns = [
     path("team/<str:pk>/update", UpdateTeamView.as_view(), name="update_team"),
     path("link/add", add_link, name="add_link"),
     path("link/<str:pk>/delete", delete_link, name="delete_link"),
-    path("link/<str:pk>/update", UpdateLinkView.as_view(), name="update_link"),
     path("profile/<str:email_prefix>/remove", remove_user, name="remove_user"),
     path("profile/edit", edit_profile, name="edit_profile"),
     path("profile/<str:email_prefix>", user_profile, name="user_profile"),
