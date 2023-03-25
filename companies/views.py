@@ -215,7 +215,13 @@ def add_location(request):
 @is_company_owner
 def delete_location(request, pk):
     if request.method == "POST":
-        location = get_object_or_404(Location, pk=pk)
+        company = request.user.company
+        location = get_object_or_404(Location, pk=pk, company=company)
+        # Find users that are in this location and remove them from the location
+        # This prevents any cascading deletes
+        User.objects.filter(company=company, general_location=location).update(
+            general_location=None
+        )
         location.delete()
         return redirect("company_settings")
 
