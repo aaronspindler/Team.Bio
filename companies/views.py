@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -8,7 +9,13 @@ from django.views.generic import UpdateView
 from accounts.forms import UserProfileForm
 from accounts.models import User
 from companies.decorators import is_company_owner
-from companies.forms import CompanyForm, InviteForm, LocationForm, TeamForm
+from companies.forms import (
+    CompanyFeatureForm,
+    CompanyForm,
+    InviteForm,
+    LocationForm,
+    TeamForm,
+)
 from companies.models import Company, CompanyOwner, Invite, Location, Team
 from utils.models import Email
 
@@ -110,9 +117,27 @@ def company_settings(request):
     company_users = company.get_active_users
     invited_users = company.get_invited_users
 
-    locations = Location.objects.filter(company=company).order_by("name")
+    locations = (
+        Location.objects.filter(company=company)
+        .order_by("name")
+        .annotate(Count("user", distinct=True))
+    )
+    teams = (
+        Team.objects.filter(company=company)
+        .order_by("name")
+        .annotate(Count("user", distinct=True))
+    )
 
-    teams = Team.objects.filter(company=company).order_by("name")
+    billing_user = company.get_billing_user
+    billing_email = None
+    if billing_user:
+        billing_email = billing_user.user.email
+
+    company_feature_form = CompanyFeatureForm(instance=company)
+    if request.method == "POST":
+        company_feature_form = CompanyFeatureForm(request.POST, instance=company)
+        if company_feature_form.is_valid():
+            company_feature_form.save()
 
     context = {
         "owners": company.get_owners,
@@ -120,6 +145,8 @@ def company_settings(request):
         "invited_users": invited_users,
         "locations": locations,
         "teams": teams,
+        "billing_email": billing_email,
+        "company_feature_form": company_feature_form,
     }
     return render(request, "companies/company_settings.html", context)
 
@@ -212,6 +239,18 @@ def add_team(request):
                 instance.save()
             return redirect("company_settings")
     return render(request, "companies/add_team.html", {"form": form})
+
+
+@login_required
+@is_company_owner
+def delete_team(request, pk):
+    if request.method == "POST":
+        company = request.user.company
+        team = get_object_or_404(Team, company=company, pk=pk)
+        # Find users that are in this team and remove them from the team
+        User.objects.filter(company=company, team=team).update(team=None)
+        team.delete()
+        return redirect("company_settings")
 
 
 @method_decorator(login_required, name="dispatch")
