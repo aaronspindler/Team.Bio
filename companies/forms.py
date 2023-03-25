@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from companies.models import Company, Invite, Location, Team
+from companies.models import Company, Invite, Link, Location, Team
 
 
 class CompanyForm(ModelForm):
@@ -90,3 +90,28 @@ class TeamForm(ModelForm):
     class Meta:
         model = Team
         fields = ["name"]
+
+
+class LinkForm(ModelForm):
+    name = forms.CharField(
+        label="Name",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "PTO Policy",
+                "class": "block w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
+            }
+        ),
+    )
+    url = forms.CharField(
+        label="URL",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "https://www.magmahealth.com/pto-policy",
+                "class": "block w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6",
+            }
+        ),
+    )
+
+    class Meta:
+        model = Link
+        fields = ["name", "url"]
