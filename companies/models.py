@@ -155,6 +155,17 @@ class Company(models.Model):
         }
         return data
 
+    def get_link_data(self):
+        if not self.links_enabled:
+            return {"show_links": False}
+
+        links = self.links.values("name", "url")
+        data = {
+            "links": links,
+            "show_links": True,
+        }
+        return data
+
     @property
     def days_left_in_trial(self):
         return (self.created + timedelta(days=self.trial_days) - timezone.now()).days

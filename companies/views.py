@@ -355,5 +355,6 @@ def home(request):
 
     data = {}
     data.update(company.get_map_data())
+    data.update(company.get_link_data())
 
     return render(request, "companies/home.html", data)
