@@ -13,10 +13,11 @@ from companies.forms import (
     CompanyFeatureForm,
     CompanyForm,
     InviteForm,
+    LinkForm,
     LocationForm,
     TeamForm,
 )
-from companies.models import Company, CompanyOwner, Invite, Location, Team
+from companies.models import Company, CompanyOwner, Invite, Link, Location, Team
 from utils.models import Email
 
 
@@ -127,6 +128,7 @@ def company_settings(request):
         .order_by("name")
         .annotate(Count("user", distinct=True))
     )
+    links = Link.objects.filter(company=company).order_by("name")
 
     billing_user = company.get_billing_user
     billing_email = None
@@ -145,6 +147,7 @@ def company_settings(request):
         "invited_users": invited_users,
         "locations": locations,
         "teams": teams,
+        "links": links,
         "billing_email": billing_email,
         "company_feature_form": company_feature_form,
     }
@@ -301,6 +304,34 @@ def edit_profile(request):
 
 
 @login_required
+@is_company_owner
+def add_link(request):
+    form = LinkForm()
+    if request.method == "POST":
+        form = LinkForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            # Check if this already exists
+            if not Link.objects.filter(
+                company=request.user.company, name=instance.name
+            ).exists():
+                instance.company = request.user.company
+                instance.save()
+            return redirect("company_settings")
+    return render(request, "companies/add_link.html", {"form": form})
+
+
+@login_required
+@is_company_owner
+def delete_link(request, pk):
+    if request.method == "POST":
+        company = request.user.company
+        link = get_object_or_404(Link, company=company, pk=pk)
+        link.delete()
+        return redirect("company_settings")
+
+
+@login_required
 def home(request):
     user = request.user
     company = request.user.company
@@ -324,5 +355,6 @@ def home(request):
 
     data = {}
     data.update(company.get_map_data())
+    data.update(company.get_link_data())
 
     return render(request, "companies/home.html", data)

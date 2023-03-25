@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from companies.models import Company, CompanyOwner, Invite, Location, Team
+from companies.models import Company, CompanyOwner, Invite, Link, Location, Team
 
 
 @admin.register(Company)
@@ -32,3 +32,10 @@ class InviteAdmin(admin.ModelAdmin):
     list_display = ["company", "email"]
     list_filter = ["company"]
     model = Invite
+
+
+@admin.register(Link)
+class LinkAdmin(admin.ModelAdmin):
+    list_display = ["company", "name"]
+    list_filter = ["company"]
+    model = Link

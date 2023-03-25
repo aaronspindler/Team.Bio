@@ -155,6 +155,17 @@ class Company(models.Model):
         }
         return data
 
+    def get_link_data(self):
+        if not self.links_enabled:
+            return {"show_links": False}
+
+        links = self.links.values("name", "url")
+        data = {
+            "links": links,
+            "show_links": True,
+        }
+        return data
+
     @property
     def days_left_in_trial(self):
         return (self.created + timedelta(days=self.trial_days) - timezone.now()).days
@@ -259,3 +270,22 @@ class Location(models.Model):
         unique_together = ("company", "name")
         verbose_name = "Location"
         verbose_name_plural = "Locations"
+
+
+class Link(models.Model):
+    company = models.ForeignKey(Company, related_name="links", on_delete=models.CASCADE)
+    name = models.CharField(max_length=60)
+    url = models.CharField(max_length=500)
+
+    def save(self, *args, **kwargs):
+        if not self.url.startswith("http"):
+            self.url = f"http://{self.url}"
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        unique_together = ("company", "name")
+        verbose_name = "Link"
+        verbose_name_plural = "Links"
