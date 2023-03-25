@@ -42,14 +42,20 @@ class TestModels(TestCase):
         self.assertEqual(user.email_prefix, "aaron")
 
     def test_user_address_string(self):
-        user = UserFactory(address_1="123 Main St")
+        company = CompanyFactory()
+        user = UserFactory(address_1="123 Main St", company=company)
         self.assertEqual(user.address_string, "123 Main St")
 
-        user = UserFactory(address_1=" 123 Main St   ", city="   Toronto ")
+        user = UserFactory(
+            address_1=" 123 Main St   ", city="   Toronto ", company=company
+        )
         self.assertEqual(user.address_string, "123 Main St Toronto")
 
         user = UserFactory(
-            address_1=" 123 Main St   ", city="   Toronto ", prov_state="   ON "
+            address_1=" 123 Main St   ",
+            city="   Toronto ",
+            prov_state="   ON ",
+            company=company,
         )
         self.assertEqual(user.address_string, "123 Main St Toronto ON")
 
@@ -58,6 +64,7 @@ class TestModels(TestCase):
             city="   Toronto ",
             prov_state="   ON ",
             country="   Canada ",
+            company=company,
         )
         self.assertEqual(user.address_string, "123 Main St Toronto ON Canada")
 
@@ -67,6 +74,7 @@ class TestModels(TestCase):
             prov_state="   ON ",
             country="   Canada ",
             postal_code="   M1M 1M1 ",
+            company=company,
         )
         self.assertEqual(user.address_string, "123 Main St Toronto ON Canada M1M 1M1")
 
@@ -80,35 +88,51 @@ class TestModels(TestCase):
     def test_user_personality_type_name(self):
         user = UserFactory(personality_type="")
         self.assertEqual(user.personality_type_name(), "")
-        user = UserFactory(personality_type="INTJ")
+        user.personality_type = "INTJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Architect")
-        user = UserFactory(personality_type="INTP")
+        user.personality_type = "INTP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Logician")
-        user = UserFactory(personality_type="ENTJ")
+        user.personality_type = "ENTJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Commander")
-        user = UserFactory(personality_type="ENTP")
+        user.personality_type = "ENTP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Debater")
-        user = UserFactory(personality_type="INFJ")
+        user.personality_type = "INFJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Advocate")
-        user = UserFactory(personality_type="INFP")
+        user.personality_type = "INFP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Mediator")
-        user = UserFactory(personality_type="ENFJ")
+        user.personality_type = "ENFJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Protagonist")
-        user = UserFactory(personality_type="ENFP")
+        user.personality_type = "ENFP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Campaigner")
-        user = UserFactory(personality_type="ISTJ")
+        user.personality_type = "ISTJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Logistician")
-        user = UserFactory(personality_type="ISFJ")
+        user.personality_type = "ISFJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Defender")
-        user = UserFactory(personality_type="ESTJ")
+        user.personality_type = "ESTJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Executive")
-        user = UserFactory(personality_type="ESFJ")
+        user.personality_type = "ESFJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Consul")
-        user = UserFactory(personality_type="ISTP")
+        user.personality_type = "ISTP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Virtuoso")
-        user = UserFactory(personality_type="ISFP")
+        user.personality_type = "ISFP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Adventurer")
-        user = UserFactory(personality_type="ESTP")
+        user.personality_type = "ESTP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Entrepreneur")
-        user = UserFactory(personality_type="ESFP")
+        user.personality_type = "ESFP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Entertainer")
