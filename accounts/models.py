@@ -11,6 +11,33 @@ from accounts.utils import (
 )
 
 
+class PetType(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ["name"]
+
+
+class Pet(models.Model):
+    name = models.CharField(max_length=200)
+    nickname = models.CharField(max_length=400, blank=True, null=True)
+    pet_type = models.ForeignKey(
+        PetType, on_delete=models.CASCADE, blank=True, null=True
+    )
+
+    picture = models.ImageField(blank=True, null=True, upload_to="pets/")
+
+    owner = models.ForeignKey(
+        "accounts.User", related_name="pets", on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return self.name
+
+
 class User(AbstractUser):
     company = models.ForeignKey(
         "companies.Company",
