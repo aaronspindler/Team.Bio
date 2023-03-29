@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
 
 from accounts.forms import UserProfileForm
-from accounts.models import User
+from accounts.models import Pet, User
 from companies.decorators import is_company_owner
 from companies.forms import (
     CompanyFeatureForm,
@@ -292,13 +292,12 @@ def user_profile(request, email_prefix):
     company_user = get_object_or_404(
         User, company=request.user.company, email_prefix=email_prefix
     )
-    team_members = User.objects.filter(
-        company=request.user.company, team=company_user.team
-    )
+
+    pets = Pet.objects.filter(owner=company_user)
     return render(
         request,
         "companies/user_profile.html",
-        {"company_user": company_user, "team_members": team_members},
+        {"company_user": company_user, "pets": pets},
     )
 
 
