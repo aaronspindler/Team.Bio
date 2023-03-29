@@ -134,6 +134,7 @@ def add_pet_types(apps, schema_editor):
         "Rodent",
         "Horse",
         "Other",
+        "Pomsky"
     ]
 
     types_to_create = []
