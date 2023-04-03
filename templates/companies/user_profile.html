@@ -5,11 +5,10 @@
 
 {% block content %}
     <div class="flex h-full">
-        <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
-            <div class="relative z-0 flex flex-1 overflow-hidden">
-                <main class="relative z-0 flex-1 overflow-y-auto focus:outline-none xl:order-last">
+        <div class="flex min-w-0 flex-1 flex-col">
+            <div class="relative z-0 flex flex-1">
+                <main class="relative z-0 flex-1 focus:outline-none xl:order-last">
                     <article>
-                        <!-- Profile header -->
                         <div>
                             <div>
                                 <img class="h-32 w-full object-cover lg:h-48" src="https://images.unsplash.com/photo-1444628838545-ac4016a5418a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="">
@@ -63,14 +62,13 @@
                                         <div class="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
                                             <a href="mailto:{{ company_user.email }}"
                                                class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                                <!-- Heroicon name: mini/envelope -->
                                                 <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                     <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z"/>
                                                     <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z"/>
                                                 </svg>
                                                 <span>E-Mail</span>
                                             </a>
-                                            {% if user == company_user %}
+                                            {% if is_profile_owner %}
                                                 <a href="{% url 'edit_profile' %}" class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
                                                 focus:ring-2 focus:ring-indigo-500
                                                 focus:ring-offset-2">
@@ -214,7 +212,30 @@
                                     </div>
                                 {% endif %}
                             </dl>
+
+                            <br>
+                            <dt class="text-lg font-large text-black-500">
+                                Pets
+                                {% if is_profile_owner %}
+                                    <br>
+                                    <a type="button" href="{% url 'add_pet' %}"
+                                       class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-small text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Add
+                                        Pet</a>
+                                {% endif %}
+                            </dt>
+                            {% if pets %}
+                                <ul role="list" class="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                                    {% for pet in pets %}
+                                        {% include "objects/pet.html" with pet=pet show_buttons=is_profile_owner %}
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <div class="mx-auto mt-8 max-w-5xl px-4 pb-12 sm:px-6 lg:px-8">
+                                    <h2 class="text-sm font-medium text-gray-500">No pets</h2>
+                                </div>
+                            {% endif %}
                         </div>
+
 
                         {#                        <!-- Team member list -->#}
                         {#                        <div class="mx-auto mt-8 max-w-5xl px-4 pb-12 sm:px-6 lg:px-8">#}

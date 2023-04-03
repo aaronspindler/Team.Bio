@@ -4,11 +4,45 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.dispatch import receiver
+from django.urls import reverse
 
 from accounts.utils import (
     attempt_connect_user_to_a_company,
     attempt_connect_user_with_invites,
 )
+
+
+class PetType(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ["name"]
+
+
+class Pet(models.Model):
+    name = models.CharField(max_length=200)
+    nickname = models.CharField(max_length=400, blank=True, null=True)
+    pet_type = models.ForeignKey(
+        PetType, on_delete=models.CASCADE, blank=True, null=True
+    )
+
+    picture = models.ImageField(blank=True, null=True, upload_to="pets/")
+
+    owner = models.ForeignKey(
+        "accounts.User", related_name="pets", on_delete=models.CASCADE
+    )
+
+    @property
+    def picture_url(self):
+        if self.picture:
+            return self.picture.url
+        return "https://team-bio.s3.amazonaws.com/public/pets/dog-cat-transparent.png"
+
+    def __str__(self):
+        return self.name
 
 
 class User(AbstractUser):
@@ -114,6 +148,10 @@ class User(AbstractUser):
 
     #   Non-User Editable
     start_date = models.DateField(blank=True, null=True)
+
+    @property
+    def profile_url(self):
+        return reverse("user_profile", kwargs={"email_prefix": self.email_prefix})
 
     @property
     def profile_picture_url(self):

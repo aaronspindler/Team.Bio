@@ -6,8 +6,8 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
 
-from accounts.forms import UserProfileForm
-from accounts.models import User
+from accounts.forms import PetForm, UserProfileForm
+from accounts.models import Pet, User
 from companies.decorators import is_company_owner
 from companies.forms import (
     CompanyFeatureForm,
@@ -292,13 +292,21 @@ def user_profile(request, email_prefix):
     company_user = get_object_or_404(
         User, company=request.user.company, email_prefix=email_prefix
     )
-    team_members = User.objects.filter(
-        company=request.user.company, team=company_user.team
-    )
+
+    pets = Pet.objects.filter(owner=company_user)
+
+    is_profile_owner = False
+    if company_user == request.user:
+        is_profile_owner = True
+
     return render(
         request,
         "companies/user_profile.html",
-        {"company_user": company_user, "team_members": team_members},
+        {
+            "company_user": company_user,
+            "pets": pets,
+            "is_profile_owner": is_profile_owner,
+        },
     )
 
 
@@ -344,6 +352,49 @@ def delete_link(request, pk):
         link = get_object_or_404(Link, company=company, pk=pk)
         link.delete()
         return redirect("company_settings")
+
+
+@login_required
+def add_pet(request):
+    user = request.user
+    form = PetForm()
+    if request.method == "POST":
+        form = PetForm(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.owner = user
+            instance.save()
+            return redirect(user.profile_url)
+    return render(request, "companies/add_pet.html", {"form": form})
+
+
+@login_required
+def delete_pet(request, pk):
+    user = request.user
+    if request.method == "POST":
+        pet = get_object_or_404(Pet, owner=request.user, pk=pk)
+        pet.delete()
+        return redirect(user.profile_url)
+    return Http404
+
+
+@method_decorator(login_required, name="dispatch")
+class UpdatePetView(UpdateView):
+    model = Pet
+    template_name = "companies/update_pet.html"
+    success_url = reverse_lazy("edit_profile")
+    form_class = PetForm
+
+    def get_object(self, *args, **kwargs):
+        obj = super(UpdatePetView, self).get_object(*args, **kwargs)
+        if obj.owner != self.request.user:
+            raise Http404
+        return obj
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "user_profile", kwargs={"email_prefix": self.request.user.email_prefix}
+        )
 
 
 @login_required
