@@ -1,5 +1,5 @@
 <li>
-    <img class="mx-auto h-56 w-56 rounded-full" src="{{ pet.picture.url }}" alt="">
+    <img class="mx-auto h-56 w-56 rounded-full" src="{{ pet.picture_url }}" alt="">
     <h3 class="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900">{{ pet.name }} {% if pet.nickname %}<small>"{{ pet.nickname }}"</small>{% endif %}</h3>
     <p class="text-sm leading-6 text-gray-600">{{ pet.pet_type.name }}</p>
     {% if show_buttons %}

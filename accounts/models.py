@@ -35,6 +35,12 @@ class Pet(models.Model):
         "accounts.User", related_name="pets", on_delete=models.CASCADE
     )
 
+    @property
+    def picture_url(self):
+        if self.picture:
+            return self.picture.url
+        return "https://team-bio.s3.amazonaws.com/public/pets/dog-cat-transparent.png"
+
     def __str__(self):
         return self.name
 
