@@ -2,14 +2,17 @@ from django.urls import path
 
 from companies.views import (
     UpdateLocationView,
+    UpdatePetView,
     UpdateTeamView,
     add_link,
     add_location,
+    add_pet,
     add_team,
     company_settings,
     create_company,
     delete_link,
     delete_location,
+    delete_pet,
     delete_team,
     edit_profile,
     home,
@@ -41,5 +44,8 @@ urlpatterns = [
     path("profile/<str:email_prefix>/remove", remove_user, name="remove_user"),
     path("profile/edit", edit_profile, name="edit_profile"),
     path("profile/<str:email_prefix>", user_profile, name="user_profile"),
+    path("profile/pet/add", add_pet, name="add_pet"),
+    path("profile/pet/<str:pk>/delete", delete_pet, name="delete_pet"),
+    path("profile/pet/<str:pk>/update", UpdatePetView.as_view(), name="update_pet"),
     path("invite", invite, name="invite"),
 ]

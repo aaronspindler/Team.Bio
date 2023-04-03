@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.dispatch import receiver
+from django.urls import reverse
 
 from accounts.utils import (
     attempt_connect_user_to_a_company,
@@ -141,6 +142,10 @@ class User(AbstractUser):
 
     #   Non-User Editable
     start_date = models.DateField(blank=True, null=True)
+
+    @property
+    def profile_url(self):
+        return reverse("user_profile", kwargs={"email_prefix": self.email_prefix})
 
     @property
     def profile_picture_url(self):

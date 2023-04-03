@@ -1,7 +1,38 @@
 from django import forms
 
-from accounts.models import User
+from accounts.models import Pet, User
 from companies.models import Location, Team
+
+
+class PetForm(forms.ModelForm):
+    picture = forms.ImageField(label="", required=False)
+
+    class Meta:
+        model = Pet
+        fields = ["name", "nickname", "pet_type", "picture"]
+
+    def __init__(self, *args, **kwargs):
+        super(PetForm, self).__init__(*args, **kwargs)
+        self.fields["name"].widget.attrs.update(
+            {
+                "class": "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
+            }
+        )
+        self.fields["nickname"].widget.attrs.update(
+            {
+                "class": "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
+            }
+        )
+        self.fields["pet_type"].widget.attrs.update(
+            {
+                "class": "block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
+            }
+        )
+        self.fields["picture"].widget.attrs.update(
+            {
+                "class": "rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            }
+        )
 
 
 class UserProfileForm(forms.ModelForm):
