@@ -391,6 +391,11 @@ class UpdatePetView(UpdateView):
             raise Http404
         return obj
 
+    def get_success_url(self):
+        return reverse_lazy(
+            "user_profile", kwargs={"email_prefix": self.request.user.email_prefix}
+        )
+
 
 @login_required
 def home(request):
