@@ -24,6 +24,19 @@
         <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}
 </head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8NMLTSTGZE"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-8NMLTSTGZE');
+</script>
 
 <body>
 <script src="https://betteruptime.com/widgets/announcement.js" data-id="158950" async="async" type="text/javascript"></script>
