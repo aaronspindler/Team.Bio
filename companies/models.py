@@ -14,10 +14,12 @@ class Company(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     trial_days = models.IntegerField(default=settings.DEFAULT_TRIAL_DAYS)
-    test_company = models.BooleanField(default=False)
+    test_company = models.BooleanField(
+        default=False, help_text="Used for develop testing companies"
+    )
     billing_disabled = models.BooleanField(
-        default=False
-    )  # Used for companies where we do not want to bill them
+        default=False, help_text="Used for companies where we do not want to bill them"
+    )
 
     name = models.TextField(unique=True)
     url = models.URLField(unique=True)
