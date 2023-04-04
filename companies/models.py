@@ -178,7 +178,7 @@ class Company(models.Model):
         return self.days_left_in_trial > 0
 
     @property
-    def is_billing_active(self):
+    def is_enabled(self):
         if self.get_billing_user:
             return True
         if self.in_trial_period:

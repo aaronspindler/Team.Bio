@@ -413,10 +413,10 @@ def home(request):
             return redirect("create_company")
 
     # If the user is a company owner and their billing is inactive, redirect them to the settings page
-    if user in company.get_owners and company.is_billing_active is False:
+    if user in company.get_owners and company.is_enabled is False:
         return redirect("company_settings")
     # if the user is not a company owner and their billing is inactive, redirect them to billing inactive page
-    elif user not in company.get_owners and company.is_billing_active is False:
+    elif user not in company.get_owners and company.is_enabled is False:
         return redirect("billing_inactive")
 
     data = {}

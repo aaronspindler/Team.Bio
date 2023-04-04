@@ -16,6 +16,10 @@ class Command(BaseCommand):
             print(f"{company} (PK: {company.pk})")
             if company.in_trial_period:
                 print("\t In trial period")
+            elif company.test_company:
+                print("\t Test company, not invoicing")
+            elif company.billing_disabled:
+                print("\t Billing disabled, not invoicing")
             else:
                 # Calculate the average number of users the company had in the last 30 days
                 average_num_users = int(
@@ -43,9 +47,5 @@ class Command(BaseCommand):
                     )
                 else:
                     print(f"\t Billing user: {billing_user} (PK: {billing_user.pk})")
-                    # Invoice the customer
-                    if company.test_company:
-                        print("\t Test company, not invoicing")
-                    else:
-                        billing_user.invoice_customer(average_num_users)
-                        print(f"\t Invoiced customer for {average_num_users} users")
+                    billing_user.invoice_customer(average_num_users)
+                    print(f"\t Invoiced customer for {average_num_users} users")
