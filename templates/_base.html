@@ -23,6 +23,10 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet"/>
         <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}
+    <script src="https://cdn.websitepolicies.io/lib/cconsent/cconsent.min.js" defer></script>
+    <script>window.addEventListener("load", function () {
+        window.wpcb.init({"border": "normal", "corners": "normal", "colors": {"popup": {"background": "#f6f6f6", "text": "#000000", "border": "#555555"}, "button": {"background": "#555555", "text": "#ffffff"}}, "content": {"href": "https://www.team.bio/privacy-policy"}, "position": "bottom"})
+    });</script>
 </head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8NMLTSTGZE"></script>
