@@ -15,6 +15,9 @@ class Company(models.Model):
 
     trial_days = models.IntegerField(default=settings.DEFAULT_TRIAL_DAYS)
     test_company = models.BooleanField(default=False)
+    billing_disabled = models.BooleanField(
+        default=False
+    )  # Used for companies where we do not want to bill them
 
     name = models.TextField(unique=True)
     url = models.URLField(unique=True)
@@ -181,6 +184,8 @@ class Company(models.Model):
         if self.in_trial_period:
             return True
         if self.test_company:
+            return True
+        if self.billing_disabled:
             return True
         return False
 
