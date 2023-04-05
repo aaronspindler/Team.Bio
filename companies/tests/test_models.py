@@ -1,4 +1,5 @@
 from decimal import Decimal
+from unittest import mock
 
 from django.test import TestCase
 
@@ -39,9 +40,18 @@ class TestModels(TestCase):
         company = CompanyFactory(url="https://www.spindlers.ca")
         self.assertEqual(company.url_root, "spindlers.ca")
 
-    def test_calculate_geo_midpoint(self):
+    @mock.patch(
+        "accounts.models.User.geo_code_address",
+    )
+    def test_calculate_geo_midpoint(self, mock_geo_code_address):
         result = self.company.calculate_geo_midpoint()
         self.assertEqual(result, (0.0, 0.0))
+
+        mock_geo_code_address.return_value = (
+            Decimal("48.6143971"),
+            Decimal("-96.3965717"),
+            "place_id",
+        )
 
         UserFactory(
             address_1="123 Main St",
