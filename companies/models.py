@@ -6,13 +6,16 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
-from billing.models import StripeCustomer
+from billing.models import PromoCode, StripeCustomer
 
 
 class Company(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    promo_code = models.ForeignKey(
+        PromoCode, on_delete=models.SET_NULL, null=True, blank=True
+    )
     trial_days = models.IntegerField(default=settings.DEFAULT_TRIAL_DAYS)
     test_company = models.BooleanField(
         default=False, help_text="Used for develop testing companies"
