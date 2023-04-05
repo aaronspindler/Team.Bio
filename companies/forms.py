@@ -13,6 +13,12 @@ class CompanyForm(ModelForm):
         widget=forms.TextInput(attrs={"placeholder": "https://www.magmahealth.com"}),
     )
 
+    promo_code = forms.CharField(
+        label="Promo Code",
+        widget=forms.TextInput(attrs={"placeholder": ""}),
+        required=False,
+    )
+
     class Meta:
         model = Company
         fields = ["name", "url"]

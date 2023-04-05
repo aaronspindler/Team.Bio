@@ -14,16 +14,23 @@
 
                 <div class="space-y-6 sm:space-y-5">
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="about" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Company Name</label>
+                        <label for="name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Company Name</label>
                         <div class="flex max-w-lg rounded-md shadow-sm">
                             <input type="text" name="name" id="id_name" class="block w-full min-w-0 flex-1 rounded-none rounded-r-md rounded-l-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Magma Health" value="{{ form.name.value|default_if_none:"" }}">
                         </div>
                     </div>
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="about" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">URL</label>
+                        <label for="url" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">URL</label>
                         <div class="flex max-w-lg rounded-md shadow-sm">
                             <input type="text" name="url" id="id_url" class="block w-full min-w-0 flex-1 rounded-none rounded-r-md rounded-l-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="https://www.Magmahealth.com"
                                    value="{{ form.url.value|default_if_none:"" }}">
+                        </div>
+                    </div>
+                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+                        <label for="about" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Promo Code</label>
+                        <div class="flex max-w-lg rounded-md shadow-sm">
+                            <input type="text" name="promo_code" id="id_promo_code" class="block w-full min-w-0 flex-1 rounded-none rounded-r-md rounded-l-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                   value="{{ form.promo_code.value|default_if_none:"" }}">
                         </div>
                     </div>
                 </div>

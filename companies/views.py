@@ -8,6 +8,7 @@ from django.views.generic import UpdateView
 
 from accounts.forms import PetForm, UserProfileForm
 from accounts.models import Pet, User
+from billing.models import PromoCode
 from companies.decorators import is_company_owner
 from companies.forms import (
     CompanyFeatureForm,
@@ -34,6 +35,15 @@ def create_company(request):
             company = form.save()
             # Create a CompanyOwner object to track who owns the company
             CompanyOwner.objects.create(company=company, owner=request.user)
+
+            promo_code = form.cleaned_data.get("promo_code")
+            if promo_code:
+                # check if the promo code exists
+                promo_code = PromoCode.objects.filter(code=promo_code)
+                # if the promo code exists set the companies trial days to the promo code amount
+                if promo_code:
+                    company.trial_days = promo_code.first().num_free_days
+                    company.save()
 
             # Update the users company field
             user = request.user

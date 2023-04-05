@@ -3,6 +3,7 @@ from django.urls import reverse
 
 from accounts.factories import UserFactory
 from accounts.models import User
+from billing.factories import PromoCodeFactory
 from companies.factories import CompanyFactory
 from companies.models import Company, CompanyOwner
 
@@ -105,6 +106,48 @@ class TestCompanyViews(TestCase):
         self.assertTemplateUsed(response, "companies/home.html")
         self.assertContains(response, "Freedom Health")
         self.assertGreater(Company.objects.count(), pre_company_count)
+        self.assertGreater(CompanyOwner.objects.count(), pre_company_owner_count)
+        self.other_user.refresh_from_db()
+        self.assertIsNotNone(self.other_user.company)
+
+    def test_create_company_post_valid_promo_code(self):
+        self.client.force_login(self.other_user)
+        self.assertIsNone(self.other_user.company)
+        pre_company_count = Company.objects.count()
+        pre_company_owner_count = CompanyOwner.objects.count()
+        PromoCodeFactory(code="test", num_free_days=365)
+        data = {
+            "name": "Freedom Health",
+            "url": "https://www.freedomhealth.com",
+            "promo_code": "test",
+        }
+        response = self.client.post(reverse("create_company"), data=data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "companies/home.html")
+        self.assertContains(response, "Freedom Health")
+        self.assertGreater(Company.objects.count(), pre_company_count)
+        self.assertEqual(Company.objects.get(name="Freedom Health").trial_days, 365)
+        self.assertGreater(CompanyOwner.objects.count(), pre_company_owner_count)
+        self.other_user.refresh_from_db()
+        self.assertIsNotNone(self.other_user.company)
+
+    def test_create_company_post_invalid_promo_code(self):
+        self.client.force_login(self.other_user)
+        self.assertIsNone(self.other_user.company)
+        pre_company_count = Company.objects.count()
+        pre_company_owner_count = CompanyOwner.objects.count()
+        PromoCodeFactory(code="test", num_free_days=365)
+        data = {
+            "name": "Freedom Health",
+            "url": "https://www.freedomhealth.com",
+            "promo_code": "not_real_promo_code",
+        }
+        response = self.client.post(reverse("create_company"), data=data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "companies/home.html")
+        self.assertContains(response, "Freedom Health")
+        self.assertGreater(Company.objects.count(), pre_company_count)
+        self.assertEqual(Company.objects.get(name="Freedom Health").trial_days, 30)
         self.assertGreater(CompanyOwner.objects.count(), pre_company_owner_count)
         self.other_user.refresh_from_db()
         self.assertIsNotNone(self.other_user.company)
