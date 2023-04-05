@@ -3,6 +3,17 @@ from django.conf import settings
 from django.db import models
 
 
+class PromoCode(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    code = models.CharField(max_length=255, unique=True)
+    num_free_days = models.IntegerField()
+
+    def __str__(self):
+        return self.code
+
+
 class PaymentAttempt(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
