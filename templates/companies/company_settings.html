@@ -2,6 +2,9 @@
 {% load static %}
 
 {% block title %}{{ user.company }} Settings{% endblock title %}
+{% block javascript %}
+    <script src="https://js.stripe.com/v3/"></script>
+{% endblock javascript %}
 {% block content %}
     <main class="mx-auto max-w-6xl px-4 pb-12 lg:pb-16">
         <div class="space-y-6">
