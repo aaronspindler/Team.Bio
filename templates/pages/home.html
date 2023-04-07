@@ -9,13 +9,13 @@
             <div class="relative px-6 lg:px-8">
                 <div class="mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">
                     <div>
-                        <div class="hidden sm:mb-8 sm:flex sm:justify-center">
-                            <div class="relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-              <span class="text-gray-600">
-                Join now <a href="{% url 'account_signup' %}" class="font-semibold text-indigo-600"><span class="absolute inset-0" aria-hidden="true"></span>Read more <span aria-hidden="true">&rarr;</span></a>
-              </span>
-                            </div>
-                        </div>
+                        {#                        <div class="hidden sm:mb-8 sm:flex sm:justify-center">#}
+                        {#                            <div class="relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">#}
+                        {#              <span class="text-gray-600">#}
+                        {#                Join now <a href="{% url 'account_signup' %}" class="font-semibold text-indigo-600"><span class="absolute inset-0" aria-hidden="true"></span>Read more <span aria-hidden="true">&rarr;</span></a>#}
+                        {#              </span>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
                         <div>
                             <h1 class="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">Meet your co-workers, virtually!</h1>
                             <p class="mt-6 text-lg leading-8 text-gray-600 sm:text-center">Learn about personality types, geographic similarities, and much much more!</p>
@@ -69,6 +69,16 @@
                                     <svg class="absolute top-1 left-0 h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
                                     </svg>
+                                    Pets
+                                </dt>
+                                <dd class="mt-2">Share a picture of your pets along with the type/breed. In the future you will be able to see fellow team mates that have the same pet breed.</dd>
+                            </div>
+                            <div class="relative pl-9">
+                                <dt class="font-semibold text-gray-900">
+                                    <!-- Heroicon name: mini/check -->
+                                    <svg class="absolute top-1 left-0 h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
+                                    </svg>
                                     Social Links
                                 </dt>
                                 <dd class="mt-2">Find LinkedIn, Github, and Twitter for team members</dd>
@@ -89,6 +99,16 @@
                                     <svg class="absolute top-1 left-0 h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
                                     </svg>
+                                    Company Geography
+                                </dt>
+                                <dd class="mt-2">Take a look at how your company is geographically diverse and even see the real time company midpoint (Future retreat location?)</dd>
+                            </div>
+                            <div class="relative pl-9">
+                                <dt class="font-semibold text-gray-900">
+                                    <!-- Heroicon name: mini/check -->
+                                    <svg class="absolute top-1 left-0 h-5 w-5 text-indigo-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
+                                    </svg>
                                     Favourites
                                 </dt>
                                 <dd class="mt-2">Match movie, music, and food tastes</dd>
@@ -97,6 +117,16 @@
                     </div>
                 </div>
             </div>
+            {#            <div class="bg-white py-24 sm:py-32">#}
+            {#                <div class="mx-auto max-w-7xl px-6 lg:px-8">#}
+            {#                    <div class="mx-auto max-w-2xl lg:max-w-none">#}
+            {#                        <h2 class="text-2xl font-bold leading-10 tracking-tight text-gray-900">Trusted by the worlds most amazing teams</h2>#}
+            {#                        <div class="mx-auto mt-10 grid grid-cols-4 items-start gap-x-8 gap-y-10 sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:grid-cols-5">#}
+            {#                            <img class="col-span-2 max-h-12 w-full object-contain object-left lg:col-span-1" src="https://tailwindui.com/img/logos/transistor-logo-gray-900.svg" alt="Transistor" width="158" height="48">#}
+            {#                        </div>#}
+            {#                    </div>#}
+            {#                </div>#}
+            {#            </div>#}
             <div class="bg-white">
                 <div class="mx-auto max-w-7xl py-16 px-6 sm:py-24 lg:px-8">
                     <h2 class="text-2xl font-bold leading-10 tracking-tight text-gray-900">Frequently asked questions</h2>
@@ -119,7 +149,7 @@
                             </div>
                             <div>
                                 <dt class="text-base font-semibold leading-7 text-gray-900">How is my data used?</dt>
-                                <dd class="mt-2 text-base leading-7 text-gray-600">Team Bio has protections to help you keep employee data private that need to stay private. Easily set permissions for who can access certain info, while everyone else gets access to info that helps them work better
+                                <dd class="mt-2 text-base leading-7 text-gray-600">Team Bio has protections to help you keep employee data private that needs to stay private. Easily set permissions for who can access certain info, while everyone else gets access to info that helps them work better
                                     together.
                                 </dd>
                             </div>
