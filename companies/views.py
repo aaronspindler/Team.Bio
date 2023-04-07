@@ -1,3 +1,5 @@
+import urllib.parse
+
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import Http404
@@ -142,8 +144,12 @@ def company_settings(request):
 
     billing_user = company.get_billing_user
     billing_email = None
+    manage_billing_link = None
     if billing_user:
         billing_email = billing_user.user.email
+        manage_billing_link = "https://billing.stripe.com/p/login/4gw8zp2YTeZmcta288"
+        url_parameters = urllib.parse.urlencode({"prefilled_email": billing_email})
+        manage_billing_link += f"?{url_parameters}"
 
     company_feature_form = CompanyFeatureForm(instance=company)
     if request.method == "POST":
@@ -159,6 +165,7 @@ def company_settings(request):
         "teams": teams,
         "links": links,
         "billing_email": billing_email,
+        "manage_billing_link": manage_billing_link,
         "company_feature_form": company_feature_form,
     }
     return render(request, "companies/company_settings.html", context)
