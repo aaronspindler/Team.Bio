@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from accounts.factories import UserFactory
+from accounts.models import User
 from companies.factories import CompanyFactory
 from companies.models import CompanyOwner
 
@@ -44,31 +45,39 @@ class TestModels(TestCase):
     def test_user_address_string(self):
         company = CompanyFactory()
         user = UserFactory(address_1="123 Main St", company=company)
+        user_pk = user.pk
+
         self.assertEqual(user.address_string, "123 Main St")
 
-        user = UserFactory(
+        User.objects.filter(pk=user_pk).update(
             address_1=" 123 Main St   ", city="   Toronto ", company=company
         )
-        self.assertEqual(user.address_string, "123 Main St Toronto")
+        self.assertEqual(
+            User.objects.get(pk=user_pk).address_string, "123 Main St Toronto"
+        )
 
-        user = UserFactory(
+        User.objects.filter(pk=user_pk).update(
             address_1=" 123 Main St   ",
             city="   Toronto ",
             prov_state="   ON ",
             company=company,
         )
-        self.assertEqual(user.address_string, "123 Main St Toronto ON")
+        self.assertEqual(
+            User.objects.get(pk=user_pk).address_string, "123 Main St Toronto ON"
+        )
 
-        user = UserFactory(
+        User.objects.filter(pk=user_pk).update(
             address_1=" 123 Main St   ",
             city="   Toronto ",
             prov_state="   ON ",
             country="   Canada ",
             company=company,
         )
-        self.assertEqual(user.address_string, "123 Main St Toronto ON Canada")
+        self.assertEqual(
+            User.objects.get(pk=user_pk).address_string, "123 Main St Toronto ON Canada"
+        )
 
-        user = UserFactory(
+        User.objects.filter(pk=user_pk).update(
             address_1=" 123 Main St   ",
             city="   Toronto ",
             prov_state="   ON ",
@@ -76,7 +85,10 @@ class TestModels(TestCase):
             postal_code="   M1M 1M1 ",
             company=company,
         )
-        self.assertEqual(user.address_string, "123 Main St Toronto ON Canada M1M 1M1")
+        self.assertEqual(
+            User.objects.get(pk=user_pk).address_string,
+            "123 Main St Toronto ON Canada M1M 1M1",
+        )
 
     def test_user_geo_code_address(self):
         user = UserFactory(address_1="123 Main St", city="Toronto", country="Canada")
