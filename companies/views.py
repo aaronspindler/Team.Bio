@@ -337,6 +337,8 @@ def edit_profile(request):
         )
         if form.is_valid():
             form.save()
+            company.calculate_geo_midpoint()
+            company.calculate_map_bounds()
             return redirect("user_profile", email_prefix=request.user.email_prefix)
         print(form.errors)
 

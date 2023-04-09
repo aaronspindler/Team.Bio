@@ -127,9 +127,6 @@ class Company(models.Model):
         if not self.should_show_map():
             return {"show_map": False}
 
-        self.calculate_geo_midpoint()
-        self.calculate_map_bounds()
-
         mid_lat, mid_lng = (
             self.midpoint_lat,
             self.midpoint_lng,
