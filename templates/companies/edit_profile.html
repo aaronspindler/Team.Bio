@@ -6,185 +6,141 @@
 {% block title %}Editing Profile{% endblock title %}
 
 {% block content %}
-    <form class="space-y-8 divide-y divide-gray-200" action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
+    <main class="mx-auto max-w-6xl px-4 pb-12 lg:pb-16">
         <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
             <div class="space-y-6 pt-8 sm:space-y-5 sm:pt-10">
                 <div>
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Editing {{ user.name }}'s Profile</h3>
                     <p class="mt-1 max-w-3xl text-sm text-gray-500">All fields are optional, but keep in mind that filling out more fields will result in a more personalized experience.</p>
                 </div>
-                <div class="space-y-6 sm:space-y-5">
-                    <div class="sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="photo" class="block text-sm font-medium text-gray-700">Photo</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
-                            <div class="flex items-center">
-                                {{ form.profile_picture | as_crispy_field }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Title</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+            </div>
+        </div>
+        <br>
+        <form class="mt-3 sm:items-center" action="{% url 'edit_profile' %}" method="post" enctype="multipart/form-data">
+            <div class="bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Basic Information</h3>
+                    <div class="space-y-6 sm:space-y-5">
+                        <div class="rounded-md px-3 pt-2.5 pb-1.5">
+                            <label for="photo" class="block text-xs font-medium text-gray-900">Photo</label>
+                            {{ form.profile_picture | as_crispy_field }}
+                            <br>
+                            <label for="first_name" class="block text-xs font-medium text-gray-900">First Name</label>
+                            {{ form.first_name }}
+                            <br>
+                            <label for="last_name" class="block text-xs font-medium text-gray-900">Last Name</label>
+                            {{ form.last_name }}
+                            <br>
+                            <label for="title" class="block text-xs font-medium text-gray-900">Title</label>
                             {{ form.title }}
-                        </div>
-                    </div>
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="about" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">About</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
-                            {{ form.short_bio }}
-                            <p class="mt-2 text-sm text-gray-500">Write a few sentences about yourself.</p>
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="username" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">LinkedIn Profile</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
-                            <div class="flex max-w-lg rounded-md shadow-sm">
-                                <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">linkedin.com/in/</span>
-                                {{ form.linkedin }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="username" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Twitter Profile</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
-                            <div class="flex max-w-lg rounded-md shadow-sm">
-                                <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">twitter.com/</span>
-                                {{ form.twitter }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="username" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Github Profile</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
-                            <div class="flex max-w-lg rounded-md shadow-sm">
-                                <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">github.com/</span>
-                                {{ form.github }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="country" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Office Location</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
-                            {{ form.general_location }}
-                            <p class="mt-2 text-sm text-gray-500">Select whichever office is closest to you</p>
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="country" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Team</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                            <br>
+                            <label for="Team" class="block text-xs font-medium text-gray-900">Team</label>
                             {{ form.team }}
+                            <br>
+                            <label for="general_location" class="block text-xs font-medium text-gray-900">Location</label>
+                            {{ form.general_location }}
                         </div>
                     </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="about" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Personality Type</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                </div>
+            </div>
+            <br>
+            <div class="bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Profile</h3>
+                    <div class="space-y-6 sm:space-y-5">
+                        <div class="rounded-md px-3 pt-2.5 pb-1.5">
+                            <label for="short_bio" class="block text-xs font-medium text-gray-900">Short Bio</label>
+                            {{ form.short_bio }}
+                            <br>
+                            <label for="personality_type" class="block text-xs font-medium text-gray-900">Personality Type</label>
                             {{ form.personality_type }}
-                            <p class="mt-2 text-sm text-gray-500">If you are unsure about which personality type you are, find out <a href="https://www.16personalities.com/free-personality-test">here</a></p>
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="about" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Chinese Zodiac</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                            <br>
+                            <label for="chinese_zodiac" class="block text-xs font-medium text-gray-900">Chinese Zodiac</label>
                             {{ form.chinese_zodiac }}
-                            <p class="mt-2 text-sm text-gray-500">Find out your chinese zodiac <a href="https://www.travelchinaguide.com/intro/social_customs/zodiac/">here</a></p>
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="about" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Zodiac</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                            <small>Find out your chinese zodiac <a href="https://www.travelchinaguide.com/intro/social_customs/zodiac/">here</a></small>
+                            <br>
+                            <label for="zodiac_sign" class="block text-xs font-medium text-gray-900 pt-3">Zodiac Sign</label>
                             {{ form.zodiac_sign }}
-                            <p class="mt-2 text-sm text-gray-500">Find out your zodiac sign <a href="https://whatismysign.net">here</a></p>
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Favourite Food</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                            <small>Find out your zodiac sign <a href="https://whatismysign.net">here</a></small>
+                            <br>
+                            <label for="favourite_food" class="block text-xs font-medium text-gray-900 pt-3">Favourite Food</label>
                             {{ form.favourite_food }}
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Favourite Movie</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                            <br>
+                            <label for="favourite_movie" class="block text-xs font-medium text-gray-900">Favourite Movie</label>
                             {{ form.favourite_movie }}
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Favourite Travel Destination</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                            <br>
+                            <label for="favourite_travel_destination" class="block text-xs font-medium text-gray-900">Favourite Travel Destination</label>
                             {{ form.favourite_travel_destination }}
                         </div>
                     </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="first-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">First name</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
-                            {{ form.first_name }}
+                </div>
+            </div>
+            <br>
+            <div class="bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Links</h3>
+                    <div class="space-y-6 sm:space-y-5">
+                        <div class="rounded-md px-3 pt-2.5 pb-1.5">
+                            <label for="linkedin" class="block text-xs font-medium text-gray-900">LinkedIn</label>
+                            <div class="mt-1 sm:col-span-2 sm:mt-0">
+                                <div class="flex max-w-lg rounded-md shadow-sm">
+                                    <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">linkedin.com/in/</span>
+                                    {{ form.linkedin }}
+                                </div>
+                            </div>
+                            <br>
+                            <label for="twitter" class="block text-xs font-medium text-gray-900">Twitter</label>
+                            <div class="mt-1 sm:col-span-2 sm:mt-0">
+                                <div class="flex max-w-lg rounded-md shadow-sm">
+                                    <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">twitter.com/</span>
+                                    {{ form.twitter }}
+                                </div>
+                            </div>
+                            <br>
+                            <label for="github" class="block text-xs font-medium text-gray-900">Github</label>
+                            <div class="mt-1 sm:col-span-2 sm:mt-0">
+                                <div class="flex max-w-lg rounded-md shadow-sm">
+                                    <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">github.com/</span>
+                                    {{ form.github }}
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="last-name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Last name</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
-                            {{ form.last_name }}
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="street-address" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Street address</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                </div>
+            </div>
+            <br>
+            <div class="bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Address</h3>
+                    <p class="mt-1 max-w-3xl text-sm text-gray-500">Address information will not be shared publicly, it is used for the company map and to calculate a company midpoint</p>
+                    <div class="space-y-6 sm:space-y-5">
+                        <div class="rounded-md px-3 pt-2.5 pb-1.5">
+                            <label for="address_1" class="block text-xs font-medium text-gray-900">Address</label>
                             {{ form.address_1 }}
-                            <p class="mt-2 text-sm text-gray-500">Address details will not be shared publicly, these are used to compute your companies midpoint location.</p>
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="city" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">City</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                            <br>
+                            <label for="city" class="block text-xs font-medium text-gray-900">City</label>
                             {{ form.city }}
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="region" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">State / Province</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                            <br>
+                            <label for="prov_state" class="block text-xs font-medium text-gray-900">State / Province</label>
                             {{ form.prov_state }}
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="region" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Country</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                            <br>
+                            <label for="country" class="block text-xs font-medium text-gray-900">Country</label>
                             {{ form.country }}
-                        </div>
-                    </div>
-
-                    <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                        <label for="postal-code" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">ZIP / Postal code</label>
-                        <div class="mt-1 sm:col-span-2 sm:mt-0">
+                            <br>
+                            <label for="postal_code" class="block text-xs font-medium text-gray-900">ZIP / Postal Code</label>
                             {{ form.postal_code }}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            {% csrf_token %}
+            <br>
+            <button type="submit"
+                    class=" inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm">
+                Submit
+            </button>
+            <a type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" href="{% url 'user_profile' user.email_prefix %}">Cancel</a>
+        </form>
+    </main>
 
-        <div class="pt-5">
-            <div class="flex justify-end">
-                {% csrf_token %}
-                <a type="button" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" href="{% url 'user_profile' user.email_prefix %}">Cancel</a>
-                <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Save</button>
-            </div>
-        </div>
-    </form>
 {% endblock content %}
