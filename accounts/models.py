@@ -60,7 +60,7 @@ class User(AbstractUser):
     profile_picture = models.ImageField(
         blank=True, null=True, upload_to="profile_picture/"
     )
-    short_bio = models.CharField(max_length=240, blank=True, null=True)
+    short_bio = models.TextField(blank=True, null=True)
     title = models.CharField(max_length=240, blank=True, null=True)
     general_location = models.ForeignKey(
         "companies.Location", on_delete=models.CASCADE, blank=True, null=True
