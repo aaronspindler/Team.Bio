@@ -76,6 +76,7 @@
                         <a href="{% url 'account_login' %}" class="inline-block rounded-md border border-transparent bg-indigo-500 py-2 px-4 text-base font-medium text-white hover:bg-opacity-75">Log in</a>
                         <a href="{% url 'account_signup' %}" class="inline-block rounded-md border border-transparent bg-white py-2 px-4 text-base font-medium text-indigo-600 hover:bg-indigo-50">Sign up</a>
                     {% else %}
+                        <a href="{% url 'edit_profile' %}" class="inline-block rounded-md border border-transparent bg-indigo-500 py-2 px-4 text-base font-medium text-white hover:bg-opacity-75">Edit Profile</a>
                         <a href="{% url 'account_logout' %}" class="inline-block rounded-md border border-transparent bg-white py-2 px-4 text-base font-medium text-indigo-600 hover:bg-indigo-50">Log out</a>
 
                     {% endif %}
