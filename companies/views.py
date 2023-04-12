@@ -110,7 +110,7 @@ def remove_user(request, email_prefix):
     )
 
     # Check if the user is a company owner
-    if user_to_remove in request.user.company.get_owners:
+    if user_to_remove.pk in request.user.company.get_owners:
         raise Http404
 
     # Deactivate the user
@@ -179,7 +179,7 @@ def make_owner(request, email_prefix):
     )
 
     # Check if the user is already an owner
-    if user in request.user.company.get_owners:
+    if user.pk in request.user.company.get_owners:
         raise Http404
 
     # Make the user an owner
@@ -197,7 +197,7 @@ def remove_owner(request, email_prefix):
     )
 
     # Check if the user is already an owner
-    if user not in request.user.company.get_owners:
+    if user.pk not in request.user.company.get_owners:
         raise Http404
 
     if user == request.user:
@@ -432,10 +432,10 @@ def home(request):
             return redirect("create_company")
 
     # If the user is a company owner and their billing is inactive, redirect them to the settings page
-    if user in company.get_owners and company.is_enabled is False:
+    if user.pk in company.get_owners and company.is_enabled is False:
         return redirect("company_settings")
     # if the user is not a company owner and their billing is inactive, redirect them to billing inactive page
-    elif user not in company.get_owners and company.is_enabled is False:
+    elif user.pk not in company.get_owners and company.is_enabled is False:
         return redirect("billing_inactive")
 
     data = {}

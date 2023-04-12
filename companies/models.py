@@ -193,15 +193,13 @@ class Company(models.Model):
 
     @property
     def get_owners(self):
-        company_owners = self.owners.all()
-        owners_list = []
-        for company_owner in company_owners:
-            owners_list.append(company_owner.owner)
-        return owners_list
+        return list(
+            CompanyOwner.objects.filter(company=self).values_list("owner", flat=True)
+        )
 
     @property
     def get_billing_user(self):
-        users = StripeCustomer.objects.filter(user__in=self.get_owners)
+        users = StripeCustomer.objects.filter(user__pk__in=self.get_owners)
         if users:
             return users.first()
         return None

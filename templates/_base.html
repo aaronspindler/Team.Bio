@@ -58,7 +58,7 @@
                             <a href="{% url 'company_home' %}" class="text-base font-medium text-white hover:text-indigo-50">Home</a>
 
                             <a href="{% url 'user_profile' user.email_prefix %}" class="text-base font-medium text-white hover:text-indigo-50">My Profile</a>
-                            {% if user in user.company.get_owners %}
+                            {% if user.pk in user.company.get_owners %}
                                 <a href="{% url 'company_settings' %}" class="text-base font-medium text-white hover:text-indigo-50">Settings</a>
                             {% endif %}
 

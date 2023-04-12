@@ -141,7 +141,7 @@
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ company_user.email }}</td>
                                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                                 {% if company_user != user %}
-                                                    {% if company_user in owners %}
+                                                    {% if company_user.pk in owners %}
                                                         <form method="post" action="{% url 'remove_owner' company_user.email_prefix %}">
                                                             {% csrf_token %}
                                                             <button type="submit"
