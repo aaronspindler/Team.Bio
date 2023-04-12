@@ -16,7 +16,7 @@
                             <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
                                 <div class="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
                                     <div class="flex">
-                                        <img class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32" src="{{ company_user.profile_picture_url }}" alt="">
+                                        <img class="h-60 w-48 object-cover rounded ring-4 ring-white" src="{{ company_user.profile_picture_url }}" alt="">
                                     </div>
                                     <div class="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                                         <div class="mt-6 min-w-0 flex-1 sm:hidden 2xl:block">
@@ -204,9 +204,9 @@
                                     </div>
                                 {% endif %}
                                 {% if company_user.short_bio %}
-                                    <div class="sm:col-span-2">
+                                    <div class="sm:col-span-3">
                                         <dt class="text-sm font-medium text-gray-500">About</dt>
-                                        <dd class="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
+                                        <dd class="mt-1 space-y-5 text-sm text-gray-900">
                                             {{ company_user.short_bio|linebreaks }}
                                         </dd>
                                     </div>
@@ -224,7 +224,7 @@
                                 {% endif %}
                             </dt>
                             {% if pets %}
-                                <ul role="list" class="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                                <ul role="list" class="mx-auto mt-1 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                                     {% for pet in pets %}
                                         {% include "objects/pet.html" with pet=pet show_buttons=is_profile_owner %}
                                     {% endfor %}

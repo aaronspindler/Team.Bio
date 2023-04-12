@@ -155,22 +155,23 @@
                         });
                     </script>
                 {% endif %}
-                <ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:space-y-0 sm:space-b-2 lg:grid-cols-3 lg:gap-x-8">
+                <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {% for company_user in user.company.get_active_users %}
-                        <li class="pt-2">
-                            <div class="space-y-4">
+                        <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
+                            <div class="flex flex-1 flex-col p-8">
                                 <div class="aspect-w-4 aspect-h-3">
-                                    <img class="rounded-lg object-cover shadow-lg" src="{{ company_user.profile_picture_url }}" alt="">
+                                    <img class="aspect-[3/2] w-full object-contain" src="{{ company_user.profile_picture_url }}" alt="">
                                 </div>
 
                                 <div class="space-y-2">
                                     <a href="{% url 'user_profile' company_user.email_prefix %}">
                                         <div class="space-y-1 text-lg font-medium leading-6">
+                                            <br>
                                             <h3>{{ company_user.name }}</h3>
                                             {% if company_user.title %}<p class="text-indigo-600">{{ company_user.title }}</p>{% endif %}
                                         </div>
                                     </a>
-                                    <ul role="list" class="flex space-x-5">
+                                    <ul role="list" class="flex space-x-5 justify-center">
                                         {% if company_user.linkedin %}
                                             <li>
                                                 <a href="https://www.linkedin.com/in/{{ company_user.linkedin }}" class="text-gray-400 hover:text-gray-500">
