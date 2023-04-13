@@ -80,7 +80,7 @@ def invite(request):
                 email = Email.objects.create(
                     recipient=instance.email,
                     template="invite",
-                    subject=f"You have been invited by {request.user.name} to join your co-workers on Team Bio",
+                    subject=f"You have been invited by {request.user.name} to join your {request.user.company.name} co-workers on Team Bio",
                 )
                 parameters = {
                     "invite_sender_name": request.user.name,

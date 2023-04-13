@@ -1,5 +1,5 @@
 Howdy,
-    <p>{{ invite_sender_name }} with {{ invite_sender_organization_name }} has invited you to use Team Bio to collaborate with them. Use the link below to set up your account with the email you received this email at and get started:</p>
+    <p>{{ invite_sender_name }} from {{ invite_sender_organization_name }} has invited you to use Team Bio. Use the link below to set up your account with the email you received this email at and get started:</p>
     <p><a href="{{ action_url }}" class="f-fallback button" target="_blank">Set up account</a></p>
     <p>Thanks,<br>The Team Bio Team</p>
     <p>Need help getting started? Either reply to this email, or reach out to our fantastic support at support@team.bio</p>
