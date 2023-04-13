@@ -74,12 +74,14 @@ class UserProfileForm(forms.ModelForm):
 
         self.fields["general_location"].queryset = Location.objects.filter(
             company=company
-        )
+        ).order_by("name")
         self.fields["general_location"].widget.attrs.update(
             {"class": BASIC_FIELD_CLASS}
         )
 
-        self.fields["team"].queryset = Team.objects.filter(company=company)
+        self.fields["team"].queryset = Team.objects.filter(company=company).order_by(
+            "name"
+        )
         self.fields["team"].widget.attrs.update({"class": BASIC_FIELD_CLASS})
 
         self.fields["personality_type"].widget.attrs.update(
