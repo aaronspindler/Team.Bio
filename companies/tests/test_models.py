@@ -66,5 +66,6 @@ class TestModels(TestCase):
             company=self.company,
         )
 
-        result = self.company.calculate_geo_midpoint()
-        self.assertEqual(result, (Decimal("48.6143971"), Decimal("-96.3965717")))
+        lat, lng = self.company.calculate_geo_midpoint()
+        self.assertEqual(lat, Decimal("48.6143970000000000"))
+        self.assertEqual(lng, Decimal("-96.3965720000000000"))
