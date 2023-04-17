@@ -4,6 +4,7 @@ from decimal import Decimal
 import tldextract as tldextract
 from django.conf import settings
 from django.db import models
+from django.db.models import Avg
 from django.utils import timezone
 
 from billing.models import PromoCode, StripeCustomer
@@ -70,17 +71,11 @@ class Company(models.Model):
 
     def calculate_geo_midpoint(self):
         users = self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False)
-        lat_sum = Decimal(0.0)
-        lng_sum = Decimal(0.0)
         if users.count() == 0:
             return 0.0, 0.0
 
-        for user in users:
-            lat_sum += Decimal(user.lat)
-            lng_sum += Decimal(user.lng)
-
-        self.midpoint_lat = lat_sum / users.count()
-        self.midpoint_lng = lng_sum / users.count()
+        self.midpoint_lat = users.aggregate(Avg("lat"))["lat__avg"]
+        self.midpoint_lng = users.aggregate(Avg("lng"))["lng__avg"]
         self.save()
 
         return self.midpoint_lat, self.midpoint_lng

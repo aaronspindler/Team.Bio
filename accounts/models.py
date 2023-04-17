@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import googlemaps
 from allauth.account.signals import user_signed_up
 from django.conf import settings
@@ -137,8 +139,8 @@ class User(AbstractUser):
 
     # Address Info
     place_id = models.TextField(blank=True, null=True)
-    lat = models.TextField(blank=True, null=True)
-    lng = models.TextField(blank=True, null=True)
+    lat = models.DecimalField(max_digits=12, decimal_places=6, null=True, blank=True)
+    lng = models.DecimalField(max_digits=12, decimal_places=6, null=True, blank=True)
 
     address_1 = models.CharField(max_length=200, blank=True, null=True)
     city = models.CharField(max_length=200, blank=True, null=True)
@@ -208,8 +210,8 @@ class User(AbstractUser):
         address = self.address_string
         geocode_result = gmaps.geocode(address)
         if geocode_result:
-            lat = geocode_result[0]["geometry"]["location"]["lat"]
-            lng = geocode_result[0]["geometry"]["location"]["lng"]
+            lat = Decimal(geocode_result[0]["geometry"]["location"]["lat"])
+            lng = Decimal(geocode_result[0]["geometry"]["location"]["lng"])
             place_id = geocode_result[0]["place_id"]
 
         return lat, lng, place_id
