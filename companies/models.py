@@ -2,6 +2,7 @@ from datetime import timedelta
 from decimal import Decimal
 
 import tldextract as tldextract
+from colorfield.fields import ColorField
 from django.conf import settings
 from django.db import models
 from django.db.models import Avg
@@ -249,6 +250,7 @@ class Invite(models.Model):
 class Team(models.Model):
     company = models.ForeignKey(Company, related_name="teams", on_delete=models.CASCADE)
     name = models.CharField(max_length=60)
+    color = ColorField(default="#FF0000")
 
     def __str__(self):
         return f"{self.name}"

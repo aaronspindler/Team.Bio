@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "storages",
     "crispy_forms",
     "crispy_tailwind",
+    "colorfield",
     # Local
     "accounts",
     "pages",
