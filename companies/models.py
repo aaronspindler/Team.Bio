@@ -127,30 +127,39 @@ class Company(models.Model):
             self.midpoint_lat,
             self.midpoint_lng,
         )
-        user_points = (
-            self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False)
-            .select_related("team__name")
-            .values("lng", "lat", "team__name")
-        )
 
-        cleaned_user_points = []
-        for user in user_points:
-            lng = float(user["lng"])
-            lat = float(user["lat"])
+        teams = list(self.teams.all())
+        teams.append(None)  # This is here so that we can have a "No Team" group
+        map_teams = []
+        for team in teams:
+            team_name = "No Team"
+            team_color = "#000000"
+            if team:
+                team_name = team.name
+                team_color = team.color.lower()
+            user_points = self.users.filter(
+                is_active=True, lat__isnull=False, lng__isnull=False, team=team
+            ).values("lng", "lat", "first_name", "last_name")
+            cleaned_user_points = []
+            for user in user_points:
+                lng = float(user["lng"])
+                lat = float(user["lat"])
 
-            cleaned_user_points.append(
-                [
-                    lng,
-                    lat,
-                    user["team__name"] if user["team__name"] else "No Team",
-                ]
-            )
+                cleaned_user_points.append(
+                    [
+                        lng,
+                        lat,
+                        f"{user.get('first_name')} {user.get('last_name')}<br>{team_name}",
+                    ]
+                )
+            map_teams.append((team_name, team_color, cleaned_user_points))
+
         data = {
             "mid_lng": mid_lng,
             "mid_lat": mid_lat,
             "sw_corner": self.get_map_sw_corner(),
             "ne_corner": self.get_map_ne_corner(),
-            "user_points": cleaned_user_points,
+            "map_teams": map_teams,
             "api_key": settings.MAPBOX_API_KEY,
             "show_map": True,
         }
