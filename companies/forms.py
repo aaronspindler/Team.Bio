@@ -1,3 +1,4 @@
+from colorfield.fields import ColorField
 from django import forms
 from django.forms import ModelForm
 
@@ -92,10 +93,19 @@ class TeamForm(ModelForm):
             }
         ),
     )
+    color = ColorField()
 
     class Meta:
         model = Team
-        fields = ["name"]
+        fields = ["name", "color"]
+
+    def __init__(self, *args, **kwargs):
+        super(TeamForm, self).__init__(*args, **kwargs)
+        self.fields["color"].widget.attrs.update(
+            {
+                "class": "colorfield_field jscolor block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            }
+        )
 
 
 class LinkForm(ModelForm):
