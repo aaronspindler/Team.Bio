@@ -139,7 +139,7 @@ class Company(models.Model):
                 team_color = team.color.lower()
             user_points = self.users.filter(
                 is_active=True, lat__isnull=False, lng__isnull=False, team=team
-            ).values("lng", "lat", "first_name", "last_name")
+            ).values("lng", "lat", "first_name", "last_name", "city", "prov_state")
             cleaned_user_points = []
             for user in user_points:
                 lng = float(user["lng"])
@@ -149,7 +149,7 @@ class Company(models.Model):
                     [
                         lng,
                         lat,
-                        f"{user.get('first_name')} {user.get('last_name')}<br>{team_name}",
+                        f"{user.get('first_name')} {user.get('last_name')}<br>{user.get('city')}, {user.get('prov_state')}<br>{team_name}",
                     ]
                 )
             map_teams.append((team_name, team_color, cleaned_user_points))
