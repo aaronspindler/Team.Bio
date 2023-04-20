@@ -5,6 +5,7 @@ from .models import Pet, PetType, User
 
 class UserAdmin(admin.ModelAdmin):
     model = User
+    list_filter = ["company"]
     list_display = ["email", "username", "company", "last_login"]
 
 
