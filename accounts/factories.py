@@ -4,6 +4,7 @@ import factory
 
 from accounts.models import Pet, PetType, User
 from companies.factories import CompanyFactory
+from companies.models import Location, Team
 
 PERSONALITY_TYPE_CHOICES = [x[0] for x in User.PERSONALITY_TYPE_CHOICES]
 CHINESE_ZODIAC_CHOICES = [x[0] for x in User.CHINESE_ZODIAC_CHOICES]
@@ -28,13 +29,13 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def team(self):
-        teams = list(self.company.teams.all())
+        teams = list(Team.objects.filter(company=self.company))
         teams.append(None)
         return random.choice(teams)
 
     @factory.lazy_attribute
     def general_location(self):
-        locations = list(self.company.locations.all())
+        locations = list(Location.objects.filter(company=self.company))
         locations.append(None)
         return random.choice(locations)
 
