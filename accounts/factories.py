@@ -28,11 +28,15 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def team(self):
-        return random.choice(self.company.teams.all())
+        teams = list(self.company.teams.all())
+        teams.append(None)
+        return random.choice(teams)
 
     @factory.lazy_attribute
     def general_location(self):
-        return random.choice(self.company.locations.all())
+        locations = list(self.company.locations.all())
+        locations.append(None)
+        return random.choice(locations)
 
     @factory.lazy_attribute
     def personality_type(self):
