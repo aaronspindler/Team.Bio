@@ -217,5 +217,11 @@ GOOGLE_MAPS_API_KEY = env("GOOGLE_MAPS_API_KEY")
 # Mapbox
 MAPBOX_API_KEY = env("MAPBOX_API_KEY")
 
+# Unsplash
+try:
+    UNSPLASH_ACCESS_KEY = env("UNSPLASH_ACCESS_KEY")
+except Exception:
+    UNSPLASH_ACCESS_KEY = None
+
 if DEBUG:
     BASE_URL = "http://localhost:8000/"
