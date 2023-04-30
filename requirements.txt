@@ -20,7 +20,7 @@ django-redis==5.2.0
 django-ses==3.4.1
 django-storages==1.13.2
 factory-boy==3.2.1
-Faker==18.5.1
+Faker==18.6.0
 filelock==3.12.0
 googlemaps==4.10.0
 gunicorn==20.1.0
