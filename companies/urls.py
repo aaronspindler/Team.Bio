@@ -18,6 +18,7 @@ from companies.views import (
     home,
     invite,
     make_owner,
+    pets,
     remove_owner,
     remove_user,
     revoke_invite,
@@ -26,6 +27,7 @@ from companies.views import (
 
 urlpatterns = [
     path("home", home, name="company_home"),
+    path("pets", pets, name="company_pets"),
     path("settings", company_settings, name="company_settings"),
     path("make-owner/<str:email_prefix>", make_owner, name="make_owner"),
     path("remove-owner/<str:email_prefix>", remove_owner, name="remove_owner"),

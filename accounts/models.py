@@ -41,7 +41,7 @@ class Pet(models.Model):
     def picture_url(self):
         if self.picture:
             return self.picture.url
-        return "https://team-bio.s3.amazonaws.com/public/pets/dog-cat-transparent.png"
+        return "https://team-bio.s3.amazonaws.com/public/pets/dog-cat-transparent.jpg"
 
     def __str__(self):
         return self.name
