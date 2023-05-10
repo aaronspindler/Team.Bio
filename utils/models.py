@@ -1,11 +1,59 @@
 import logging
 
+import boto3
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db import models
 from django.template.loader import render_to_string
 
 logger = logging.getLogger(__name__)
+
+
+class AdminPhoneNumber(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    number = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.number
+
+
+class AdminEmail(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.email
+
+
+class TextMessage(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    recipient = models.CharField(max_length=255)
+
+    message = models.TextField()
+
+    sent = models.BooleanField(default=False)
+
+    def send(self):
+        if self.sent:
+            logger.warning("Message already sent")
+            return False
+
+        sns = boto3.client(
+            "sns",
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name="us-east-1",
+        )
+        sns.publish(PhoneNumber=self.recipient, Message=self.message)
+
+        self.sent = True
+        self.save()
 
 
 class Email(models.Model):

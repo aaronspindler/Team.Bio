@@ -12,6 +12,7 @@ from accounts.utils import (
     attempt_connect_user_to_a_company,
     attempt_connect_user_with_invites,
 )
+from utils.sms import create_admin_sms
 
 
 class PetType(models.Model):
@@ -252,5 +253,6 @@ class User(AbstractUser):
     # This is a signal receiver to try to connect a user to an existing company
     @receiver(user_signed_up)
     def allauth_user_signed_up(sender, request, user, **kwargs):
+        create_admin_sms(f"TeamBio New User Signed Up: {user.email}")
         attempt_connect_user_with_invites(user)
         attempt_connect_user_to_a_company(user)
