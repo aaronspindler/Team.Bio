@@ -443,3 +443,9 @@ def home(request):
     data.update(company.get_link_data())
 
     return render(request, "companies/home.html", data)
+
+
+@login_required
+def pets(request):
+    company_pets = Pet.objects.filter(owner__company=request.user.company)
+    return render(request, "companies/pets.html", {"pets": company_pets})
