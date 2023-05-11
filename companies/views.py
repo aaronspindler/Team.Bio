@@ -447,7 +447,9 @@ def home(request):
 
 @login_required
 def pets(request):
-    company_pets = Pet.objects.filter(
-        owner__company=request.user.company
-    ).select_related("pet_type", "owner")
+    company_pets = (
+        Pet.objects.filter(owner__company=request.user.company)
+        .order_by("name")
+        .select_related("pet_type", "owner")
+    )
     return render(request, "companies/pets.html", {"pets": company_pets})
