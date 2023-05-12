@@ -27,7 +27,7 @@ gunicorn==20.1.0
 identify==2.5.24
 idna==3.4
 jmespath==1.0.1
-nodeenv==1.7.0
+nodeenv==1.8.0
 oauthlib==3.2.2
 Pillow==9.5.0
 platformdirs==3.5.1
