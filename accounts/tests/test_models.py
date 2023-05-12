@@ -148,3 +148,16 @@ class TestModels(TestCase):
         user.personality_type = "ESFP"
         user.save()
         self.assertEqual(user.personality_type_name(), "Entertainer")
+
+    def test_user_profile_completion_percentage(self):
+        user = UserFactory()
+        user.short_bio = None
+        user.title = None
+        user.save()
+        self.assertEqual(user.profile_completion_percentage(), 32)
+        user.title = "CEO"
+        user.save()
+        self.assertEqual(user.profile_completion_percentage(), 36)
+        user.short_bio = "I am a CEO"
+        user.save()
+        self.assertEqual(user.profile_completion_percentage(), 40)

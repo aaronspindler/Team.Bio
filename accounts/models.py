@@ -240,6 +240,37 @@ class User(AbstractUser):
             return types[self.personality_type]
         return ""
 
+    def profile_completion_percentage(self):
+        percentage = 0
+        fields = [
+            self.first_name,
+            self.last_name,
+            self.title,
+            self.profile_picture,
+            self.short_bio,
+            self.general_location,
+            self.team,
+            self.personality_type,
+            self.zodiac_sign,
+            self.chinese_zodiac,
+            self.favourite_food,
+            self.favourite_movie,
+            self.favourite_travel_destination,
+            self.linkedin,
+            self.twitter,
+            self.github,
+            self.address_1,
+            self.city,
+            self.prov_state,
+            self.postal_code,
+            self.country,
+        ]
+        percentage_per_field = int(100 / len(fields))
+        for field in fields:
+            if field:
+                percentage += percentage_per_field
+        return percentage
+
     @property
     def name(self):
         return f"{self.first_name} {self.last_name}"
