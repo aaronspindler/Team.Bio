@@ -76,7 +76,11 @@
                         <a href="{% url 'account_login' %}" class="inline-block rounded-md border border-transparent bg-indigo-500 py-2 px-4 text-base font-medium text-white hover:bg-opacity-75">Log in</a>
                         <a href="{% url 'account_signup' %}" class="inline-block rounded-md border border-transparent bg-white py-2 px-4 text-base font-medium text-indigo-600 hover:bg-indigo-50">Sign up</a>
                     {% else %}
-                        <a href="{% url 'edit_profile' %}" class="inline-block rounded-md border border-transparent bg-indigo-500 py-2 px-4 text-base font-medium text-white hover:bg-opacity-75">Edit Profile</a>
+                        <span class="relative inline-block">
+                            <a href="{% url 'edit_profile' %}" class="inline-block rounded-md border border-transparent bg-indigo-500 py-2 px-4 text-base font-medium text-white hover:bg-opacity-75">Edit Profile</a>
+                            {% if user.profile_completion_percentage < 50 %}
+                                <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{{ user.profile_completion_percentage }}%</span>{% endif %}
+                        </span>
                         <a href="{% url 'account_logout' %}" class="inline-block rounded-md border border-transparent bg-white py-2 px-4 text-base font-medium text-indigo-600 hover:bg-indigo-50">Log out</a>
 
                     {% endif %}
