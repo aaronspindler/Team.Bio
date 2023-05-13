@@ -18,6 +18,23 @@ Get icons from [iconoir](https://iconoir.com), make sure to create a normal (bla
 Size 24
 Stroke Width 1.5
 
+### Models with Image Fields
+
+To handle HEIC and HEIF images, we need to convert these with Pillow, while we are wrapping the image with pillow it is also probably a good idea to scale the quality back as well. To do this I have made a helper function.
+Example usage:
+
+```python
+from utils.images import convert_and_compress_image
+
+
+def save(self, *args, **kwargs):
+    # Convert picture to jpg and compresses it
+    if self.picture:
+        name, buffer = convert_and_compress_image(self.picture)
+        self.picture.save(name, buffer, save=False)
+    super().save(*args, **kwargs)
+```
+
 ### Environment Variables
 
 If you add a new environment variable to settings, you will also need to add the variable to https://github.com/aaronspindler/Team.Bio/blob/main/.github/workflows/test-and-deploy.yml in the env section
