@@ -51,7 +51,7 @@ six==1.16.0
 soupsieve==2.4.1
 sqlparse==0.4.4
 stripe==5.4.0
-tldextract==3.4.1
+tldextract==3.4.2
 types-cryptography==3.3.23.2
 urllib3==1.26.15
 virtualenv==20.23.0
