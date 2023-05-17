@@ -42,8 +42,9 @@ class Pet(models.Model):
     def save(self, *args, **kwargs):
         # Convert picture to jpg and compresses it
         if self.picture:
-            name, buffer = convert_and_compress_image(self.picture)
-            self.picture.save(name, buffer, save=False)
+            if not self.picture.name.lower().endswith(".png"):
+                name, buffer = convert_and_compress_image(self.picture)
+                self.picture.save(name, buffer, save=False)
         super().save(*args, **kwargs)
 
     @property
@@ -189,9 +190,10 @@ class User(AbstractUser):
         self.lat, self.lng, self.place_id = self.geo_code_address()
 
         # Convert profile picture to jpg and compresses it
-        # if self.profile_picture:
-        #     name, buffer = convert_and_compress_image(self.profile_picture)
-        #     self.profile_picture.save(name, buffer, save=False)
+        if self.profile_picture:
+            if not self.profile_picture.name.lower().endswith(".png"):
+                name, buffer = convert_and_compress_image(self.profile_picture)
+                self.profile_picture.save(name, buffer, save=False)
         super().save(*args, **kwargs)
 
     @property
