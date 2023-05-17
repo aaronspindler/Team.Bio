@@ -12,7 +12,6 @@ from accounts.utils import (
     attempt_connect_user_to_a_company,
     attempt_connect_user_with_invites,
 )
-from utils.images import convert_and_compress_image
 from utils.sms import create_admin_sms
 
 
@@ -38,14 +37,6 @@ class Pet(models.Model):
     owner = models.ForeignKey(
         "accounts.User", related_name="pets", on_delete=models.CASCADE
     )
-
-    def save(self, *args, **kwargs):
-        # Convert picture to jpg and compresses it
-        if self.picture:
-            if not self.picture.name.lower().endswith(".png"):
-                name, buffer = convert_and_compress_image(self.picture)
-                self.picture.save(name, buffer, save=False)
-        super().save(*args, **kwargs)
 
     @property
     def picture_url(self):
@@ -188,12 +179,6 @@ class User(AbstractUser):
 
         # Geocode the address
         self.lat, self.lng, self.place_id = self.geo_code_address()
-
-        # Convert profile picture to jpg and compresses it
-        if self.profile_picture:
-            if not self.profile_picture.name.lower().endswith(".png"):
-                name, buffer = convert_and_compress_image(self.profile_picture)
-                self.profile_picture.save(name, buffer, save=False)
         super().save(*args, **kwargs)
 
     @property

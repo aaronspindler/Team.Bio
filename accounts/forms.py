@@ -2,6 +2,7 @@ from django import forms
 
 from accounts.models import Pet, User
 from companies.models import Location, Team
+from utils.forms import CleanedImageField
 
 BASIC_FIELD_CLASS = "block w-full max-w-xxl rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 LINK_FIELD_CLASS = "block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -9,7 +10,7 @@ PICTURE_FIELD_CLASS = "rounded-md border border-gray-300 bg-white text-sm font-m
 
 
 class PetForm(forms.ModelForm):
-    picture = forms.ImageField(label="", required=False)
+    picture = CleanedImageField(label="", required=False)
 
     class Meta:
         model = Pet
@@ -40,7 +41,7 @@ class UserProfileForm(forms.ModelForm):
     favourite_travel_destination = forms.CharField(
         required=False, widget=forms.Textarea(attrs={"rows": "2"})
     )
-    profile_picture = forms.ImageField(label="", required=False)
+    profile_picture = CleanedImageField(label="", required=False)
 
     class Meta:
         model = User
