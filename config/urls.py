@@ -3,11 +3,12 @@ from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 
-from config.sitemaps import PagesSitemap
+from config.sitemaps import BlogSitemap, PagesSitemap
 from config.views import health, robotstxt
 
 sitemaps = {
     "pages": PagesSitemap,
+    "blog": BlogSitemap,
 }
 
 urlpatterns = [
