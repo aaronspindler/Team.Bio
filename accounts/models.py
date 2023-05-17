@@ -189,9 +189,9 @@ class User(AbstractUser):
         self.lat, self.lng, self.place_id = self.geo_code_address()
 
         # Convert profile picture to jpg and compresses it
-        if self.profile_picture:
-            name, buffer = convert_and_compress_image(self.profile_picture)
-            self.profile_picture.save(name, buffer, save=False)
+        # if self.profile_picture:
+        #     name, buffer = convert_and_compress_image(self.profile_picture)
+        #     self.profile_picture.save(name, buffer, save=False)
         super().save(*args, **kwargs)
 
     @property
