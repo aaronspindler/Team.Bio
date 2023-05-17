@@ -3,6 +3,7 @@ from pathlib import Path
 
 import environ
 import sentry_sdk
+from pillow_heif import register_heif_opener
 from sentry_sdk.integrations.django import DjangoIntegration
 
 from config.sentry import traces_sampler
@@ -15,6 +16,8 @@ sentry_sdk.init(
     traces_sampler=traces_sampler,
     send_default_pii=True,
 )
+
+register_heif_opener()
 
 env = environ.Env(
     # set casting, default value
