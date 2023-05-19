@@ -39,7 +39,11 @@ def billing_inactive(request):
 
 
 def blog(request):
-    posts = BlogPost.objects.filter(published=True).order_by("-created_at")
+    posts = (
+        BlogPost.objects.filter(published=True)
+        .select_related("posted_by")
+        .order_by("-created_at")
+    )
     return render(request, "pages/blog.html", {"posts": posts})
 
 
