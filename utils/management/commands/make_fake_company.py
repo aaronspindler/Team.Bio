@@ -73,7 +73,7 @@ class Command(BaseCommand):
         return address
 
     def handle(self, *args, **options):
-        num_people = 10
+        num_people = 1
         company = Company.objects.get(pk=2)
 
         teams = [

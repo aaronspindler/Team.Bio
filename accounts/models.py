@@ -12,6 +12,7 @@ from accounts.utils import (
     attempt_connect_user_to_a_company,
     attempt_connect_user_with_invites,
 )
+from utils.images import get_image_from_url
 from utils.sms import create_admin_sms
 
 
@@ -280,10 +281,26 @@ class User(AbstractUser):
             return True
         return False
 
+    def set_social_profile_picture(self):
+        # If this fails it is fine, the user can set their profile picture manually, but I don't want this to block signup
+        try:
+            social_accounts = self.socialaccount_set.all()
+            if social_accounts:
+                social_account = social_accounts[0]
+                account_type = social_account.provider
+                image_url = social_accounts[0].get_avatar_url()
+                if image_url:
+                    data = get_image_from_url(image_url)
+                    self.profile_picture.save(
+                        f"social_{account_type}_{self.username}.jpg", data, save=True
+                    )
+        except Exception as e:
+            print(e)
+
     # This is a signal receiver to try to connect a user to an existing company
     @receiver(user_signed_up)
     def allauth_user_signed_up(sender, request, user, **kwargs):
         create_admin_sms(f"TeamBio New User Signed Up: {user.email}")
-
-        attempt_connect_user_with_invites(user)
-        attempt_connect_user_to_a_company(user)
+        user.get_and_set_social_image()
+        attempt_connect_user_with_invites(user.pk)
+        attempt_connect_user_to_a_company(user.pk)

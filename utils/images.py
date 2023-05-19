@@ -15,6 +15,6 @@ def convert_and_compress_image(image):
 def get_image_from_url(url):
     response = requests.get(url)
     if response.status_code == 200:
-        bytes = BytesIO(response.content)
-        return bytes
+        data = BytesIO(response.content)
+        return data
     return None
