@@ -1,5 +1,4 @@
 import random
-from io import BytesIO
 
 import faker
 import requests
@@ -11,6 +10,7 @@ from django.db import transaction
 from accounts.factories import PetFactory, UserFactory
 from accounts.models import PetType
 from companies.models import Company, Location, Team
+from utils.images import get_image_from_url
 
 fake = faker.Faker()
 
@@ -24,10 +24,7 @@ class Command(BaseCommand):
         if response.status_code == 200:
             json = response.json()
             image_url = json["urls"]["regular"]
-            print(image_url)
-            response = requests.get(image_url)
-            bytes = BytesIO(response.content)
-            return bytes
+            return get_image_from_url(image_url)
         return None
 
     def get_profile_image(self):
