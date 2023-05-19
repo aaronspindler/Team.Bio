@@ -17,30 +17,30 @@ class TestUtils(TestCase):
 
     def test_attempt_connect_user_to_a_company_success(self):
         self.assertIsNone(self.user.company)
-        self.assertTrue(attempt_connect_user_to_a_company(self.user))
+        self.assertTrue(attempt_connect_user_to_a_company(self.user.pk))
         self.user.refresh_from_db()
         self.assertEqual(self.user.company, self.company)
 
     def test_attempt_connect_user_to_a_company_no_company(self):
         self.user = UserFactory(company=None, email="fred@flintstone.com")
         self.assertIsNone(self.user.company)
-        self.assertFalse(attempt_connect_user_to_a_company(self.user))
+        self.assertFalse(attempt_connect_user_to_a_company(self.user.pk))
 
     def test_attempt_connect_user_to_blacklisted_domain_root(self):
         for domain in settings.BLACKLISTED_DOMAIN_ROOTS:
             CompanyFactory(url=f"https://www.{domain}")
             user = UserFactory(company=None, email=f"aaron@{domain}")
-            self.assertFalse(attempt_connect_user_to_a_company(user))
+            self.assertFalse(attempt_connect_user_to_a_company(user.pk))
 
     def test_attempt_connect_user_with_invites_no_invite(self):
         self.assertIsNone(self.user.company)
-        self.assertFalse(attempt_connect_user_with_invites(self.user))
+        self.assertFalse(attempt_connect_user_with_invites(self.user.pk))
 
     def test_attempt_connect_user_with_invites_success(self):
         self.assertIsNone(self.user.company)
         InviteFactory(email=self.user.email, company=self.company)
         self.assertEqual(Invite.objects.count(), 1)
-        self.assertTrue(attempt_connect_user_with_invites(self.user))
+        self.assertTrue(attempt_connect_user_with_invites(self.user.pk))
         self.user.refresh_from_db()
         self.assertEqual(self.user.company, self.company)
         self.assertEqual(Invite.objects.count(), 0)
@@ -50,7 +50,7 @@ class TestUtils(TestCase):
         self.user.email = self.user.email.upper()
         InviteFactory(email=self.user.email.lower(), company=self.company)
         self.assertEqual(Invite.objects.count(), 1)
-        self.assertTrue(attempt_connect_user_with_invites(self.user))
+        self.assertTrue(attempt_connect_user_with_invites(self.user.pk))
         self.user.refresh_from_db()
         self.assertEqual(self.user.company, self.company)
         self.assertEqual(Invite.objects.count(), 0)

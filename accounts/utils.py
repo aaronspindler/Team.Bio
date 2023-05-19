@@ -1,9 +1,12 @@
+from django.apps import apps
 from django.conf import settings
 
 from companies.models import Company, Invite
 
 
-def attempt_connect_user_to_a_company(user):
+def attempt_connect_user_to_a_company(user_pk):
+    Users = apps.get_model(settings.AUTH_USER_MODEL)
+    user = Users.objects.get(pk=user_pk)
     user_email_root = user.email_root
     # Don't auto connect users to a company if their email root is one of the popular free emails
     if user_email_root in settings.BLACKLISTED_DOMAIN_ROOTS:
@@ -20,7 +23,9 @@ def attempt_connect_user_to_a_company(user):
     return False
 
 
-def attempt_connect_user_with_invites(user):
+def attempt_connect_user_with_invites(user_pk):
+    Users = apps.get_model(settings.AUTH_USER_MODEL)
+    user = Users.objects.get(pk=user_pk)
     invites = Invite.objects.filter(email__iexact=user.email)
     if invites:
         invite = invites.first()
