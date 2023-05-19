@@ -33,7 +33,7 @@ oauthlib==3.2.2
 Pillow==9.5.0
 pillow-heif==0.11.1
 platformdirs==3.5.1
-pre-commit==3.3.1
+pre-commit==3.3.2
 psycopg2-binary==2.9.6
 pycparser==2.21
 PyJWT==2.7.0
@@ -51,7 +51,7 @@ six==1.16.0
 soupsieve==2.4.1
 sqlparse==0.4.4
 stripe==5.4.0
-tldextract==3.4.2
+tldextract==3.4.3
 types-cryptography==3.3.23.2
 urllib3==1.26.15
 virtualenv==20.23.0
