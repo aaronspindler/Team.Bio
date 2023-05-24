@@ -197,6 +197,9 @@ SOCIALACCOUNT_PROVIDERS = {
             "email",
             "https://www.googleapis.com/auth/calendar.readonly",
             "https://www.googleapis.com/auth/calendar.events.readonly",
+            # "https://www.googleapis.com/auth/calendar.readonly",
+            # "https://www.googleapis.com/auth/calendar.events.readonly",
+            "https://www.googleapis.com/auth/calendar.events.freebusy",
         ],
         "AUTH_PARAMS": {
             "access_type": "online",
