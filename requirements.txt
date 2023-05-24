@@ -1,4 +1,4 @@
-asgiref==3.6.0
+asgiref==3.7.1
 async-timeout==4.0.2
 beautifulsoup4==4.12.2
 boto3
