@@ -193,11 +193,9 @@ SOCIALACCOUNT_PROVIDERS = {
         "SCOPE": [
             "profile",
             "email",
-            "https://www.googleapis.com/auth/calendar.readonly",
-            "https://www.googleapis.com/auth/calendar.events.readonly",
             # "https://www.googleapis.com/auth/calendar.readonly",
             # "https://www.googleapis.com/auth/calendar.events.readonly",
-            "https://www.googleapis.com/auth/calendar.events.freebusy",
+            # "https://www.googleapis.com/auth/calendar.events.freebusy",
         ],
         "AUTH_PARAMS": {
             "access_type": "online",
