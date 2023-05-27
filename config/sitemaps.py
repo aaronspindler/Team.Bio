@@ -15,6 +15,7 @@ class PagesSitemap(Sitemap):
             "privacy_policy",
             "terms_of_service",
             "robotstxt",
+            "blog_feed",
         ]
 
     def location(self, item):
