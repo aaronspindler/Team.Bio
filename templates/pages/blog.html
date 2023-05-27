@@ -10,6 +10,7 @@
                 <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
                     <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">Team Bio Blog</h2>
                     <p class="mt-2 text-lg leading-8 text-gray-600">Learn about our new and upcoming features/news!</p>
+                    <small><a href="{% url 'blog_feed'%}">RSS Feed</a></small>
                 </div>
                 <div class="mx-auto mt-4 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                     {% for post in posts %}
@@ -26,6 +27,9 @@
                                         <span class="absolute inset-0"></span>
                                         {{ post.title }}
                                     </a>
+                                    {% if post.thumbnail %}
+                                        <img src="{{ post.thumbnail.url }}" alt="" class="w-full object-cover rounded-lg">
+                                    {% endif %}
                                 </h3>
                                 <p class="mt-2 line-clamp-3 text-sm leading-6 text-gray-600">{{ post.short_content }}</p>
                             </div>
