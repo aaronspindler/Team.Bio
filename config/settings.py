@@ -30,6 +30,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG", False)
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 PRICE_PER_USER = 100
 DEFAULT_TRIAL_DAYS = 30
 

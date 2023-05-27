@@ -1,6 +1,7 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from config import settings
+from pages.models import BlogPost
 from pages.utils import get_dog_image
 
 
@@ -35,3 +36,17 @@ def pricing(request):
 def billing_inactive(request):
     image = get_dog_image()
     return render(request, "pages/billing_inactive.html", {"image": image})
+
+
+def blog(request):
+    posts = (
+        BlogPost.objects.filter(published=True)
+        .select_related("posted_by")
+        .order_by("-created_at")
+    )
+    return render(request, "pages/blog.html", {"posts": posts})
+
+
+def blog_post(request, slug):
+    post = get_object_or_404(BlogPost, slug=slug, published=True)
+    return render(request, "pages/blog_post.html", {"post": post})
