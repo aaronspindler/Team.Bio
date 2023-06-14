@@ -33,7 +33,7 @@ oauthlib==3.2.2
 Pillow==9.5.0
 pillow-heif==0.11.1
 platformdirs==3.5.1
-pre-commit==3.3.2
+pre-commit==3.3.3
 psycopg2-binary==2.9.6
 pycparser==2.21
 PyJWT==2.7.0
