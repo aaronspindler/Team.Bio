@@ -22,7 +22,7 @@ django-ses==3.5.0
 django-storages==1.13.2
 factory-boy==3.2.1
 Faker==18.10.1
-filelock==3.12.0
+filelock==3.12.2
 googlemaps==4.10.0
 gunicorn==20.1.0
 identify==2.5.24
@@ -32,7 +32,7 @@ nodeenv==1.8.0
 oauthlib==3.2.2
 Pillow==9.5.0
 pillow-heif==0.11.1
-platformdirs==3.5.1
+platformdirs==3.5.3
 pre-commit==3.3.3
 psycopg2-binary==2.9.6
 pycparser==2.21
