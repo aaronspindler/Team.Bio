@@ -153,6 +153,24 @@ class User(AbstractUser):
     #   Non-User Editable
     start_date = models.DateField(blank=True, null=True)
 
+    def answer_blob(self):
+        return {
+            "name": self.get_full_name(),
+            "title": self.title if self.title else "",
+            "location": self.general_location.name if self.general_location else "",
+            "team": self.team.name if self.team else "",
+            "personality_type": f"{self.personality_type_name()} ({self.personality_type})"
+            if self.personality_type
+            else "",
+            "chinese_zodiac": self.chinese_zodiac if self.chinese_zodiac else "",
+            "zodiac_sign": self.zodiac_sign if self.zodiac_sign else "",
+            "favourite_food": self.favourite_food if self.favourite_food else "",
+            "favourite_movie": self.favourite_movie if self.favourite_movie else "",
+            "favourite_travel_destination": self.favourite_travel_destination
+            if self.favourite_travel_destination
+            else "",
+        }
+
     @property
     def profile_url(self):
         return reverse("user_profile", kwargs={"email_prefix": self.email_prefix})
