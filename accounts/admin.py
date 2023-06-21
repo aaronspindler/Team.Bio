@@ -6,7 +6,10 @@ from .models import Pet, PetType, User
 class UserAdmin(admin.ModelAdmin):
     model = User
     list_filter = ["company"]
-    list_display = ["email", "username", "company", "last_login"]
+    list_display = ["email", "username", "company", "last_login", "profile_completion"]
+
+    def profile_completion(self, obj):
+        return f"{obj.profile_completion_percentage()}%"
 
 
 class PetAdmin(admin.ModelAdmin):
