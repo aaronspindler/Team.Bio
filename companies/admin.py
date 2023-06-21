@@ -9,6 +9,7 @@ from companies.models import (
     Team,
     TriviaQuestion,
     TriviaQuestionOption,
+    TriviaUserAnswer,
 )
 
 
@@ -58,7 +59,14 @@ class TriviaQuestionAdmin(admin.ModelAdmin):
 
 
 @admin.register(TriviaQuestionOption)
-class TriviaQuestionOption(admin.ModelAdmin):
+class TriviaQuestionOptionAdmin(admin.ModelAdmin):
     list_display = ["question", "text", "correct"]
-    list_filter = ["question"]
+    list_filter = ["question", "question__company"]
     model = TriviaQuestionOption
+
+
+@admin.register(TriviaUserAnswer)
+class TriviaUserAnswerAdmin(admin.ModelAdmin):
+    list_display = ["user", "question", "selected_option"]
+    list_filter = ["question", "question__company"]
+    model = TriviaUserAnswer
