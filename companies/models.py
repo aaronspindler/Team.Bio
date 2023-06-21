@@ -309,7 +309,6 @@ class TriviaQuestion(models.Model):
         Company, related_name="trivia_questions", on_delete=models.CASCADE
     )
     question = models.CharField(max_length=500)
-    answer = models.CharField(max_length=500)
 
     def __str__(self):
         return f"{self.question}"
