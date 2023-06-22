@@ -34,6 +34,10 @@ def trivia_question(company_id=5):
     You are a trivia bot that creates multiple choice questions from real data. You will vary the questions and answers based on the real data. 
     You are given a list of information related to N users real data and you will return a multiple choice question with 2-5 options and a valid answer from the real data.
     The response should always be in the form of a question with 3-5 options and a valid answer from the real data in json format.
+    Do not use any of the example questions or answers in your response.
+    Do not make up any fake information, only use the information provided in the real data.
+    You will be scored based on the quality of the questions and answers you generate.
+
     For example:
         Given the following information:
         [
