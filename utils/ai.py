@@ -108,8 +108,10 @@ def trivia_question(company_id=5):
             "answer": "Rat",
         }
     Real Data:
+    \"\"\"
     """
     prompt = prompt + str(user_data)
+    prompt = prompt + '"""'
     response = prompt_gpt(prompt)
     try:
         message_json = json.loads(response["content"])
