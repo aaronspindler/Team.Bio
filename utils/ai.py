@@ -8,6 +8,7 @@ from companies.models import Company, TriviaQuestion, TriviaQuestionOption
 
 openai.api_key = settings.OPENAI_KEY
 
+# DEFAULT_MODEL = "gpt-4-32k"
 DEFAULT_MODEL = "gpt-3.5-turbo-16k"
 
 
@@ -27,9 +28,7 @@ def trivia_question(company_id=5):
     user_data = []
     for user in company.users.all():
         user_data.append(user.answer_blob())
-    random.shuffle(
-        user_data
-    )  # Shuffle the input data so that we get questions about different users
+    random.shuffle(user_data)  # Shuffle the input data so that we get questions about different users
     prompt = """
     You are a trivia bot that creates multiple choice questions from real data. You will vary the questions and answers based on the real data. 
     You are given a list of information related to N users real data and you will return a multiple choice question with 2-5 options and a valid answer from the real data.
@@ -120,35 +119,23 @@ def trivia_question(company_id=5):
         answer = message_json["answer"] or None
 
         # Make sure that none of the required elements are empty
-        if (
-            not question_text
-            or not options
-            or not answer
-            or len(options) < 2
-            or answer not in options
-        ):
+        if not question_text or not options or not answer or len(options) < 2 or answer not in options:
             raise Exception("Invalid response")
 
         # Check if the question already exists
-        question = TriviaQuestion.objects.filter(
-            question__icontains=question_text, company=company
-        )
+        question = TriviaQuestion.objects.filter(question__icontains=question_text, company=company)
         if question.exists():
             raise Exception("Question already exists")
 
         # Create the question
-        question_instance = TriviaQuestion.objects.create(
-            question=question_text, company=company
-        )
+        question_instance = TriviaQuestion.objects.create(question=question_text, company=company)
 
         # Create the options
         for option in options:
             correct = False
             if option == answer:
                 correct = True
-            TriviaQuestionOption.objects.create(
-                question=question_instance, text=option, correct=correct
-            )
+            TriviaQuestionOption.objects.create(question=question_instance, text=option, correct=correct)
 
         print(question_text)
         print(options)
