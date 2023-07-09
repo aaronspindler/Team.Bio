@@ -100,15 +100,9 @@ class Command(BaseCommand):
             for _ in range(num_people):
                 address = self.get_address()
                 location = address["prov_state"]
-                location, _ = Location.objects.get_or_create(
-                    name=location, company=company
-                )
-                user = UserFactory(
-                    company=company, general_location=location, **address
-                )
-                user.email = (
-                    f"{user.first_name.lower()}.{user.last_name.lower()}@spindlers.ca"
-                )
+                location, _ = Location.objects.get_or_create(name=location, company=company)
+                user = UserFactory(company=company, general_location=location, **address)
+                user.email = f"{user.first_name.lower()}.{user.last_name.lower()}@spindlers.ca"
                 print(user.email)
                 user.title = user.title.title()
                 file = self.get_profile_image()

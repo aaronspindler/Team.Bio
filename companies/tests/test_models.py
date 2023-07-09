@@ -13,9 +13,7 @@ class TestModels(TestCase):
         self.company = CompanyFactory()
         self.user = UserFactory(company=self.company)
         self.user2 = UserFactory(company=self.company)
-        self.company_owner = CompanyOwner.objects.create(
-            company=self.company, owner=self.user
-        )
+        self.company_owner = CompanyOwner.objects.create(company=self.company, owner=self.user)
 
     def test_company_get_owners_single(self):
         expected_result = [self.user.pk]
@@ -32,9 +30,7 @@ class TestModels(TestCase):
         self.assertEqual(str(self.company), self.company.name)
 
     def test_company_owner_str(self):
-        self.assertEqual(
-            str(self.company_owner), f"{self.company} {self.company_owner.owner}"
-        )
+        self.assertEqual(str(self.company_owner), f"{self.company} {self.company_owner.owner}")
 
     def test_company_save_url_root(self):
         company = CompanyFactory(url="https://www.spindlers.ca")

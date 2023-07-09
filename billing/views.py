@@ -33,17 +33,12 @@ def create_checkout_session(request):
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             checkout_session = stripe.checkout.Session.create(
-                client_reference_id=request.user.id
-                if request.user.is_authenticated
-                else None,
-                success_url=settings.BASE_URL
-                + "billing/success?session_id={CHECKOUT_SESSION_ID}",
+                client_reference_id=request.user.id if request.user.is_authenticated else None,
+                success_url=settings.BASE_URL + "billing/success?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=settings.BASE_URL + "billing/cancel",
                 payment_method_types=["card"],
                 mode="setup",
-                customer_email=request.user.email
-                if request.user.is_authenticated
-                else None,
+                customer_email=request.user.email if request.user.is_authenticated else None,
                 customer_creation="always",
             )
             return JsonResponse({"sessionId": checkout_session["id"]})

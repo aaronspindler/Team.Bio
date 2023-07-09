@@ -28,9 +28,7 @@ def terms_of_service(request):
 def pricing(request):
     price = round(settings.PRICE_PER_USER / 100, 2)
     trial_days = settings.DEFAULT_TRIAL_DAYS
-    return render(
-        request, "pages/pricing.html", {"price": price, "trial_days": trial_days}
-    )
+    return render(request, "pages/pricing.html", {"price": price, "trial_days": trial_days})
 
 
 def billing_inactive(request):
@@ -39,11 +37,7 @@ def billing_inactive(request):
 
 
 def blog(request):
-    posts = (
-        BlogPost.objects.filter(published=True)
-        .select_related("posted_by")
-        .order_by("-created_at")
-    )
+    posts = BlogPost.objects.filter(published=True).select_related("posted_by").order_by("-created_at")
     return render(request, "pages/blog.html", {"posts": posts})
 
 

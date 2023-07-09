@@ -12,9 +12,7 @@ class BlogPost(models.Model):
     short_content = models.TextField(blank=True, null=True)
     content_html = models.TextField(blank=True, null=True)
 
-    posted_by = models.ForeignKey(
-        "accounts.User", on_delete=models.CASCADE, blank=True, null=True
-    )
+    posted_by = models.ForeignKey("accounts.User", on_delete=models.CASCADE, blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     edited_at = models.DateTimeField(auto_now=True)

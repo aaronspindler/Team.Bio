@@ -6,9 +6,7 @@ from companies.models import Company, Invite, Link, Location, Team
 
 
 class CompanyForm(ModelForm):
-    name = forms.CharField(
-        label="Name", widget=forms.TextInput(attrs={"placeholder": "Magma Health"})
-    )
+    name = forms.CharField(label="Name", widget=forms.TextInput(attrs={"placeholder": "Magma Health"}))
     url = forms.CharField(
         label="URL",
         widget=forms.TextInput(attrs={"placeholder": "https://www.magmahealth.com"}),
@@ -101,11 +99,7 @@ class TeamForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TeamForm, self).__init__(*args, **kwargs)
-        self.fields["color"].widget.attrs.update(
-            {
-                "class": "colorfield_field jscolor block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            }
-        )
+        self.fields["color"].widget.attrs.update({"class": "colorfield_field jscolor block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"})
 
 
 class LinkForm(ModelForm):

@@ -29,18 +29,10 @@ class PetForm(forms.ModelForm):
 
 
 class UserProfileForm(forms.ModelForm):
-    short_bio = forms.CharField(
-        required=False, widget=forms.Textarea(attrs={"rows": "5"})
-    )
-    favourite_food = forms.CharField(
-        required=False, widget=forms.Textarea(attrs={"rows": "2"})
-    )
-    favourite_movie = forms.CharField(
-        required=False, widget=forms.Textarea(attrs={"rows": "2"})
-    )
-    favourite_travel_destination = forms.CharField(
-        required=False, widget=forms.Textarea(attrs={"rows": "2"})
-    )
+    short_bio = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": "5"}))
+    favourite_food = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": "2"}))
+    favourite_movie = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": "2"}))
+    favourite_travel_destination = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": "2"}))
     profile_picture = CleanedImageField(label="", required=False)
 
     class Meta:
@@ -73,21 +65,13 @@ class UserProfileForm(forms.ModelForm):
         company = kwargs.pop("company")
         super(UserProfileForm, self).__init__(*args, **kwargs)
 
-        self.fields["general_location"].queryset = Location.objects.filter(
-            company=company
-        ).order_by("name")
-        self.fields["general_location"].widget.attrs.update(
-            {"class": BASIC_FIELD_CLASS}
-        )
+        self.fields["general_location"].queryset = Location.objects.filter(company=company).order_by("name")
+        self.fields["general_location"].widget.attrs.update({"class": BASIC_FIELD_CLASS})
 
-        self.fields["team"].queryset = Team.objects.filter(company=company).order_by(
-            "name"
-        )
+        self.fields["team"].queryset = Team.objects.filter(company=company).order_by("name")
         self.fields["team"].widget.attrs.update({"class": BASIC_FIELD_CLASS})
 
-        self.fields["personality_type"].widget.attrs.update(
-            {"class": BASIC_FIELD_CLASS}
-        )
+        self.fields["personality_type"].widget.attrs.update({"class": BASIC_FIELD_CLASS})
 
         self.fields["chinese_zodiac"].widget.attrs.update({"class": BASIC_FIELD_CLASS})
 
@@ -97,9 +81,7 @@ class UserProfileForm(forms.ModelForm):
 
         self.fields["favourite_movie"].widget.attrs.update({"class": BASIC_FIELD_CLASS})
 
-        self.fields["favourite_travel_destination"].widget.attrs.update(
-            {"class": BASIC_FIELD_CLASS}
-        )
+        self.fields["favourite_travel_destination"].widget.attrs.update({"class": BASIC_FIELD_CLASS})
 
         self.fields["title"].widget.attrs.update({"class": BASIC_FIELD_CLASS})
 
@@ -158,6 +140,4 @@ class UserProfileForm(forms.ModelForm):
             }
         )
 
-        self.fields["profile_picture"].widget.attrs.update(
-            {"class": PICTURE_FIELD_CLASS}
-        )
+        self.fields["profile_picture"].widget.attrs.update({"class": PICTURE_FIELD_CLASS})
