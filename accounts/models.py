@@ -301,6 +301,6 @@ class User(AbstractUser):
     @receiver(user_signed_up)
     def allauth_user_signed_up(sender, request, user, **kwargs):
         create_admin_sms(f"TeamBio New User Signed Up: {user.email}")
-        user.get_and_set_social_image()
+        user.set_social_profile_picture()
         attempt_connect_user_with_invites(user.pk)
         attempt_connect_user_to_a_company(user.pk)
