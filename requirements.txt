@@ -6,7 +6,7 @@ botocore
 certifi==2023.5.7
 cffi==1.15.1
 cfgv==3.3.1
-charset-normalizer==3.1.0
+charset-normalizer==3.2.0
 crispy-tailwind==0.5.0
 cryptography==41.0.1
 defusedxml==0.7.1
