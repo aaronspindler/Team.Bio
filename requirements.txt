@@ -31,7 +31,7 @@ jmespath==1.0.1
 nodeenv==1.8.0
 oauthlib==3.2.2
 Pillow==10.0.0
-pillow-heif==0.11.1
+pillow-heif==0.12.0
 platformdirs==3.8.1
 pre-commit==3.3.3
 psycopg2-binary==2.9.6
