@@ -50,7 +50,7 @@ sentry-sdk
 six==1.16.0
 soupsieve==2.4.1
 sqlparse==0.4.4
-stripe==6.0.0
+stripe==6.1.0
 tldextract==3.4.4
 types-cryptography==3.3.23.2
 urllib3==1.26.16
