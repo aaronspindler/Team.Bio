@@ -54,5 +54,5 @@ stripe==6.4.0
 tldextract==3.4.4
 types-cryptography==3.3.23.2
 urllib3==1.26.16
-virtualenv==20.24.4
+virtualenv==20.24.5
 whitenoise==6.5.0
