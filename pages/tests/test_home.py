@@ -1,12 +1,12 @@
-from django.test import TestCase
 from django.urls import reverse
 
 from accounts.factories import UserFactory
 from companies.factories import CompanyFactory
 from companies.models import CompanyOwner
+from utils.testcases import BaseTestCase
 
 
-class TestHome(TestCase):
+class TestHome(BaseTestCase):
     def setUp(self):
         # Create required models
         self.company = CompanyFactory()

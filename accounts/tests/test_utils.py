@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.test import TestCase
 
 from accounts.factories import UserFactory
 from accounts.models import User
@@ -10,9 +9,10 @@ from accounts.utils import (
 )
 from companies.factories import CompanyFactory, InviteFactory
 from companies.models import Invite
+from utils.testcases import BaseTestCase
 
 
-class TestUtils(TestCase):
+class TestUtils(BaseTestCase):
     def setUp(self):
         self.company = CompanyFactory(url="https://www.spindlers.ca")
         self.user = UserFactory(company=None, email="aaron@spindlers.ca")
