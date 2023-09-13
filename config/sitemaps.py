@@ -9,7 +9,6 @@ class PagesSitemap(Sitemap):
         return [
             "home",
             "pricing",
-            "account_signup",
             "blog",
             "account_login",
             "privacy_policy",

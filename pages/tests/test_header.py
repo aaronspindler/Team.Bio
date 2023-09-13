@@ -9,7 +9,6 @@ from companies.models import CompanyOwner
 class TestHeader(TestCase):
     def setUp(self):
         self.login_text = "Log in"
-        self.sign_up_text = "Sign up"
         self.logout_text = "Log out"
         # Create required models
         self.company = CompanyFactory()
@@ -28,7 +27,6 @@ class TestHeader(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(response, self.login_text)
-        self.assertContains(response, self.sign_up_text)
 
         self.assertNotContains(response, "Settings")
 
@@ -37,7 +35,6 @@ class TestHeader(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertNotContains(response, self.login_text)
-        self.assertNotContains(response, self.sign_up_text)
 
         self.assertContains(response, self.logout_text)
         self.assertContains(response, "Settings")
@@ -49,7 +46,6 @@ class TestHeader(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertNotContains(response, self.login_text)
-        self.assertNotContains(response, self.sign_up_text)
         self.assertNotContains(response, "Settings")
 
         self.assertContains(response, "Home")
@@ -64,5 +60,4 @@ class TestHeader(TestCase):
         self.assertContains(response, self.logout_text)
 
         self.assertNotContains(response, self.login_text)
-        self.assertNotContains(response, self.sign_up_text)
         self.assertNotContains(response, "Settings")
