@@ -1,6 +1,6 @@
 {% extends '_base.html' %}
 {% load static %}
-{% load env_extras %}
+{% load socialaccount %}
 
 {% block title %}Log in{% endblock %}
 
@@ -63,8 +63,7 @@
 
                     <div class="mt-6 grid grid-cols-1 gap-3">
                         <div>
-                            {% if not is_github_actions%}
-                            {% load socialaccount %}
+                        {% if not 'GITHUB_ACTION' in os.environ %}
                             <form action="{% provider_login_url 'google' %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit"
@@ -74,8 +73,8 @@
                                          src="{% static 'images/google-logo.png' %}"/>
                                 </button>
                             </form>
-                            {% endif %}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
