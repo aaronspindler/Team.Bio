@@ -1,10 +1,9 @@
-from django.test import TestCase
-
 from accounts.factories import UserFactory
 from accounts.models import User
+from utils.testcases import BaseTestCase
 
 
-class TestFactories(TestCase):
+class TestFactories(BaseTestCase):
     def test_user_factory(self):
         """
         User Factory

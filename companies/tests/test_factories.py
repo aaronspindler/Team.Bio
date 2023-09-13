@@ -1,10 +1,9 @@
-from django.test import TestCase
-
 from companies.factories import CompanyFactory
 from companies.models import Company
+from utils.testcases import BaseTestCase
 
 
-class TestFactories(TestCase):
+class TestFactories(BaseTestCase):
     def test_company_factory(self):
         """
         Company Factory
