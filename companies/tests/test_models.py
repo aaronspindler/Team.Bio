@@ -1,14 +1,13 @@
 from decimal import Decimal
 from unittest import mock
 
-from django.test import TestCase
-
 from accounts.factories import UserFactory
 from companies.factories import CompanyFactory
 from companies.models import CompanyOwner
+from utils.testcases import BaseTestCase
 
 
-class TestModels(TestCase):
+class TestModels(BaseTestCase):
     def setUp(self):
         self.company = CompanyFactory()
         self.user = UserFactory(company=self.company)

@@ -90,7 +90,7 @@ def invite(request):
                 parameters = {
                     "invite_sender_name": request.user.name,
                     "invite_sender_organization_name": request.user.company.name,
-                    "action_url": f"https://www.team.bio{reverse('account_signup')}",
+                    "action_url": f"https://www.team.bio{reverse('account_login')}",
                 }
                 email.send(parameters)
             return redirect("company_settings")

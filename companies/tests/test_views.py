@@ -1,4 +1,3 @@
-from django.test import TestCase
 from django.urls import reverse
 
 from accounts.factories import UserFactory
@@ -6,9 +5,10 @@ from accounts.models import User
 from billing.factories import PromoCodeFactory
 from companies.factories import CompanyFactory
 from companies.models import Company, CompanyOwner
+from utils.testcases import BaseTestCase
 
 
-class TestCompanyViews(TestCase):
+class TestCompanyViews(BaseTestCase):
     def setUp(self):
         # Create required models
         self.company = CompanyFactory()
