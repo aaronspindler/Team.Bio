@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
     "debug_toolbar",
     "storages",
     "crispy_forms",
@@ -190,6 +191,21 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
+            # "https://www.googleapis.com/auth/calendar.readonly",
+            # "https://www.googleapis.com/auth/calendar.events.readonly",
+            # "https://www.googleapis.com/auth/calendar.events.freebusy",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+    }
+}
+
 BLACKLISTED_DOMAIN_ROOTS = [
     "gmail.com",
     "live.com",
@@ -218,20 +234,3 @@ except Exception:
 
 if DEBUG:
     BASE_URL = "http://localhost:8000/"
-
-if not os.getenv("GITHUB_ACTIONS"):
-    INSTALLED_APPS += ["allauth.socialaccount.providers.google"]
-    SOCIALACCOUNT_PROVIDERS = {
-        "google": {
-            "SCOPE": [
-                "profile",
-                "email",
-                # "https://www.googleapis.com/auth/calendar.readonly",
-                # "https://www.googleapis.com/auth/calendar.events.readonly",
-                # "https://www.googleapis.com/auth/calendar.events.freebusy",
-            ],
-            "AUTH_PARAMS": {
-                "access_type": "online",
-            },
-        }
-    }
