@@ -1,3 +1,5 @@
+import os
+
 from accounts.factories import UserFactory
 from accounts.models import User
 from companies.factories import CompanyFactory
@@ -7,6 +9,7 @@ from utils.testcases import BaseTestCase
 
 class TestModels(BaseTestCase):
     def setUp(self):
+        print(f"LOOK HERE: {os.environ}")
         self.company = CompanyFactory()
         self.user = UserFactory(company=self.company)
 
