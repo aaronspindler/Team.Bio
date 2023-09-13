@@ -11,6 +11,7 @@ from django.urls import reverse
 from accounts.utils import (
     attempt_connect_user_to_a_company,
     attempt_connect_user_with_invites,
+    merge_user,
 )
 from utils.images import get_image_from_url
 from utils.sms import create_admin_sms
@@ -297,10 +298,11 @@ class User(AbstractUser):
         except Exception as e:
             print(e)
 
-    # This is a signal receiver to try to connect a user to an existing company
+    # This is a signal receiver to handle actions after a user signs up
     @receiver(user_signed_up)
     def allauth_user_signed_up(sender, request, user, **kwargs):
         create_admin_sms(f"TeamBio New User Signed Up: {user.email}")
+        merge_user(user.pk)
         user.set_social_profile_picture()
         attempt_connect_user_with_invites(user.pk)
         attempt_connect_user_to_a_company(user.pk)
