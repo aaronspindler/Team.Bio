@@ -1,12 +1,12 @@
-from django.test import TestCase
 from django.urls import reverse
 
 from accounts.factories import UserFactory
 from companies.factories import CompanyFactory
 from companies.models import CompanyOwner
+from utils.testcases import BaseTestCase
 
 
-class TestHeader(TestCase):
+class TestHeader(BaseTestCase):
     def setUp(self):
         self.login_text = "Log in"
         self.logout_text = "Log out"
