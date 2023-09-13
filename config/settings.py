@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
     "debug_toolbar",
     "storages",
     "crispy_forms",
@@ -221,6 +220,7 @@ if DEBUG:
     BASE_URL = "http://localhost:8000/"
 
 if not os.getenv("GITHUB_ACTIONS"):
+    INSTALLED_APPS += ["allauth.socialaccount.providers.google"]
     SOCIALACCOUNT_PROVIDERS = {
         "google": {
             "SCOPE": [
