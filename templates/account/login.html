@@ -1,6 +1,5 @@
 {% extends '_base.html' %}
 {% load static %}
-{% load socialaccount %}
 {% load env_extras %}
 
 {% block title %}Log in{% endblock %}
@@ -65,6 +64,7 @@
                     <div class="mt-6 grid grid-cols-1 gap-3">
                         <div>
                             {% if not is_github_actions%}
+                            {% load socialaccount %}
                             <form action="{% provider_login_url 'google' %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit"
