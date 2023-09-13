@@ -6,5 +6,5 @@ register = template.Library()
 
 
 @register.simple_tag
-def is_github_actions(key):
+def is_github_actions():
     return os.environ.get("GITHUB_ACTIONS", False)
