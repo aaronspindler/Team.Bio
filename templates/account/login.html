@@ -62,7 +62,7 @@
                     </div>
 
                     <div class="mt-6 grid grid-cols-1 gap-3">
-                        {% if False %}
+                        {% if not IS_GITHUB_ACTIONS %}
                             <form action="{% provider_login_url 'google' %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit"
