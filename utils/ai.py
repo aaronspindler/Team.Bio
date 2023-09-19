@@ -8,25 +8,33 @@ from companies.models import Company, TriviaQuestion, TriviaQuestionOption
 
 openai.api_key = settings.OPENAI_KEY
 
-# DEFAULT_MODEL = "gpt-4-32k"
-DEFAULT_MODEL = "gpt-3.5-turbo-16k"
+DEFAULT_MODEL = "gpt-4"
+# DEFAULT_MODEL = "gpt-3.5-turbo-16k"
 
 
-def prompt_gpt(prompt, model=DEFAULT_MODEL, temperature=1.5):
+def prompt_gpt(prompt, model=DEFAULT_MODEL, temperature=1.3):
     completion = openai.ChatCompletion.create(
-        model=DEFAULT_MODEL,
+        model=model,
         messages=[
             {"role": "user", "content": prompt},
         ],
         temperature=temperature,
+        stream=True,
     )
-    return completion.choices[0].message
+    collected_messages = []
+    for chunk in completion:
+        chunk_message = chunk["choices"][0]["delta"]
+        if chunk_message == {}:
+            break
+        collected_messages.append(chunk_message)
+        print(chunk_message)
+    return "".join([m.get("content", "") for m in collected_messages])
 
 
 def trivia_question(company_id=5):
     company = Company.objects.get(pk=company_id)
     user_data = []
-    for user in company.users.all():
+    for user in company.users.filter(is_active=True):
         user_data.append(user.answer_blob())
     random.shuffle(user_data)  # Shuffle the input data so that we get questions about different users
     prompt = """
@@ -36,6 +44,8 @@ def trivia_question(company_id=5):
     Do not use any of the example questions or answers in your response.
     Do not make up any fake information, only use the information provided in the real data.
     You will be scored based on the quality of the questions and answers you generate.
+    Do not use any fake names or information.
+    Return only a single question and answer in json format.
 
     For example:
         Given the following information:
@@ -113,7 +123,7 @@ def trivia_question(company_id=5):
     prompt = prompt + '"""'
     response = prompt_gpt(prompt)
     try:
-        message_json = json.loads(response["content"])
+        message_json = json.loads(response)
         question_text = message_json["question"] or None
         options = message_json["options"] or None
         answer = message_json["answer"] or None
