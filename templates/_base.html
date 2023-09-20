@@ -91,6 +91,9 @@
                     {% if user in user.company.get_owners %}
                         <a href="{% url 'company_settings' %}" class="text-base font-medium text-white hover:text-indigo-50">Settings</a>
                     {% endif %}
+                    {% if user.is_superuser %}
+                        <a href="/admin" class="text-base font-medium text-white hover:text-indigo-50">Admin</a>
+                    {% endif %}
                 {% endif %}
             </div>
         </nav>
