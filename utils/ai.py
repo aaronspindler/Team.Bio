@@ -11,7 +11,7 @@ except GPTModel.DoesNotExist:
     DEFAULT_MODEL = "gpt-3.5-turbo-16k"
 
 
-def prompt_gpt(prompt, model=DEFAULT_MODEL, temperature=1.3):
+def prompt_gpt(prompt, model=DEFAULT_MODEL, temperature=1.4):
     completion = openai.ChatCompletion.create(
         model=model,
         messages=[
