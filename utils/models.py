@@ -9,6 +9,13 @@ from django.template.loader import render_to_string
 logger = logging.getLogger(__name__)
 
 
+class GPTModel(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=255)
+    primary = models.BooleanField(default=False)
+
+
 class AdminPhoneNumber(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
