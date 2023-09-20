@@ -469,3 +469,24 @@ class TestCompanyViews(BaseTestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn(self.user.pk, self.company.get_owners)
+
+    def test_home_feature_toggle_trivia(self):
+        self.assertTrue(self.company.trivia_enabled)
+        response = self.client.get(
+            reverse("company_home"),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "companies/home.html")
+        self.assertContains(response, "Trivia")
+
+        self.company.trivia_enabled = False
+        self.company.save()
+
+        response = self.client.get(
+            reverse("company_home"),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "companies/home.html")
+        self.assertNotContains(response, "Trivia")
