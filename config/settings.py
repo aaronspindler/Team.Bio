@@ -125,6 +125,10 @@ CACHES = {
     }
 }
 
+# Celery
+CELERY_BROKER_URL = env("REDIS_URL")
+CELERY_ALWAYS_EAGER = DEBUG
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
