@@ -1,7 +1,8 @@
 from django.urls import path
 
-from .views import trivia
+from .views import answer_trivia_question, home
 
 urlpatterns = [
-    path("", trivia, name="trivia_home"),
+    path("", home, name="trivia_home"),
+    path("answer/<int:question>", answer_trivia_question, name="answer_trivia_question"),
 ]

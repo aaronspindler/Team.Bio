@@ -2,6 +2,8 @@ from django.db import models
 
 
 class TriviaQuestion(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     company = models.ForeignKey("companies.Company", related_name="trivia_questions", on_delete=models.CASCADE)
     question = models.CharField(max_length=500)
 
@@ -14,7 +16,7 @@ class TriviaQuestion(models.Model):
 
 
 class TriviaQuestionOption(models.Model):
-    question = models.ForeignKey(TriviaQuestion, related_name="trivia_answers", on_delete=models.CASCADE)
+    question = models.ForeignKey(TriviaQuestion, related_name="question_option", on_delete=models.CASCADE)
     text = models.CharField(max_length=500)
     correct = models.BooleanField(default=False)
 
