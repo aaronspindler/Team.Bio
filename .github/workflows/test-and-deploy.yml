@@ -80,7 +80,11 @@ jobs:
     needs: [test, lint]
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Deploy Webhook
+      - name: Deploy App Webhook
         uses: joelwmale/webhook-action@master
         with:
-          url: ${{ secrets.RENDER_DEPLOY_HOOK }}
+          url: ${{ secrets.RENDER_APP_DEPLOY_HOOK }}
+      - name: Deploy Celery Webhook
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.RENDER_CELERY_DEPLOY_HOOK }}
