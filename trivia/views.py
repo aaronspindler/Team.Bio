@@ -6,8 +6,7 @@ from trivia.models import TriviaQuestion, TriviaQuestionOption, TriviaUserAnswer
 
 @login_required
 def home(request):
-    questions = TriviaQuestion.objects.filter(company=request.user.company)
-    questions = TriviaQuestion.objects.all().order_by("-created")
+    questions = TriviaQuestion.objects.filter(company=request.user.company).order_by("-created")
 
     for question in questions:
         question.options = question.question_option.all()
