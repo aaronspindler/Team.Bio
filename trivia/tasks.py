@@ -1,11 +1,14 @@
 import json
 import random
 
+from celery import shared_task
+
 from companies.models import Company
 from trivia.models import TriviaQuestion, TriviaQuestionOption
 from utils.ai import prompt_gpt
 
 
+@shared_task(time_limit=60)
 def create_trivia_question(company_id=5):
     company = Company.objects.get(pk=company_id)
     user_data = []
