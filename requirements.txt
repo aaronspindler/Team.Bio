@@ -57,7 +57,7 @@ soupsieve==2.5
 sqlparse==0.4.4
 tqdm==4.65.0
 stripe==6.5.0
-tldextract==3.5.0
+tldextract==3.6.0
 types-cryptography==3.3.23.2
 urllib3==1.26.16
 virtualenv==20.24.5
