@@ -22,8 +22,12 @@ class TextMessageAdmin(admin.ModelAdmin):
             message.send()
 
 
+class GPTModelAdmin(admin.ModelAdmin):
+    list_display = ["name", "primary"]
+
+
 admin.site.register(TextMessage, TextMessageAdmin)
 admin.site.register(Email, EmailAdmin)
 admin.site.register(AdminPhoneNumber)
 admin.site.register(AdminEmail)
-admin.site.register(GPTModel)
+admin.site.register(GPTModel, GPTModelAdmin)
