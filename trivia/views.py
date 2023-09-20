@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Prefetch
+from django.http import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 
 from trivia.models import TriviaQuestion, TriviaQuestionOption, TriviaUserAnswer
@@ -35,3 +36,4 @@ def answer_trivia_question(request, question):
         answer = get_object_or_404(TriviaQuestionOption, text=data.get(str(question.pk)), question=question)
         TriviaUserAnswer.objects.create(user=request.user, question=question, selected_option=answer)
         return redirect("trivia_home")
+    return HttpResponseNotAllowed(["POST"])
