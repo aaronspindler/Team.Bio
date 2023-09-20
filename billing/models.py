@@ -18,9 +18,7 @@ class PaymentAttempt(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    customer = models.ForeignKey(
-        "billing.StripeCustomer", on_delete=models.CASCADE, null=True, blank=True
-    )
+    customer = models.ForeignKey("billing.StripeCustomer", on_delete=models.CASCADE, null=True, blank=True)
     company = models.ForeignKey("companies.Company", on_delete=models.CASCADE)
     amount = models.IntegerField()
 
@@ -51,9 +49,7 @@ class StripeCustomer(models.Model):
         Charge the customer a certain amount
         amount: int - amount to charge in cents
         """
-        payment_attempt = PaymentAttempt.objects.create(
-            customer=self, company=self.user.company, amount=amount
-        )
+        payment_attempt = PaymentAttempt.objects.create(customer=self, company=self.user.company, amount=amount)
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             stripe.PaymentIntent.create(

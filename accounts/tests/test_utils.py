@@ -73,18 +73,10 @@ class TestUtils(BaseTestCase):
             "github": initial_user.github,
         }
         new_user = UserFactory(email=initial_user.email, company=None)
-        self.assertEqual(
-            User.objects.count(), pre_user_count + 2
-        )  # Should be 2 new users
-        self.assertNotEqual(
-            initial_user.pk, new_user.pk
-        )  # pks for the new users should not be the same
-        self.assertNotEqual(
-            initial_user.company, new_user.company
-        )  # They should not be in the same company
-        self.assertEqual(
-            initial_user.email, new_user.email
-        )  # They should have the same email
+        self.assertEqual(User.objects.count(), pre_user_count + 2)  # Should be 2 new users
+        self.assertNotEqual(initial_user.pk, new_user.pk)  # pks for the new users should not be the same
+        self.assertNotEqual(initial_user.company, new_user.company)  # They should not be in the same company
+        self.assertEqual(initial_user.email, new_user.email)  # They should have the same email
 
         self.assertNotEqual(initial_user.short_bio, new_user.short_bio)
         self.assertNotEqual(initial_user.title, new_user.title)

@@ -30,15 +30,11 @@ class PetType(models.Model):
 class Pet(models.Model):
     name = models.CharField(max_length=200)
     nickname = models.CharField(max_length=400, blank=True, null=True)
-    pet_type = models.ForeignKey(
-        PetType, on_delete=models.CASCADE, blank=True, null=True
-    )
+    pet_type = models.ForeignKey(PetType, on_delete=models.CASCADE, blank=True, null=True)
 
     picture = models.ImageField(blank=True, null=True, upload_to="pets/")
 
-    owner = models.ForeignKey(
-        "accounts.User", related_name="pets", on_delete=models.CASCADE
-    )
+    owner = models.ForeignKey("accounts.User", related_name="pets", on_delete=models.CASCADE)
 
     @property
     def picture_url(self):
@@ -62,17 +58,11 @@ class User(AbstractUser):
     email_root = models.CharField(max_length=250)
 
     # Profile
-    profile_picture = models.ImageField(
-        blank=True, null=True, upload_to="profile_picture/"
-    )
+    profile_picture = models.ImageField(blank=True, null=True, upload_to="profile_picture/")
     short_bio = models.TextField(blank=True, null=True)
     title = models.CharField(max_length=240, blank=True, null=True)
-    general_location = models.ForeignKey(
-        "companies.Location", on_delete=models.CASCADE, blank=True, null=True
-    )
-    team = models.ForeignKey(
-        "companies.Team", on_delete=models.CASCADE, blank=True, null=True
-    )
+    general_location = models.ForeignKey("companies.Location", on_delete=models.CASCADE, blank=True, null=True)
+    team = models.ForeignKey("companies.Team", on_delete=models.CASCADE, blank=True, null=True)
 
     PERSONALITY_TYPE_CHOICES = (
         ("INTJ", "INTJ"),
@@ -92,9 +82,7 @@ class User(AbstractUser):
         ("ESTP", "ESTP"),
         ("ESFP", "ESFP"),
     )
-    personality_type = models.CharField(
-        max_length=240, blank=True, null=True, choices=PERSONALITY_TYPE_CHOICES
-    )
+    personality_type = models.CharField(max_length=240, blank=True, null=True, choices=PERSONALITY_TYPE_CHOICES)
 
     CHINESE_ZODIAC_CHOICES = (
         ("Rat", "Rat"),
@@ -110,9 +98,7 @@ class User(AbstractUser):
         ("Dog", "Dog"),
         ("Pig", "Pig"),
     )
-    chinese_zodiac = models.CharField(
-        max_length=240, blank=True, null=True, choices=CHINESE_ZODIAC_CHOICES
-    )
+    chinese_zodiac = models.CharField(max_length=240, blank=True, null=True, choices=CHINESE_ZODIAC_CHOICES)
 
     ZODIAC_SIGN_CHOICES = (
         ("Aries", "Aries"),
@@ -128,9 +114,7 @@ class User(AbstractUser):
         ("Aquarius", "Aquarius"),
         ("Pisces", "Pisces"),
     )
-    zodiac_sign = models.CharField(
-        max_length=240, blank=True, null=True, choices=ZODIAC_SIGN_CHOICES
-    )
+    zodiac_sign = models.CharField(max_length=240, blank=True, null=True, choices=ZODIAC_SIGN_CHOICES)
 
     favourite_food = models.TextField(blank=True, null=True)
     favourite_movie = models.TextField(blank=True, null=True)
@@ -153,6 +137,20 @@ class User(AbstractUser):
 
     #   Non-User Editable
     start_date = models.DateField(blank=True, null=True)
+
+    def answer_blob(self):
+        return {
+            "name": self.get_full_name(),
+            "title": self.title if self.title else "",
+            "location": self.general_location.name if self.general_location else "",
+            "team": self.team.name if self.team else "",
+            "personality_type": f"{self.personality_type_name()} ({self.personality_type})" if self.personality_type else "",
+            "chinese_zodiac": self.chinese_zodiac if self.chinese_zodiac else "",
+            "zodiac_sign": self.zodiac_sign if self.zodiac_sign else "",
+            "favourite_food": self.favourite_food if self.favourite_food else "",
+            "favourite_movie": self.favourite_movie if self.favourite_movie else "",
+            "favourite_travel_destination": self.favourite_travel_destination if self.favourite_travel_destination else "",
+        }
 
     @property
     def profile_url(self):
@@ -292,9 +290,7 @@ class User(AbstractUser):
                 image_url = social_accounts[0].get_avatar_url()
                 if image_url:
                     data = get_image_from_url(image_url)
-                    self.profile_picture.save(
-                        f"social_{account_type}_{self.username}.jpg", data, save=True
-                    )
+                    self.profile_picture.save(f"social_{account_type}_{self.username}.jpg", data, save=True)
         except Exception as e:
             print(e)
 

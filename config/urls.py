@@ -15,6 +15,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("company/", include("companies.urls")),
+    path("trivia/", include("trivia.urls")),
     path("billing/", include("billing.urls")),
     path("system/health", health, name="system_health"),
     path("robots.txt", robotstxt, name="robotstxt"),

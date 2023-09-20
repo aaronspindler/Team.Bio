@@ -68,10 +68,7 @@ def invite(request):
             instance = form.save(commit=False)
             email = instance.email.lower()
             # Check if this user already exists as a user or a previous invite
-            if (
-                not User.objects.filter(email=email).exists()
-                and not Invite.objects.filter(email=email).exists()
-            ):
+            if not User.objects.filter(email=email).exists() and not Invite.objects.filter(email=email).exists():
                 instance.email = email
                 instance.company = request.user.company
                 instance.save()
@@ -105,9 +102,7 @@ def revoke_invite(request, email):
 @login_required
 @is_company_owner
 def remove_user(request, email_prefix):
-    user_to_remove = get_object_or_404(
-        User, company=request.user.company, email_prefix=email_prefix
-    )
+    user_to_remove = get_object_or_404(User, company=request.user.company, email_prefix=email_prefix)
 
     # Check if the user is a company owner
     if user_to_remove.pk in request.user.company.get_owners:
@@ -130,16 +125,8 @@ def company_settings(request):
     company_users = company.get_active_users
     invited_users = company.get_invited_users
 
-    locations = (
-        Location.objects.filter(company=company)
-        .order_by("name")
-        .annotate(Count("user", distinct=True))
-    )
-    teams = (
-        Team.objects.filter(company=company)
-        .order_by("name")
-        .annotate(Count("user", distinct=True))
-    )
+    locations = Location.objects.filter(company=company).order_by("name").annotate(Count("user", distinct=True))
+    teams = Team.objects.filter(company=company).order_by("name").annotate(Count("user", distinct=True))
     links = Link.objects.filter(company=company).order_by("name")
 
     billing_user = company.get_billing_user
@@ -174,9 +161,7 @@ def company_settings(request):
 @login_required
 @is_company_owner
 def make_owner(request, email_prefix):
-    user = get_object_or_404(
-        User, company=request.user.company, email_prefix=email_prefix
-    )
+    user = get_object_or_404(User, company=request.user.company, email_prefix=email_prefix)
 
     # Check if the user is already an owner
     if user.pk in request.user.company.get_owners:
@@ -192,9 +177,7 @@ def make_owner(request, email_prefix):
 @login_required
 @is_company_owner
 def remove_owner(request, email_prefix):
-    user = get_object_or_404(
-        User, company=request.user.company, email_prefix=email_prefix
-    )
+    user = get_object_or_404(User, company=request.user.company, email_prefix=email_prefix)
 
     # Check if the user is already an owner
     if user.pk not in request.user.company.get_owners:
@@ -219,9 +202,7 @@ def add_location(request):
         if form.is_valid():
             instance = form.save(commit=False)
             # Check if this already exists
-            if not Location.objects.filter(
-                company=request.user.company, name=instance.name
-            ).exists():
+            if not Location.objects.filter(company=request.user.company, name=instance.name).exists():
                 instance.company = request.user.company
                 instance.save()
             return redirect("company_settings")
@@ -236,9 +217,7 @@ def delete_location(request, pk):
         location = get_object_or_404(Location, pk=pk, company=company)
         # Find users that are in this location and remove them from the location
         # This prevents any cascading deletes
-        User.objects.filter(company=company, general_location=location).update(
-            general_location=None
-        )
+        User.objects.filter(company=company, general_location=location).update(general_location=None)
         location.delete()
         return redirect("company_settings")
 
@@ -267,9 +246,7 @@ def add_team(request):
         if form.is_valid():
             instance = form.save(commit=False)
             # Check if this already exists
-            if not Team.objects.filter(
-                company=request.user.company, name=instance.name
-            ).exists():
+            if not Team.objects.filter(company=request.user.company, name=instance.name).exists():
                 instance.company = request.user.company
                 instance.save()
             return redirect("company_settings")
@@ -306,9 +283,7 @@ class UpdateTeamView(UpdateView):
 @login_required
 def user_profile(request, email_prefix):
     # Get the user requested for that company
-    company_user = get_object_or_404(
-        User, company=request.user.company, email_prefix=email_prefix
-    )
+    company_user = get_object_or_404(User, company=request.user.company, email_prefix=email_prefix)
 
     pets = Pet.objects.filter(owner=company_user)
 
@@ -332,9 +307,7 @@ def edit_profile(request):
     company = request.user.company
     form = UserProfileForm(instance=request.user, company=company)
     if request.method == "POST":
-        form = UserProfileForm(
-            request.POST, request.FILES, instance=request.user, company=company
-        )
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user, company=company)
         if form.is_valid():
             form.save()
             company.calculate_geo_midpoint()
@@ -354,9 +327,7 @@ def add_link(request):
         if form.is_valid():
             instance = form.save(commit=False)
             # Check if this already exists
-            if not Link.objects.filter(
-                company=request.user.company, name=instance.name
-            ).exists():
+            if not Link.objects.filter(company=request.user.company, name=instance.name).exists():
                 instance.company = request.user.company
                 instance.save()
             return redirect("company_settings")
@@ -411,9 +382,7 @@ class UpdatePetView(UpdateView):
         return obj
 
     def get_success_url(self):
-        return reverse_lazy(
-            "user_profile", kwargs={"email_prefix": self.request.user.email_prefix}
-        )
+        return reverse_lazy("user_profile", kwargs={"email_prefix": self.request.user.email_prefix})
 
 
 @login_required
@@ -447,9 +416,5 @@ def home(request):
 
 @login_required
 def pets(request):
-    company_pets = (
-        Pet.objects.filter(owner__company=request.user.company)
-        .order_by("name")
-        .select_related("pet_type", "owner")
-    )
+    company_pets = Pet.objects.filter(owner__company=request.user.company).order_by("name").select_related("pet_type", "owner")
     return render(request, "companies/pets.html", {"pets": company_pets})

@@ -6,9 +6,7 @@ from companies.models import Company, Invite, Link, Location, Team
 
 
 class CompanyForm(ModelForm):
-    name = forms.CharField(
-        label="Name", widget=forms.TextInput(attrs={"placeholder": "Magma Health"})
-    )
+    name = forms.CharField(label="Name", widget=forms.TextInput(attrs={"placeholder": "Magma Health"}))
     url = forms.CharField(
         label="URL",
         widget=forms.TextInput(attrs={"placeholder": "https://www.magmahealth.com"}),
@@ -27,7 +25,7 @@ class CompanyForm(ModelForm):
 
 class CompanyFeatureForm(ModelForm):
     map_enabled = forms.BooleanField(
-        label="Enabled / Disable the display of your company map on the company home page",
+        label="Enabled / disable the display of your company map on the company home page",
         required=False,
         widget=forms.CheckboxInput(
             attrs={
@@ -37,7 +35,17 @@ class CompanyFeatureForm(ModelForm):
     )
 
     links_enabled = forms.BooleanField(
-        label="Enabled / Disable the display of links on your company home page",
+        label="Enabled / disable the display of links on your company home page",
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={
+                "class": "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600",
+            }
+        ),
+    )
+
+    trivia_enabled = forms.BooleanField(
+        label="Enabled / disable company trivia",
         required=False,
         widget=forms.CheckboxInput(
             attrs={
@@ -48,7 +56,7 @@ class CompanyFeatureForm(ModelForm):
 
     class Meta:
         model = Company
-        fields = ["map_enabled", "links_enabled"]
+        fields = ["map_enabled", "links_enabled", "trivia_enabled"]
 
 
 class InviteForm(ModelForm):
@@ -101,11 +109,7 @@ class TeamForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TeamForm, self).__init__(*args, **kwargs)
-        self.fields["color"].widget.attrs.update(
-            {
-                "class": "colorfield_field jscolor block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            }
-        )
+        self.fields["color"].widget.attrs.update({"class": "colorfield_field jscolor block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"})
 
 
 class LinkForm(ModelForm):

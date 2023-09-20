@@ -15,16 +15,10 @@ class Company(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    promo_code = models.ForeignKey(
-        PromoCode, on_delete=models.SET_NULL, null=True, blank=True
-    )
+    promo_code = models.ForeignKey(PromoCode, on_delete=models.SET_NULL, null=True, blank=True)
     trial_days = models.IntegerField(default=settings.DEFAULT_TRIAL_DAYS)
-    test_company = models.BooleanField(
-        default=False, help_text="Used for develop testing companies"
-    )
-    billing_disabled = models.BooleanField(
-        default=False, help_text="Used for companies where we do not want to bill them"
-    )
+    test_company = models.BooleanField(default=False, help_text="Used for develop testing companies")
+    billing_disabled = models.BooleanField(default=False, help_text="Used for companies where we do not want to bill them")
 
     name = models.TextField(unique=True)
     url = models.URLField(unique=True)
@@ -33,26 +27,15 @@ class Company(models.Model):
     # Company Features
     map_enabled = models.BooleanField(default=True)
     links_enabled = models.BooleanField(default=True)
+    trivia_enabled = models.BooleanField(default=True)
 
     # Map Stuff
-    midpoint_lat = models.DecimalField(
-        max_digits=12, decimal_places=6, null=True, blank=True
-    )
-    midpoint_lng = models.DecimalField(
-        max_digits=12, decimal_places=6, null=True, blank=True
-    )
-    max_lat = models.DecimalField(
-        max_digits=12, decimal_places=6, null=True, blank=True
-    )
-    min_lat = models.DecimalField(
-        max_digits=12, decimal_places=6, null=True, blank=True
-    )
-    max_lng = models.DecimalField(
-        max_digits=12, decimal_places=6, null=True, blank=True
-    )
-    min_lng = models.DecimalField(
-        max_digits=12, decimal_places=6, null=True, blank=True
-    )
+    midpoint_lat = models.DecimalField(max_digits=12, decimal_places=6, null=True, blank=True)
+    midpoint_lng = models.DecimalField(max_digits=12, decimal_places=6, null=True, blank=True)
+    max_lat = models.DecimalField(max_digits=12, decimal_places=6, null=True, blank=True)
+    min_lat = models.DecimalField(max_digits=12, decimal_places=6, null=True, blank=True)
+    max_lng = models.DecimalField(max_digits=12, decimal_places=6, null=True, blank=True)
+    min_lng = models.DecimalField(max_digits=12, decimal_places=6, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -63,12 +46,7 @@ class Company(models.Model):
         super().save(*args, **kwargs)
 
     def should_show_map(self):
-        return (
-            self.users.filter(
-                is_active=True, lat__isnull=False, lng__isnull=False
-            ).exists()
-            and self.map_enabled
-        )
+        return self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False).exists() and self.map_enabled
 
     def calculate_geo_midpoint(self):
         users = self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False)
@@ -137,9 +115,7 @@ class Company(models.Model):
             if team:
                 team_name = team.name
                 team_color = team.color.lower()
-            user_points = self.users.filter(
-                is_active=True, lat__isnull=False, lng__isnull=False, team=team
-            ).values("lng", "lat", "first_name", "last_name", "city", "prov_state")
+            user_points = self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False, team=team).values("lng", "lat", "first_name", "last_name", "city", "prov_state")
             cleaned_user_points = []
             for user in user_points:
                 lng = float(user["lng"])
@@ -198,9 +174,7 @@ class Company(models.Model):
 
     @property
     def get_owners(self):
-        return list(
-            CompanyOwner.objects.filter(company=self).values_list("owner", flat=True)
-        )
+        return list(CompanyOwner.objects.filter(company=self).values_list("owner", flat=True))
 
     @property
     def get_billing_user(self):
@@ -222,12 +196,8 @@ class Company(models.Model):
 
 
 class CompanyOwner(models.Model):
-    company = models.ForeignKey(
-        Company, related_name="owners", on_delete=models.CASCADE
-    )
-    owner = models.ForeignKey(
-        "accounts.User", related_name="companies", on_delete=models.CASCADE
-    )
+    company = models.ForeignKey(Company, related_name="owners", on_delete=models.CASCADE)
+    owner = models.ForeignKey("accounts.User", related_name="companies", on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.company} {self.owner}"
@@ -242,9 +212,7 @@ class Invite(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    company = models.ForeignKey(
-        Company, related_name="invites", on_delete=models.CASCADE
-    )
+    company = models.ForeignKey(Company, related_name="invites", on_delete=models.CASCADE)
     email = models.EmailField(unique=True)
 
     def __str__(self):
@@ -271,9 +239,7 @@ class Team(models.Model):
 
 
 class Location(models.Model):
-    company = models.ForeignKey(
-        Company, related_name="locations", on_delete=models.CASCADE
-    )
+    company = models.ForeignKey(Company, related_name="locations", on_delete=models.CASCADE)
     name = models.CharField(max_length=60)
 
     def __str__(self):

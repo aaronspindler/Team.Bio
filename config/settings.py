@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "companies",
     "utils",
     "billing",
+    "trivia",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
@@ -226,6 +227,9 @@ GOOGLE_MAPS_API_KEY = env("GOOGLE_MAPS_API_KEY")
 
 # Mapbox
 MAPBOX_API_KEY = env("MAPBOX_API_KEY")
+
+# OpenAI
+OPENAI_KEY = env("OPENAI_KEY")
 
 # Unsplash
 try:

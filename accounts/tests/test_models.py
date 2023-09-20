@@ -48,12 +48,8 @@ class TestModels(BaseTestCase):
 
         self.assertEqual(user.address_string, "123 Main St")
 
-        User.objects.filter(pk=user_pk).update(
-            address_1=" 123 Main St   ", city="   Toronto ", company=company
-        )
-        self.assertEqual(
-            User.objects.get(pk=user_pk).address_string, "123 Main St Toronto"
-        )
+        User.objects.filter(pk=user_pk).update(address_1=" 123 Main St   ", city="   Toronto ", company=company)
+        self.assertEqual(User.objects.get(pk=user_pk).address_string, "123 Main St Toronto")
 
         User.objects.filter(pk=user_pk).update(
             address_1=" 123 Main St   ",
@@ -61,9 +57,7 @@ class TestModels(BaseTestCase):
             prov_state="   ON ",
             company=company,
         )
-        self.assertEqual(
-            User.objects.get(pk=user_pk).address_string, "123 Main St Toronto ON"
-        )
+        self.assertEqual(User.objects.get(pk=user_pk).address_string, "123 Main St Toronto ON")
 
         User.objects.filter(pk=user_pk).update(
             address_1=" 123 Main St   ",
@@ -72,9 +66,7 @@ class TestModels(BaseTestCase):
             country="   Canada ",
             company=company,
         )
-        self.assertEqual(
-            User.objects.get(pk=user_pk).address_string, "123 Main St Toronto ON Canada"
-        )
+        self.assertEqual(User.objects.get(pk=user_pk).address_string, "123 Main St Toronto ON Canada")
 
         User.objects.filter(pk=user_pk).update(
             address_1=" 123 Main St   ",

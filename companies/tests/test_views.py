@@ -181,9 +181,7 @@ class TestCompanyViews(BaseTestCase):
     def test_remove_user_login_required_post(self):
         self.client.logout()
         response = self.client.post(
-            reverse(
-                "remove_user", kwargs={"email_prefix": self.company_user.email_prefix}
-            ),
+            reverse("remove_user", kwargs={"email_prefix": self.company_user.email_prefix}),
             follow=True,
         )
         self.assertEqual(response.status_code, 200)
@@ -193,9 +191,7 @@ class TestCompanyViews(BaseTestCase):
     def test_remove_user_login_required_get(self):
         self.client.logout()
         response = self.client.get(
-            reverse(
-                "remove_user", kwargs={"email_prefix": self.company_user.email_prefix}
-            ),
+            reverse("remove_user", kwargs={"email_prefix": self.company_user.email_prefix}),
             follow=True,
         )
         self.assertEqual(response.status_code, 200)
@@ -205,9 +201,7 @@ class TestCompanyViews(BaseTestCase):
     def test_remove_user_is_company_owner_post(self):
         self.client.force_login(self.company_user)
         response = self.client.post(
-            reverse(
-                "remove_user", kwargs={"email_prefix": self.company_user.email_prefix}
-            ),
+            reverse("remove_user", kwargs={"email_prefix": self.company_user.email_prefix}),
             follow=True,
         )
         self.assertEqual(response.status_code, 404)
@@ -217,9 +211,7 @@ class TestCompanyViews(BaseTestCase):
     def test_remove_user_is_company_owner_get(self):
         self.client.force_login(self.company_user)
         response = self.client.get(
-            reverse(
-                "remove_user", kwargs={"email_prefix": self.company_user.email_prefix}
-            ),
+            reverse("remove_user", kwargs={"email_prefix": self.company_user.email_prefix}),
             follow=True,
         )
         self.assertEqual(response.status_code, 404)
@@ -280,9 +272,7 @@ class TestCompanyViews(BaseTestCase):
 
     def test_remove_user_get(self):
         response = self.client.get(
-            reverse(
-                "remove_user", kwargs={"email_prefix": self.company_user.email_prefix}
-            ),
+            reverse("remove_user", kwargs={"email_prefix": self.company_user.email_prefix}),
             follow=True,
         )
         self.assertEqual(response.status_code, 200)
@@ -292,9 +282,7 @@ class TestCompanyViews(BaseTestCase):
     def test_remove_user_post(self):
         self.assertFalse(User.objects.filter(is_active=False).exists())
         response = self.client.post(
-            reverse(
-                "remove_user", kwargs={"email_prefix": self.company_user.email_prefix}
-            ),
+            reverse("remove_user", kwargs={"email_prefix": self.company_user.email_prefix}),
             follow=True,
         )
         self.assertEqual(response.status_code, 200)
@@ -321,11 +309,7 @@ class TestCompanyViews(BaseTestCase):
         self.assertTemplateNotUsed(response, "companies/user_profile.html")
 
     def test_user_profile(self):
-        response = self.client.get(
-            reverse(
-                "user_profile", kwargs={"email_prefix": self.company_user.email_prefix}
-            )
-        )
+        response = self.client.get(reverse("user_profile", kwargs={"email_prefix": self.company_user.email_prefix}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "companies/user_profile.html")
         self.assertContains(response, self.company_user.name)
@@ -350,9 +334,7 @@ class TestCompanyViews(BaseTestCase):
     def test_make_owner_get(self):
         self.assertNotIn(self.company_user.pk, self.company.get_owners)
         response = self.client.get(
-            reverse(
-                "make_owner", kwargs={"email_prefix": self.company_user.email_prefix}
-            ),
+            reverse("make_owner", kwargs={"email_prefix": self.company_user.email_prefix}),
             follow=True,
         )
         self.assertEqual(response.status_code, 200)
@@ -361,9 +343,7 @@ class TestCompanyViews(BaseTestCase):
     def test_make_owner_post(self):
         self.assertNotIn(self.company_user.pk, self.company.get_owners)
         response = self.client.post(
-            reverse(
-                "make_owner", kwargs={"email_prefix": self.company_user.email_prefix}
-            ),
+            reverse("make_owner", kwargs={"email_prefix": self.company_user.email_prefix}),
             follow=True,
         )
         self.assertEqual(response.status_code, 200)
@@ -373,9 +353,7 @@ class TestCompanyViews(BaseTestCase):
         self.client.force_login(self.company_user)
         self.assertNotIn(self.company_user.pk, self.company.get_owners)
         response = self.client.post(
-            reverse(
-                "make_owner", kwargs={"email_prefix": self.company_user.email_prefix}
-            ),
+            reverse("make_owner", kwargs={"email_prefix": self.company_user.email_prefix}),
             follow=True,
         )
         self.assertEqual(response.status_code, 404)
@@ -415,9 +393,7 @@ class TestCompanyViews(BaseTestCase):
         self.client.logout()
         self.assertNotIn(self.company_user.pk, self.company.get_owners)
         response = self.client.post(
-            reverse(
-                "make_owner", kwargs={"email_prefix": self.company_user.email_prefix}
-            ),
+            reverse("make_owner", kwargs={"email_prefix": self.company_user.email_prefix}),
             follow=True,
         )
         self.assertEqual(response.status_code, 200)
@@ -427,9 +403,7 @@ class TestCompanyViews(BaseTestCase):
         CompanyOwner.objects.create(company=self.company, owner=self.company_user)
         self.assertIn(self.company_user.pk, self.company.get_owners)
         response = self.client.get(
-            reverse(
-                "remove_owner", kwargs={"email_prefix": self.company_user.email_prefix}
-            ),
+            reverse("remove_owner", kwargs={"email_prefix": self.company_user.email_prefix}),
             follow=True,
         )
         self.assertEqual(response.status_code, 200)
@@ -439,9 +413,7 @@ class TestCompanyViews(BaseTestCase):
         CompanyOwner.objects.create(company=self.company, owner=self.company_user)
         self.assertIn(self.company_user.pk, self.company.get_owners)
         response = self.client.post(
-            reverse(
-                "remove_owner", kwargs={"email_prefix": self.company_user.email_prefix}
-            ),
+            reverse("remove_owner", kwargs={"email_prefix": self.company_user.email_prefix}),
             follow=True,
         )
         self.assertEqual(response.status_code, 200)
@@ -497,3 +469,24 @@ class TestCompanyViews(BaseTestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn(self.user.pk, self.company.get_owners)
+
+    def test_home_feature_toggle_trivia(self):
+        self.assertTrue(self.company.trivia_enabled)
+        response = self.client.get(
+            reverse("company_home"),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "companies/home.html")
+        self.assertContains(response, "Trivia")
+
+        self.company.trivia_enabled = False
+        self.company.save()
+
+        response = self.client.get(
+            reverse("company_home"),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "companies/home.html")
+        self.assertNotContains(response, "Trivia")

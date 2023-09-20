@@ -1,0 +1,55 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}{{ user.company.name }} Trivia{% endblock title %}
+
+{% block content %}
+    <div class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div class="space-y-12">
+                <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
+                    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">{{ user.company }} Trivia</h2>
+                </div>
+                {% for question in questions %}
+                    <form method="POST" action="{% url 'answer_trivia_question' question.pk%}">
+                        {% csrf_token %}
+                    <div class="lg:col-start-3 lg:row-end-1">
+                        <div class="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
+                            <dl class="flex flex-wrap">
+                                <div class="flex-auto pl-6 pt-6">
+                                    <dd class="mt-1 text-base font-semibold leading-6 text-gray-900">{{question.question}}</dd>
+                                </div>
+                                <div class="flex-none self-end px-6 pt-4">
+                                    <dd class="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-600/20">{{question.created | timesince}} ago</dd>
+                                </div>
+                                {% for option in question.options %}
+                                    <div class="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
+                                        {% if option == question.selected_option %}
+                                            <input checked value="{{option.text}}" name="{{question.pk}}" type="radio" {{question.disabled}} value="" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                        {% else %}
+                                            <input value="{{option.text}}" name="{{question.pk}}" type="radio" {{question.disabled}} class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                        {% endif %}
+                                        <dd class="text-sm font-medium leading-6 text-gray-900">{{option.text}}</dd>
+                                    </div>
+                                {% endfor %}
+                            </dl>
+                                <div class="mt-6 border-t border-gray-900/5 px-6 py-6">
+                                    {%if not question.selected_option %}
+                                        <button type="submit"
+                                            class=" inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                            Submit
+                                        </button>
+                                    {% else %}
+                                        <p class="text-sm text-gray-500">{{ question.number_of_answers }} team member{{question.number_of_answers | pluralize}} answered this question with {{question.percentage_of_correct_answers}}% accuracy</p>
+                                    {%endif%}             
+                                </div>
+                        </div>
+                    </div>
+                    </form>
+                {% empty %}
+                    <p class="text-sm text-gray-500">No trivia questions currently available</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
