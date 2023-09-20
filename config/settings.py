@@ -4,15 +4,15 @@ from pathlib import Path
 import environ
 import sentry_sdk
 from pillow_heif import register_heif_opener
+from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 
 from config.sentry import traces_sampler
 
 sentry_sdk.init(
     dsn="https://7293ea960f6a43fba4b4f73fe60bb6bc@o555567.ingest.sentry.io/4503933521231872",
-    integrations=[
-        DjangoIntegration(),
-    ],
+    integrations=[DjangoIntegration(), RedisIntegration(), CeleryIntegration()],
     traces_sampler=traces_sampler,
     send_default_pii=True,
 )
