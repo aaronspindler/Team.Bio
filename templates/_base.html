@@ -55,7 +55,7 @@
                     <div class="ml-10 hidden space-x-8 lg:block">
                         {% if user.is_authenticated %}
                             <a href="{% url 'company_home' %}" class="text-base font-medium text-white hover:text-indigo-50">Home</a>
-                            <a href="{% url 'trivia_home' %}" class="text-base font-medium text-white hover:text-indigo-50">Trivia</a>
+                            {% if user.company.trivia_enabled %}<a href="{% url 'trivia_home' %}" class="text-base font-medium text-white hover:text-indigo-50">Trivia</a>{% endif %}
                             <a href="{% url 'company_pets' %}" class="text-base font-medium text-white hover:text-indigo-50">Pets</a>
 
                             {% if user.pk in user.company.get_owners %}
@@ -88,6 +88,7 @@
             <div class="flex flex-wrap justify-center space-x-6 py-4 lg:hidden">
                 {% if user.is_authenticated %}
                     <a href="{% url 'company_home' %}" class="text-base font-medium text-white hover:text-indigo-50">Home</a>
+                    {% if user.company.trivia_enabled %}<a href="{% url 'trivia_home' %}" class="text-base font-medium text-white hover:text-indigo-50">Trivia</a>{% endif %}
                     <a href="{% url 'company_pets' %}" class="text-base font-medium text-white hover:text-indigo-50">Pets</a>
                     {% if user in user.company.get_owners %}
                         <a href="{% url 'company_settings' %}" class="text-base font-medium text-white hover:text-indigo-50">Settings</a>

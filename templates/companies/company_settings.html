@@ -82,6 +82,18 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <br>
+                                        <div class="space-y-5">
+                                            <div class="relative flex items-start">
+                                                <div class="flex h-6 items-center">
+                                                    {{ company_feature_form.trivia_enabled }}
+                                                </div>
+                                                <div class="ml-3 text-sm leading-6">
+                                                    <label for="comments" class="font-medium text-gray-900">Trivia</label>
+                                                    <p id="comments-description" class="text-gray-500">{{ company_feature_form.trivia_enabled.label }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </fieldset>
                                     {% csrf_token %}
                                 </div>

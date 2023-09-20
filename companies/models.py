@@ -27,6 +27,7 @@ class Company(models.Model):
     # Company Features
     map_enabled = models.BooleanField(default=True)
     links_enabled = models.BooleanField(default=True)
+    trivia_enabled = models.BooleanField(default=True)
 
     # Map Stuff
     midpoint_lat = models.DecimalField(max_digits=12, decimal_places=6, null=True, blank=True)
