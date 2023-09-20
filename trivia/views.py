@@ -27,6 +27,7 @@ def answer_trivia_question(request, question):
         question = get_object_or_404(TriviaQuestion, id=question)
         data = request.POST
         if request.user.company != question.company:
+            print("User is not part of the company")
             return redirect("trivia_home")
         if TriviaUserAnswer.objects.filter(user=request.user, question=question).exists():
             print("User answer already exists")
