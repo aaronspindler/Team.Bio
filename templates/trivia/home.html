@@ -25,9 +25,9 @@
                                 {% for option in question.options %}
                                     <div class="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
                                         {% if option == question.selected_option %}
-                                            <input checked value="{{option.text}}" name="{{question}}" type="radio" {{question.disabled}} value="" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                            <input checked value="{{option.text}}" name="{{question.pk}}" type="radio" {{question.disabled}} value="" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                         {% else %}
-                                            <input value="{{option.text}}" name="{{question}}" type="radio" {{question.disabled}} class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                            <input value="{{option.text}}" name="{{question.pk}}" type="radio" {{question.disabled}} class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                         {% endif %}
                                         <dd class="text-sm font-medium leading-6 text-gray-900">{{option.text}}</dd>
                                     </div>
@@ -40,7 +40,7 @@
                                             Submit
                                         </button>
                                     {% else %}
-                                        <p class="text-sm text-gray-500">{{ question.user_answers.count }} user{{question.user_answers.count | pluralize}} answered this question</p>
+                                        <p class="text-sm text-gray-500">{{ question.number_of_answers }} team member{{question.number_of_answers | pluralize}} answered this question with {{question.percentage_of_correct_answers}}% accuracy</p>
                                     {%endif%}             
                                 </div>
                         </div>

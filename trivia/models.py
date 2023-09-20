@@ -10,6 +10,22 @@ class TriviaQuestion(models.Model):
     def __str__(self):
         return f"{self.question}"
 
+    def number_of_answers(self):
+        return self.user_answers.count()
+
+    def number_of_correct_answers(self):
+        return self.user_answers.filter(selected_option__correct=True).count()
+
+    def percentage_of_correct_answers(self):
+        num_correct = self.number_of_correct_answers()
+        num_answers = self.number_of_answers()
+        if num_answers == 0:
+            return 0
+        return round(num_correct / num_answers * 100, 2)
+
+    def correct_answer(self):
+        return self.question_option.get(correct=True).text
+
     class Meta:
         verbose_name = "Trivia Question"
         verbose_name_plural = "Trivia Questions"

@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404, redirect, render
 
 from trivia.models import TriviaQuestion, TriviaQuestionOption, TriviaUserAnswer
@@ -6,16 +7,16 @@ from trivia.models import TriviaQuestion, TriviaQuestionOption, TriviaUserAnswer
 
 @login_required
 def home(request):
-    questions = TriviaQuestion.objects.filter(company=request.user.company).order_by("-created")
+    company = request.user.company
+    if not company.trivia_enabled:
+        return redirect("company_home")
+    user_answers_prefetch = Prefetch("user_answers", queryset=TriviaUserAnswer.objects.filter(user=request.user), to_attr="user_answer")
+
+    questions = TriviaQuestion.objects.filter(company=company).prefetch_related(Prefetch("question_option", to_attr="options"), user_answers_prefetch).order_by("-created")
 
     for question in questions:
-        question.options = question.question_option.all()
-        question.selected_option = None
-        for answer in question.user_answers.filter(user=request.user):
-            question.selected_option = answer.selected_option
-        question.disabled = ""
-        if question.selected_option:
-            question.disabled = "disabled"
+        question.selected_option = question.user_answer[0].selected_option if question.user_answer else None
+        question.disabled = "disabled" if question.selected_option else ""
 
     return render(request, "trivia/home.html", {"questions": questions})
 
@@ -31,6 +32,6 @@ def answer_trivia_question(request, question):
         if TriviaUserAnswer.objects.filter(user=request.user, question=question).exists():
             print("User answer already exists")
             return redirect("trivia_home")
-        answer = get_object_or_404(TriviaQuestionOption, text=data.get(question.question), question=question)
+        answer = get_object_or_404(TriviaQuestionOption, text=data.get(str(question.pk)), question=question)
         TriviaUserAnswer.objects.create(user=request.user, question=question, selected_option=answer)
         return redirect("trivia_home")
