@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from utils.models import AdminEmail, AdminPhoneNumber, Email, TextMessage
+from utils.models import AdminEmail, AdminPhoneNumber, Email, GPTModel, TextMessage
 
 
 class EmailAdmin(admin.ModelAdmin):
@@ -26,3 +26,4 @@ admin.site.register(TextMessage, TextMessageAdmin)
 admin.site.register(Email, EmailAdmin)
 admin.site.register(AdminPhoneNumber)
 admin.site.register(AdminEmail)
+admin.site.register(GPTModel)
