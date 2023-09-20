@@ -20,15 +20,7 @@ from companies.forms import (
     LocationForm,
     TeamForm,
 )
-from companies.models import (
-    Company,
-    CompanyOwner,
-    Invite,
-    Link,
-    Location,
-    Team,
-    TriviaQuestion,
-)
+from companies.models import Company, CompanyOwner, Invite, Link, Location, Team
 from utils.models import Email
 
 
@@ -426,9 +418,3 @@ def home(request):
 def pets(request):
     company_pets = Pet.objects.filter(owner__company=request.user.company).order_by("name").select_related("pet_type", "owner")
     return render(request, "companies/pets.html", {"pets": company_pets})
-
-
-@login_required
-def trivia(request):
-    questions = TriviaQuestion.objects.filter(company=request.user.company)
-    return render(request, "companies/trivia.html", {"questions": questions})

@@ -4,7 +4,8 @@ import random
 import openai
 from django.conf import settings
 
-from companies.models import Company, TriviaQuestion, TriviaQuestionOption
+from companies.models import Company
+from trivia.models import TriviaQuestion, TriviaQuestionOption
 
 openai.api_key = settings.OPENAI_KEY
 

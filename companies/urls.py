@@ -22,7 +22,6 @@ from companies.views import (
     remove_owner,
     remove_user,
     revoke_invite,
-    trivia,
     user_profile,
 )
 
@@ -55,6 +54,4 @@ urlpatterns = [
     path("profile/pet/add", add_pet, name="add_pet"),
     path("profile/pet/<str:pk>/delete", delete_pet, name="delete_pet"),
     path("profile/pet/<str:pk>/update", UpdatePetView.as_view(), name="update_pet"),
-    # Trivia
-    path("trivia", trivia, name="company_trivia"),
 ]

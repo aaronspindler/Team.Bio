@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "companies",
     "utils",
     "billing",
+    "trivia",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
