@@ -6,6 +6,7 @@ class TriviaQuestion(models.Model):
     updated = models.DateTimeField(auto_now=True)
     company = models.ForeignKey("companies.Company", related_name="trivia_questions", on_delete=models.CASCADE)
     question = models.CharField(max_length=500)
+    published = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.question}"

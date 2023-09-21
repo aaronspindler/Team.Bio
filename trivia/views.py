@@ -13,7 +13,7 @@ def home(request):
         return redirect("company_home")
     user_answers_prefetch = Prefetch("user_answers", queryset=TriviaUserAnswer.objects.filter(user=request.user), to_attr="user_answer")
 
-    questions = TriviaQuestion.objects.filter(company=company).prefetch_related(Prefetch("question_option", to_attr="options"), user_answers_prefetch).order_by("-created")
+    questions = TriviaQuestion.objects.filter(company=company, published=True).prefetch_related(Prefetch("question_option", to_attr="options"), user_answers_prefetch).order_by("-created")
 
     for question in questions:
         question.selected_option = question.user_answer[0].selected_option if question.user_answer else None
@@ -25,7 +25,7 @@ def home(request):
 @login_required
 def answer_trivia_question(request, question):
     if request.method == "POST":
-        question = get_object_or_404(TriviaQuestion, id=question)
+        question = get_object_or_404(TriviaQuestion, id=question, published=True)
         data = request.POST
         if request.user.company != question.company:
             print("User is not part of the company")

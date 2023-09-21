@@ -5,9 +5,15 @@ from trivia.models import TriviaQuestion, TriviaQuestionOption, TriviaUserAnswer
 
 @admin.register(TriviaQuestion)
 class TriviaQuestionAdmin(admin.ModelAdmin):
-    list_display = ["company", "question"]
-    list_filter = ["company"]
+    list_display = ["company", "question", "published"]
+    list_filter = ["company", "published"]
     model = TriviaQuestion
+
+    actions = ["publish"]
+
+    @admin.action(description="Publish trivia question(s)")
+    def publish(self, request, queryset):
+        queryset.update(published=True)
 
 
 @admin.register(TriviaQuestionOption)

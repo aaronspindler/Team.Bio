@@ -11,6 +11,7 @@ class TriviaQuestionFactory(factory.django.DjangoModelFactory):
 
     company = factory.SubFactory(CompanyFactory)
     question = factory.Faker("paragraph", nb_sentences=1)
+    published = True
 
 
 class TriviaQuestionOptionFactory(factory.django.DjangoModelFactory):
