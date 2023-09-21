@@ -3,18 +3,21 @@ from pathlib import Path
 
 import environ
 import sentry_sdk
+from pillow_heif import register_heif_opener
+from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 
 from config.sentry import traces_sampler
 
 sentry_sdk.init(
     dsn="https://7293ea960f6a43fba4b4f73fe60bb6bc@o555567.ingest.sentry.io/4503933521231872",
-    integrations=[
-        DjangoIntegration(),
-    ],
+    integrations=[DjangoIntegration(), RedisIntegration(), CeleryIntegration()],
     traces_sampler=traces_sampler,
     send_default_pii=True,
 )
+
+register_heif_opener()
 
 env = environ.Env(
     # set casting, default value
@@ -27,10 +30,17 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG", False)
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 PRICE_PER_USER = 100
 DEFAULT_TRIAL_DAYS = 30
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "team.bio", "www.team.bio"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "team.bio",
+    "www.team.bio",
+]
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
@@ -54,12 +64,14 @@ INSTALLED_APPS = [
     "storages",
     "crispy_forms",
     "crispy_tailwind",
+    "colorfield",
     # Local
     "accounts",
     "pages",
     "companies",
     "utils",
     "billing",
+    "trivia",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
@@ -76,6 +88,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -92,6 +105,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "config.context_processors.export_required_vars",
             ],
         },
     },
@@ -101,13 +115,19 @@ DATABASES = {"default": env.db()}
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": env("REDIS_URL"),
         "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "CONNECTION_POOL_KWARGS": {"ssl_cert_reqs": None},
         },
-    },
+        "KEY_PREFIX": "teambio",
+    }
 }
+
+# Celery
+CELERY_BROKER_URL = env("REDIS_URL")
+CELERY_ALWAYS_EAGER = DEBUG
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -182,6 +202,9 @@ SOCIALACCOUNT_PROVIDERS = {
         "SCOPE": [
             "profile",
             "email",
+            # "https://www.googleapis.com/auth/calendar.readonly",
+            # "https://www.googleapis.com/auth/calendar.events.readonly",
+            # "https://www.googleapis.com/auth/calendar.events.freebusy",
         ],
         "AUTH_PARAMS": {
             "access_type": "online",
@@ -206,7 +229,17 @@ STRIPE_ENDPOINT_SECRET = env("STRIPE_ENDPOINT_SECRET")
 # Google Maps
 GOOGLE_MAPS_API_KEY = env("GOOGLE_MAPS_API_KEY")
 
+# Mapbox
 MAPBOX_API_KEY = env("MAPBOX_API_KEY")
+
+# OpenAI
+OPENAI_KEY = env("OPENAI_KEY")
+
+# Unsplash
+try:
+    UNSPLASH_ACCESS_KEY = env("UNSPLASH_ACCESS_KEY")
+except Exception:
+    UNSPLASH_ACCESS_KEY = None
 
 if DEBUG:
     BASE_URL = "http://localhost:8000/"

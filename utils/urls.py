@@ -1,7 +1,7 @@
 from django.urls import path
 
-from utils.views import test_template
+from utils.views import test_code
 
 urlpatterns = [
-    path("test-template", test_template, name="test-template"),
+    path("test-code", test_code, name="test-code"),
 ]

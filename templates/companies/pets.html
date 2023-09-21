@@ -1,0 +1,37 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}{{ user.company.name }} Pets{% endblock title %}
+
+{% block content %}
+    <div class="bg-white">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div class="space-y-12">
+                <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
+                    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">{{ user.company }} Pets</h2>
+                </div>
+                <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    {% for pet in pets %}
+                        <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
+                            <div class="flex flex-1 flex-col p-8">
+                                <div class="aspect-w-4 aspect-h-3">
+                                    <img class="aspect-[3/2] w-full object-contain" src="{{ pet.picture_url }}" alt="">
+                                </div>
+
+                                <div class="space-y-2">
+                                    <a href="{% url 'user_profile' pet.owner.email_prefix %}">
+                                        <div class="space-y-1 text-lg font-medium leading-6">
+                                            <br>
+                                            <h3>{{ pet.name }}</h3>
+                                            {% if pet.pet_type %}<p class="text-indigo-600">{{ pet.pet_type }}</p>{% endif %}
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

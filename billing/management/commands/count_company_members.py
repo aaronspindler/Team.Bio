@@ -10,6 +10,4 @@ class Command(BaseCommand):
         for company in Company.objects.all():
             num_users = User.objects.filter(company=company).count()
             CompanyMemberCount.objects.create(company=company, num_users=num_users)
-            print(
-                f"Created CompanyMemberCount for {company.name} with {num_users} user(s)"
-            )
+            print(f"Created CompanyMemberCount for {company.name} with {num_users} user(s)")

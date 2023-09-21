@@ -9,7 +9,7 @@
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <div class="text-center">
                 <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">Simple no-tricks pricing</h2>
-                <p class="mt-4 text-xl text-gray-600">If you're not satisfied, contact us and we'll send you a refund.</p>
+                <p class="mt-4 text-xl text-gray-600">Looking for a risk-free way to try out our product? Look no further than our {{ trial_days }}-day free trial!</p>
             </div>
         </div>
     </div>
@@ -70,14 +70,14 @@
                         {#                            </div>#}
                         {#                        </div>#}
                         <div class="bg-gray-50 py-8 px-6 text-center lg:flex lg:flex-shrink-0 lg:flex-col lg:justify-center lg:p-12">
-                            <p class="text-lg font-medium leading-6 text-gray-900">Per team member, per month</p>
+                            <p class="text-lg font-medium leading-6 text-gray-900">After trial</p>
                             <div class="mt-4 flex items-center justify-center text-5xl font-bold tracking-tight text-gray-900">
                                 <span>${{ price|floatformat:2 }}</span>
-                                <span class="ml-3 text-xl font-medium tracking-normal text-gray-500">USD</span>
+                                <span class="ml-3 text-xl font-medium tracking-normal text-gray-500">USD per member, per month</span>
                             </div>
                             <div class="mt-6">
                                 <div class="rounded-md shadow">
-                                    <a href="{% url 'account_signup' %}" class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-3 text-base font-medium text-white hover:bg-indigo-700">Get Started</a>
+                                    <a href="{% url 'account_login' %}" class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-3 text-base font-medium text-white hover:bg-indigo-700">Get Started</a>
                                 </div>
                             </div>
                         </div>

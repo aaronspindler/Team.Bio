@@ -3,17 +3,19 @@ from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 
-from config.sitemaps import PagesSitemap
+from config.sitemaps import BlogSitemap, PagesSitemap
 from config.views import health, robotstxt
 
 sitemaps = {
     "pages": PagesSitemap,
+    "blog": BlogSitemap,
 }
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("company/", include("companies.urls")),
+    path("trivia/", include("trivia.urls")),
     path("billing/", include("billing.urls")),
     path("system/health", health, name="system_health"),
     path("robots.txt", robotstxt, name="robotstxt"),

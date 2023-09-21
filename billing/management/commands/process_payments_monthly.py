@@ -16,22 +16,20 @@ class Command(BaseCommand):
             print(f"{company} (PK: {company.pk})")
             if company.in_trial_period:
                 print("\t In trial period")
+            elif company.test_company:
+                print("\t Test company, not invoicing")
+            elif company.billing_disabled:
+                print("\t Billing disabled, not invoicing")
             else:
                 # Calculate the average number of users the company had in the last 30 days
-                average_num_users = int(
-                    CompanyMemberCount.objects.filter(
-                        company=company, created__gt=timezone.now() - timedelta(days=30)
-                    ).aggregate(Avg("num_users"))["num_users__avg"]
-                )
+                average_num_users = int(CompanyMemberCount.objects.filter(company=company, created__gt=timezone.now() - timedelta(days=30)).aggregate(Avg("num_users"))["num_users__avg"])
                 print(f"\t Average of {average_num_users} users in the last 30 days")
                 print(f"\t Current number of users: {company.get_active_users.count()}")
 
                 amount_to_bill_int = average_num_users * settings.PRICE_PER_USER
-                print(
-                    f"\t Amount to bill: ${round(Decimal(amount_to_bill_int / 100), 2)}"
-                )
+                print(f"\t Amount to bill: ${round(Decimal(amount_to_bill_int / 100), 2)}")
 
-                billing_user = company.get_billing_users
+                billing_user = company.get_billing_user
                 if not billing_user:
                     print("\t Has no billing user")
                     # Create a failed payment attempt
@@ -43,9 +41,5 @@ class Command(BaseCommand):
                     )
                 else:
                     print(f"\t Billing user: {billing_user} (PK: {billing_user.pk})")
-                    # Invoice the customer
-                    if company.test_company:
-                        print("\t Test company, not invoicing")
-                    else:
-                        billing_user.invoice_customer(average_num_users)
-                        print(f"\t Invoiced customer for {average_num_users} users")
+                    billing_user.invoice_customer(average_num_users)
+                    print(f"\t Invoiced customer for {average_num_users} users")

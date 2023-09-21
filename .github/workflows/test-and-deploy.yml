@@ -1,9 +1,9 @@
 name: Test and Deploy
 
-on: [ push ]
+on: [ push, pull_request ]
 
 env:
-  SECRET_KEY: ${{secrets.SECRET_KEY}}
+  SECRET_KEY: "FAKE_SECRET_KEY"
   DATABASE_URL: ${{secrets.DATABASE_URL}}
   REDIS_URL: ${{secrets.REDIS_URL}}
   AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
@@ -14,10 +14,18 @@ env:
   STRIPE_ENDPOINT_SECRET: ${{secrets.STRIPE_ENDPOINT_SECRET}}
   GOOGLE_MAPS_API_KEY: ${{secrets.GOOGLE_MAPS_API_KEY}}
   MAPBOX_API_KEY: ${{secrets.MAPBOX_API_KEY}}
+  OPENAI_KEY: ${{secrets.OPENAI_KEY}}
 
 jobs:
   test:
     services:
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
       postgres:
         image: postgres
         env:
@@ -49,6 +57,7 @@ jobs:
       - name: Run Tests
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/teambio
+          REDIS_URL: redis://redis:6379
         run: |
           coverage run --source='.' manage.py test --no-input
       - name: Upload coverage reports to Codecov
@@ -71,7 +80,11 @@ jobs:
     needs: [test, lint]
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Deploy Webhook
+      - name: Deploy App Webhook
         uses: joelwmale/webhook-action@master
         with:
-          url: ${{ secrets.RENDER_DEPLOY_HOOK }}
+          url: ${{ secrets.RENDER_APP_DEPLOY_HOOK }}
+      - name: Deploy Celery Webhook
+        uses: joelwmale/webhook-action@master
+        with:
+          url: ${{ secrets.RENDER_CELERY_DEPLOY_HOOK }}

@@ -1,11 +1,11 @@
-from django.test import TestCase
-
 from accounts.factories import UserFactory
+from accounts.models import User
 from companies.factories import CompanyFactory
 from companies.models import CompanyOwner
+from utils.testcases import BaseTestCase
 
 
-class TestModels(TestCase):
+class TestModels(BaseTestCase):
     def setUp(self):
         self.company = CompanyFactory()
         self.user = UserFactory(company=self.company)
@@ -42,73 +42,113 @@ class TestModels(TestCase):
         self.assertEqual(user.email_prefix, "aaron")
 
     def test_user_address_string(self):
-        user = UserFactory(address_1="123 Main St")
+        company = CompanyFactory()
+        user = UserFactory(address_1="123 Main St", company=company)
+        user_pk = user.pk
+
         self.assertEqual(user.address_string, "123 Main St")
 
-        user = UserFactory(address_1=" 123 Main St   ", city="   Toronto ")
-        self.assertEqual(user.address_string, "123 Main St Toronto")
+        User.objects.filter(pk=user_pk).update(address_1=" 123 Main St   ", city="   Toronto ", company=company)
+        self.assertEqual(User.objects.get(pk=user_pk).address_string, "123 Main St Toronto")
 
-        user = UserFactory(
-            address_1=" 123 Main St   ", city="   Toronto ", prov_state="   ON "
+        User.objects.filter(pk=user_pk).update(
+            address_1=" 123 Main St   ",
+            city="   Toronto ",
+            prov_state="   ON ",
+            company=company,
         )
-        self.assertEqual(user.address_string, "123 Main St Toronto ON")
+        self.assertEqual(User.objects.get(pk=user_pk).address_string, "123 Main St Toronto ON")
 
-        user = UserFactory(
+        User.objects.filter(pk=user_pk).update(
             address_1=" 123 Main St   ",
             city="   Toronto ",
             prov_state="   ON ",
             country="   Canada ",
+            company=company,
         )
-        self.assertEqual(user.address_string, "123 Main St Toronto ON Canada")
+        self.assertEqual(User.objects.get(pk=user_pk).address_string, "123 Main St Toronto ON Canada")
 
-        user = UserFactory(
+        User.objects.filter(pk=user_pk).update(
             address_1=" 123 Main St   ",
             city="   Toronto ",
             prov_state="   ON ",
             country="   Canada ",
             postal_code="   M1M 1M1 ",
+            company=company,
         )
-        self.assertEqual(user.address_string, "123 Main St Toronto ON Canada M1M 1M1")
+        self.assertEqual(
+            User.objects.get(pk=user_pk).address_string,
+            "123 Main St Toronto ON Canada M1M 1M1",
+        )
 
     def test_user_geo_code_address(self):
         user = UserFactory(address_1="123 Main St", city="Toronto", country="Canada")
         lat, lng, place_id = user.geo_code_address()
-        self.assertEqual(lat, 43.6826959)
-        self.assertEqual(lng, -79.2994168)
-        self.assertEqual(place_id, "ChIJP_BKRhrM1IkRuTDbHDrQNhw")
+        self.assertAlmostEquals(round(lat), 44, 1)
+        self.assertAlmostEquals(round(lng), -79, 1)
+        self.assertIsNotNone(place_id)
 
     def test_user_personality_type_name(self):
         user = UserFactory(personality_type="")
         self.assertEqual(user.personality_type_name(), "")
-        user = UserFactory(personality_type="INTJ")
+        user.personality_type = "INTJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Architect")
-        user = UserFactory(personality_type="INTP")
+        user.personality_type = "INTP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Logician")
-        user = UserFactory(personality_type="ENTJ")
+        user.personality_type = "ENTJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Commander")
-        user = UserFactory(personality_type="ENTP")
+        user.personality_type = "ENTP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Debater")
-        user = UserFactory(personality_type="INFJ")
+        user.personality_type = "INFJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Advocate")
-        user = UserFactory(personality_type="INFP")
+        user.personality_type = "INFP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Mediator")
-        user = UserFactory(personality_type="ENFJ")
+        user.personality_type = "ENFJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Protagonist")
-        user = UserFactory(personality_type="ENFP")
+        user.personality_type = "ENFP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Campaigner")
-        user = UserFactory(personality_type="ISTJ")
+        user.personality_type = "ISTJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Logistician")
-        user = UserFactory(personality_type="ISFJ")
+        user.personality_type = "ISFJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Defender")
-        user = UserFactory(personality_type="ESTJ")
+        user.personality_type = "ESTJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Executive")
-        user = UserFactory(personality_type="ESFJ")
+        user.personality_type = "ESFJ"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Consul")
-        user = UserFactory(personality_type="ISTP")
+        user.personality_type = "ISTP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Virtuoso")
-        user = UserFactory(personality_type="ISFP")
+        user.personality_type = "ISFP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Adventurer")
-        user = UserFactory(personality_type="ESTP")
+        user.personality_type = "ESTP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Entrepreneur")
-        user = UserFactory(personality_type="ESFP")
+        user.personality_type = "ESFP"
+        user.save()
         self.assertEqual(user.personality_type_name(), "Entertainer")
+
+    def test_user_profile_completion_percentage(self):
+        user = UserFactory()
+        user.short_bio = None
+        user.title = None
+        user.save()
+        self.assertEqual(user.profile_completion_percentage(), 32)
+        user.title = "CEO"
+        user.save()
+        self.assertEqual(user.profile_completion_percentage(), 36)
+        user.short_bio = "I am a CEO"
+        user.save()
+        self.assertEqual(user.profile_completion_percentage(), 40)

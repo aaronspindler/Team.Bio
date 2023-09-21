@@ -1,14 +1,49 @@
+from decimal import Decimal
+
 import googlemaps
 from allauth.account.signals import user_signed_up
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.dispatch import receiver
+from django.urls import reverse
 
 from accounts.utils import (
     attempt_connect_user_to_a_company,
     attempt_connect_user_with_invites,
+    merge_user,
 )
+from utils.images import get_image_from_url
+from utils.tasks import create_admin_sms
+
+
+class PetType(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ["name"]
+
+
+class Pet(models.Model):
+    name = models.CharField(max_length=200)
+    nickname = models.CharField(max_length=400, blank=True, null=True)
+    pet_type = models.ForeignKey(PetType, on_delete=models.CASCADE, blank=True, null=True)
+
+    picture = models.ImageField(blank=True, null=True, upload_to="pets/")
+
+    owner = models.ForeignKey("accounts.User", related_name="pets", on_delete=models.CASCADE)
+
+    @property
+    def picture_url(self):
+        if self.picture:
+            return self.picture.url
+        return "https://team-bio.s3.amazonaws.com/public/pets/dog-cat-transparent.jpg"
+
+    def __str__(self):
+        return self.name
 
 
 class User(AbstractUser):
@@ -23,17 +58,11 @@ class User(AbstractUser):
     email_root = models.CharField(max_length=250)
 
     # Profile
-    profile_picture = models.ImageField(
-        blank=True, null=True, upload_to="profile_picture/"
-    )
-    short_bio = models.CharField(max_length=240, blank=True, null=True)
+    profile_picture = models.ImageField(blank=True, null=True, upload_to="profile_picture/")
+    short_bio = models.TextField(blank=True, null=True)
     title = models.CharField(max_length=240, blank=True, null=True)
-    general_location = models.ForeignKey(
-        "companies.Location", on_delete=models.CASCADE, blank=True, null=True
-    )
-    team = models.ForeignKey(
-        "companies.Team", on_delete=models.CASCADE, blank=True, null=True
-    )
+    general_location = models.ForeignKey("companies.Location", on_delete=models.CASCADE, blank=True, null=True)
+    team = models.ForeignKey("companies.Team", on_delete=models.CASCADE, blank=True, null=True)
 
     PERSONALITY_TYPE_CHOICES = (
         ("INTJ", "INTJ"),
@@ -53,9 +82,7 @@ class User(AbstractUser):
         ("ESTP", "ESTP"),
         ("ESFP", "ESFP"),
     )
-    personality_type = models.CharField(
-        max_length=240, blank=True, null=True, choices=PERSONALITY_TYPE_CHOICES
-    )
+    personality_type = models.CharField(max_length=240, blank=True, null=True, choices=PERSONALITY_TYPE_CHOICES)
 
     CHINESE_ZODIAC_CHOICES = (
         ("Rat", "Rat"),
@@ -71,9 +98,7 @@ class User(AbstractUser):
         ("Dog", "Dog"),
         ("Pig", "Pig"),
     )
-    chinese_zodiac = models.CharField(
-        max_length=240, blank=True, null=True, choices=CHINESE_ZODIAC_CHOICES
-    )
+    chinese_zodiac = models.CharField(max_length=240, blank=True, null=True, choices=CHINESE_ZODIAC_CHOICES)
 
     ZODIAC_SIGN_CHOICES = (
         ("Aries", "Aries"),
@@ -89,9 +114,7 @@ class User(AbstractUser):
         ("Aquarius", "Aquarius"),
         ("Pisces", "Pisces"),
     )
-    zodiac_sign = models.CharField(
-        max_length=240, blank=True, null=True, choices=ZODIAC_SIGN_CHOICES
-    )
+    zodiac_sign = models.CharField(max_length=240, blank=True, null=True, choices=ZODIAC_SIGN_CHOICES)
 
     favourite_food = models.TextField(blank=True, null=True)
     favourite_movie = models.TextField(blank=True, null=True)
@@ -103,8 +126,8 @@ class User(AbstractUser):
 
     # Address Info
     place_id = models.TextField(blank=True, null=True)
-    lat = models.TextField(blank=True, null=True)
-    lng = models.TextField(blank=True, null=True)
+    lat = models.DecimalField(max_digits=12, decimal_places=6, null=True, blank=True)
+    lng = models.DecimalField(max_digits=12, decimal_places=6, null=True, blank=True)
 
     address_1 = models.CharField(max_length=200, blank=True, null=True)
     city = models.CharField(max_length=200, blank=True, null=True)
@@ -114,6 +137,24 @@ class User(AbstractUser):
 
     #   Non-User Editable
     start_date = models.DateField(blank=True, null=True)
+
+    def answer_blob(self):
+        return {
+            "name": self.get_full_name(),
+            "title": self.title if self.title else "",
+            "location": self.general_location.name if self.general_location else "",
+            "team": self.team.name if self.team else "",
+            "personality_type": f"{self.personality_type_name()} ({self.personality_type})" if self.personality_type else "",
+            "chinese_zodiac": self.chinese_zodiac if self.chinese_zodiac else "",
+            "zodiac_sign": self.zodiac_sign if self.zodiac_sign else "",
+            "favourite_food": self.favourite_food if self.favourite_food else "",
+            "favourite_movie": self.favourite_movie if self.favourite_movie else "",
+            "favourite_travel_destination": self.favourite_travel_destination if self.favourite_travel_destination else "",
+        }
+
+    @property
+    def profile_url(self):
+        return reverse("user_profile", kwargs={"email_prefix": self.email_prefix})
 
     @property
     def profile_picture_url(self):
@@ -138,7 +179,6 @@ class User(AbstractUser):
 
         # Geocode the address
         self.lat, self.lng, self.place_id = self.geo_code_address()
-
         super().save(*args, **kwargs)
 
     @property
@@ -170,8 +210,8 @@ class User(AbstractUser):
         address = self.address_string
         geocode_result = gmaps.geocode(address)
         if geocode_result:
-            lat = geocode_result[0]["geometry"]["location"]["lat"]
-            lng = geocode_result[0]["geometry"]["location"]["lng"]
+            lat = Decimal(geocode_result[0]["geometry"]["location"]["lat"])
+            lng = Decimal(geocode_result[0]["geometry"]["location"]["lng"])
             place_id = geocode_result[0]["place_id"]
 
         return lat, lng, place_id
@@ -199,6 +239,37 @@ class User(AbstractUser):
             return types[self.personality_type]
         return ""
 
+    def profile_completion_percentage(self):
+        percentage = 0
+        fields = [
+            self.first_name,
+            self.last_name,
+            self.title,
+            self.profile_picture,
+            self.short_bio,
+            self.general_location,
+            self.team,
+            self.personality_type,
+            self.zodiac_sign,
+            self.chinese_zodiac,
+            self.favourite_food,
+            self.favourite_movie,
+            self.favourite_travel_destination,
+            self.linkedin,
+            self.twitter,
+            self.github,
+            self.address_1,
+            self.city,
+            self.prov_state,
+            self.postal_code,
+            self.country,
+        ]
+        percentage_per_field = int(100 / len(fields))
+        for field in fields:
+            if field:
+                percentage += percentage_per_field
+        return percentage
+
     @property
     def name(self):
         return f"{self.first_name} {self.last_name}"
@@ -209,8 +280,25 @@ class User(AbstractUser):
             return True
         return False
 
-    # This is a signal receiver to try to connect a user to an existing company
+    def set_social_profile_picture(self):
+        # If this fails it is fine, the user can set their profile picture manually, but I don't want this to block signup
+        try:
+            social_accounts = self.socialaccount_set.all()
+            if social_accounts:
+                social_account = social_accounts[0]
+                account_type = social_account.provider
+                image_url = social_accounts[0].get_avatar_url()
+                if image_url:
+                    data = get_image_from_url(image_url)
+                    self.profile_picture.save(f"social_{account_type}_{self.username}.jpg", data, save=True)
+        except Exception as e:
+            print(e)
+
+    # This is a signal receiver to handle actions after a user signs up
     @receiver(user_signed_up)
     def allauth_user_signed_up(sender, request, user, **kwargs):
-        attempt_connect_user_with_invites(user)
-        attempt_connect_user_to_a_company(user)
+        create_admin_sms.delay(f"TeamBio New User Signed Up: {user.email}")
+        merge_user(user.pk)
+        user.set_social_profile_picture()
+        attempt_connect_user_with_invites(user.pk)
+        attempt_connect_user_to_a_company(user.pk)

@@ -2,43 +2,51 @@
 {% load static %}
 
 {% block title %}{{ user.company }} Settings{% endblock title %}
+{% block javascript %}
+    <script src="https://js.stripe.com/v3/"></script>
+{% endblock javascript %}
 {% block content %}
     <main class="mx-auto max-w-6xl px-4 pb-12 lg:pb-16">
         <div class="space-y-6">
             <div>
                 <h1 class="text-3xl font-bold leading-6 text-gray-900">{{ user.company }} Settings</h1>
             </div>
-            <div class="sm:flex sm:items-center">
-                <div class="sm:flex-auto">
-                    <h2 class="text-lg font-medium text-gray-900">Billing</h2>
-                </div>
-            </div>
-            <div class="flex flex-col">
-                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                        {% if not user.company.get_billing_users %}
-                            <button type="submit" id="subscribeButton"
-                                    class=" inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                                Subscribe
-                            </button>
-                            {% if user.company.in_trial_period %}
-                                <p class="mt-2 ml-3 text-sm text-gray-700">
-                                    You have {{ user.company.days_left_in_trial }} days left in your trial. You can upgrade to a paid plan at any time.
-                                <p>
-                                    {% else %}
-                                <p class="mt-2 ml-3 text-sm text-red-600">
-                                    Your trial has ended. You must subscribe to continue using Team Bio!
-                                </p>
-                            {% endif %}
-
-                        {% else %}
-                            <a type="button" href="https://billing.stripe.com/p/login/4gw8zp2YTeZmcta288"
-                               class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Manage
-                                Billing</a>
-                        {% endif %}
+            {% if not user.company.billing_disabled %}
+                <div class="sm:flex sm:items-center">
+                    <div class="sm:flex-auto">
+                        <h2 class="text-lg font-medium text-gray-900">Billing</h2>
                     </div>
                 </div>
-            </div>
+                <div class="flex flex-col">
+                    <div class="-my-8 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                        <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                            {% if not billing_email %}
+                                <button type="submit" id="subscribeButton"
+                                        class=" inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                    Subscribe
+                                </button>
+                                {% if user.company.in_trial_period %}
+                                    <p class="mt-2 ml-3 text-sm text-gray-700">
+                                        You have {{ user.company.days_left_in_trial }} days left in your trial. You can upgrade to a paid plan at any time.
+                                    <p>
+                                        {% else %}
+                                    <p class="mt-2 ml-3 text-sm text-red-600">
+                                        Your trial has ended. You must subscribe to continue using Team Bio!
+                                    </p>
+                                {% endif %}
+                            {% else %}
+                                <p class="mt-1 mb-1 ml-1 text-sm text-gray-700">
+                                    {{ billing_email }} is the billing contact for your account.
+                                <p>
+                                <a type="button" href="{{ manage_billing_link }}"
+                                   class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Manage
+                                    Billing</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <br>
+            {% endif %}
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
                     <h2 class="text-lg font-medium text-gray-900">Features</h2>
@@ -59,6 +67,30 @@
                                                 <div class="ml-3 text-sm leading-6">
                                                     <label for="comments" class="font-medium text-gray-900">Map</label>
                                                     <p id="comments-description" class="text-gray-500">{{ company_feature_form.map_enabled.label }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="space-y-5">
+                                            <div class="relative flex items-start">
+                                                <div class="flex h-6 items-center">
+                                                    {{ company_feature_form.links_enabled }}
+                                                </div>
+                                                <div class="ml-3 text-sm leading-6">
+                                                    <label for="comments" class="font-medium text-gray-900">Links</label>
+                                                    <p id="comments-description" class="text-gray-500">{{ company_feature_form.links_enabled.label }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="space-y-5">
+                                            <div class="relative flex items-start">
+                                                <div class="flex h-6 items-center">
+                                                    {{ company_feature_form.trivia_enabled }}
+                                                </div>
+                                                <div class="ml-3 text-sm leading-6">
+                                                    <label for="comments" class="font-medium text-gray-900">Trivia</label>
+                                                    <p id="comments-description" class="text-gray-500">{{ company_feature_form.trivia_enabled.label }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -121,8 +153,7 @@
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ company_user.email }}</td>
                                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                                 {% if company_user != user %}
-                                                    <a href="{% url 'remove_user' company_user.email_prefix %}" class="text-red-600 hover:text-red-900">Remove</a>
-                                                    {% if company_user in owners %}
+                                                    {% if company_user.pk in owners %}
                                                         <form method="post" action="{% url 'remove_owner' company_user.email_prefix %}">
                                                             {% csrf_token %}
                                                             <button type="submit"
@@ -131,6 +162,7 @@
                                                             </button>
                                                         </form>
                                                     {% else %}
+                                                        <a href="{% url 'remove_user' company_user.email_prefix %}" class="text-red-600 hover:text-red-900">Remove</a>
                                                         <form method="post" action="{% url 'make_owner' company_user.email_prefix %}">
                                                             {% csrf_token %}
                                                             <button type="submit"
@@ -178,10 +210,53 @@
                                     {% for location in locations %}
                                         <tr>
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ location.name }}</td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ location.user_set.count }}</td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ location.user__count }}</td>
 
                                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                                 <a href="{% url 'update_location' location.pk %}" class="text-indigo-600 hover:text-indigo-900">Update<span class="sr-only">, {{ location.name }}</span></a>
+                                                <br>
+                                                <button type="button" class="team-delete-button text-red-600 hover:text-red-900" data-modal-toggle="delete-location-{{ location.id }}">Delete</button>
+                                                <div id="delete-location-{{ location.id }}" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
+                                                    <div class="relative w-full h-full max-w-md md:h-auto">
+                                                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 w-fit">
+                                                            <button
+                                                                    type="button"
+                                                                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                                                                    data-modal-hide="delete-location-{{ location.id }}"
+                                                            >
+                                                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                                          clip-rule="evenodd"></path>
+                                                                </svg>
+                                                                <span class="sr-only">Close modal</span>
+                                                            </button>
+                                                            <div class="p-6 text-center">
+                                                                <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                                </svg>
+                                                                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this location: {{ location.name }} ?</h3>
+                                                                <div class="flex justify-around">
+                                                                    <button
+                                                                            data-modal-hide="delete-location-{{ location.id }}"
+                                                                            class="close-modal inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2
+                                                                            text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500
+                                                                            focus:ring-offset-2 sm:w-auto"
+                                                                    >Close
+                                                                    </button>
+                                                                    <form method="post" action="{% url 'delete_location' location.id %}">
+                                                                        {% csrf_token %}
+                                                                        <button type="submit"
+                                                                                class="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600
+                                                                                    px-4 py-2 text-sm font-medium shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2
+                                                                                    focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto text-white"
+                                                                        >Yes, I'm sure
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -211,6 +286,7 @@
                                     <tr>
                                         <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
                                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Number of Employees</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Color</th>
                                         <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                                             <span class="sr-only">Controls</span>
                                         </th>
@@ -220,9 +296,101 @@
                                     {% for team in teams %}
                                         <tr>
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ team.name }}</td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ team.user_set.count }}</td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ team.user__count }}</td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500" style="color: {{ team.color }}">{{ team.color }}</td>
                                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                <a href="{% url 'update_team' team.pk %}" class="text-indigo-600 hover:text-indigo-900">Update<span class="sr-only">, {{ team.name }}</span></a>
+                                                <a href="{% url 'update_team' team.pk %}" class="text-indigo-600 hover:text-indigo-900">Update</a>
+                                                <br>
+                                                <button type="button" class="text-red-600 hover:text-red-900" data-modal-toggle="delete-team-{{ team.id }}">Delete</button>
+                                                <div id="delete-team-{{ team.id }}" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
+                                                    <div class="relative w-full h-full max-w-md md:h-auto">
+                                                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 w-fit">
+                                                            <button
+                                                                    type="button"
+                                                                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                                                                    data-modal-hide="delete-team-{{ team.id }}"
+                                                            >
+                                                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                                          clip-rule="evenodd"></path>
+                                                                </svg>
+                                                                <span class="sr-only">Close modal</span>
+                                                            </button>
+                                                            <div class="p-6 text-center">
+                                                                <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                                </svg>
+                                                                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this team: {{ team.name }} ?</h3>
+                                                                <div class="flex justify-around">
+                                                                    <button
+                                                                            data-modal-hide="delete-team-{{ team.id }}"
+                                                                            class="close-modal inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2
+                                                                            text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500
+                                                                            focus:ring-offset-2 sm:w-auto"
+                                                                    >Close
+                                                                    </button>
+                                                                    <form method="post" action="{% url 'delete_team' team.id %}">
+                                                                        {% csrf_token %}
+                                                                        <button type="submit"
+                                                                                class="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600
+                                                                                    px-4 py-2 text-sm font-medium shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2
+                                                                                    focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto text-white"
+                                                                        >Yes, I'm sure
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="sm:flex sm:items-center">
+                    <div class="sm:flex-auto">
+                        <h2 class="text-lg font-medium text-gray-900">Links</h2>
+                        <p class="mt-2 text-sm text-gray-700">Company Links to display on the home page</p>
+                    </div>
+                    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                        <a type="button" href="{% url 'add_link' %}"
+                           class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">Add Link</a>
+                    </div>
+                </div>
+                <div class="mt-8 flex flex-col">
+                    <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                        <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                            <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                                <table class="min-w-full divide-y divide-gray-300">
+                                    <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">URL</th>
+                                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                            <span class="sr-only">Controls</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                    <div id="overlay" class="fixed hidden z-40 w-screen h-screen inset-0 bg-gray-900 bg-opacity-60"></div>
+                                    {% for link in links %}
+                                        <tr>
+                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ link.name }}</td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ link.url }}</td>
+                                            <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                                <form action="{% url 'delete_link' link.pk %}" method="post">
+                                                    {% csrf_token %}
+                                                    <button type="submit"
+                                                            class="text-red-600 hover:text-red-900">
+                                                        Delete
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -233,5 +401,6 @@
                     </div>
                 </div>
             </div>
+        </div>
     </main>
 {% endblock content %}

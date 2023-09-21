@@ -14,6 +14,12 @@
                 <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
                     <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">{{ user.company }} Team</h2>
                 </div>
+                {% if show_links %}
+                    <br>
+                    {% for link in links %}
+                        <a href="{{ link.url }}"><span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-sm font-medium text-indigo-800">{{ link.name }}</span></a>
+                    {% endfor %}
+                {% endif %}
                 {% if show_map %}
                     <div id="map" width="100%" style='height:400px'></div>
                     <script>
@@ -25,28 +31,12 @@
                             zoom: 6,
                             maxZoom: 12,
                         });
+                        map.addControl(new mapboxgl.FullscreenControl());
 
                         map.on('load', () => {
-                            map.addSource('places', {
-                                'type': 'geojson',
-                                'data': {
-                                    'type': 'FeatureCollection',
-                                    'features': [
-                                        {% for lng, lat, team_name in user_points %}
-                                            {
-                                                'type': 'Feature',
-                                                'properties': {
-                                                    'description':
-                                                        '<strong>{{ team_name }}</strong>'
-                                                },
-                                                'geometry': {
-                                                    'type': 'Point',
-                                                    'coordinates': [{{ lng }}, {{ lat }}]
-                                                }
-                                            },
-                                        {% endfor %}
-                                    ]
-                                }
+                            const popup = new mapboxgl.Popup({
+                                closeButton: false,
+                                closeOnClick: false
                             });
                             map.addSource('midpoint', {
                                 'type': 'geojson',
@@ -57,7 +47,7 @@
                                             'type': 'Feature',
                                             'properties': {
                                                 'description':
-                                                    '<strong>Company Midpoint ({{ mid_lng|floatformat:4 }}, {{ mid_lat|floatformat:4 }})</strong>'
+                                                    '<strong>Company Midpoint<br>({{ mid_lng|floatformat:4 }}, {{ mid_lat|floatformat:4 }})</strong>'
                                             },
                                             'geometry': {
                                                 'type': 'Point',
@@ -65,18 +55,6 @@
                                             }
                                         },
                                     ]
-                                }
-                            });
-                            // Add a layer showing the places.
-                            map.addLayer({
-                                'id': 'places',
-                                'type': 'circle',
-                                'source': 'places',
-                                'paint': {
-                                    'circle-color': '#4264fb',
-                                    'circle-radius': 6,
-                                    'circle-stroke-width': 2,
-                                    'circle-stroke-color': '#ffffff'
                                 }
                             });
                             map.addLayer({
@@ -87,43 +65,9 @@
                                     'circle-color': '#ff1f1f',
                                     'circle-radius': 6,
                                     'circle-stroke-width': 2,
-                                    'circle-stroke-color': '#ffffff'
+                                    'circle-stroke-color': '#6b6b6b'
                                 }
                             });
-                            map.fitBounds([
-                                {{sw_corner}}, // southwestern corner of the bounds
-                                {{ ne_corner }} // northeastern corner of the bounds
-                            ]);
-
-                            // Create a popup, but don't add it to the map yet.
-                            const popup = new mapboxgl.Popup({
-                                closeButton: false,
-                                closeOnClick: false
-                            });
-
-                            map.on('mouseenter', 'places', (e) => {
-                                map.getCanvas().style.cursor = 'pointer';
-
-                                // Copy coordinates array.
-                                const coordinates = e.features[0].geometry.coordinates.slice();
-                                const description = e.features[0].properties.description;
-
-                                // Ensure that if the map is zoomed out such that multiple
-                                // copies of the feature are visible, the popup appears
-                                // over the copy being pointed to.
-                                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                                }
-
-                                // Populate the popup and set its coordinates// based on the feature found.
-                                popup.setLngLat(coordinates).setHTML(description).addTo(map);
-                            });
-
-                            map.on('mouseleave', 'places', () => {
-                                map.getCanvas().style.cursor = '';
-                                popup.remove();
-                            });
-
                             map.on('mouseenter', 'midpoint', (e) => {
                                 map.getCanvas().style.cursor = 'pointer';
 
@@ -141,30 +85,90 @@
                                 // Populate the popup and set its coordinates// based on the feature found.
                                 popup.setLngLat(coordinates).setHTML(description).addTo(map);
                             });
-
                             map.on('mouseleave', 'midpoint', () => {
                                 map.getCanvas().style.cursor = '';
                                 popup.remove();
                             });
+                            map.fitBounds([
+                                {{sw_corner}}, // southwestern corner of the bounds
+                                {{ ne_corner }} // northeastern corner of the bounds
+                            ]);
+
+                            {% for team_name, color, user_points in map_teams %}
+                                map.addSource('{{ team_name }}', {
+                                    'type': 'geojson',
+                                    'data': {
+                                        'type': 'FeatureCollection',
+                                        'features': [
+                                            {% for lng, lat, name in user_points %}
+                                                {
+                                                    'type': 'Feature',
+                                                    'properties': {
+                                                        'description':
+                                                            '<strong>{{ name | safe }}</strong>'
+                                                    },
+                                                    'geometry': {
+                                                        'type': 'Point',
+                                                        'coordinates': [{{ lng }}, {{ lat }}]
+                                                    }
+                                                },
+                                            {% endfor %}
+                                        ]
+                                    }
+                                });
+                                map.addLayer({
+                                    'id': '{{ team_name }}',
+                                    'type': 'circle',
+                                    'source': '{{ team_name }}',
+                                    'paint': {
+                                        'circle-color': '{{ color }}',
+                                        'circle-radius': 6,
+                                        'circle-stroke-width': 2,
+                                        'circle-stroke-color': '#6b6b6b'
+                                    }
+                                });
+                                map.on('mouseenter', '{{ team_name }}', (e) => {
+                                    map.getCanvas().style.cursor = 'pointer';
+
+                                    // Copy coordinates array.
+                                    const coordinates = e.features[0].geometry.coordinates.slice();
+                                    const description = e.features[0].properties.description;
+
+                                    // Ensure that if the map is zoomed out such that multiple
+                                    // copies of the feature are visible, the popup appears
+                                    // over the copy being pointed to.
+                                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                                    }
+
+                                    // Populate the popup and set its coordinates// based on the feature found.
+                                    popup.setLngLat(coordinates).setHTML(description).addTo(map);
+                                });
+                                map.on('mouseleave', '{{ team_name }}', () => {
+                                    map.getCanvas().style.cursor = '';
+                                    popup.remove();
+                                });
+                            {% endfor %}
                         });
                     </script>
                 {% endif %}
-                <ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:space-y-0 sm:space-b-2 lg:grid-cols-3 lg:gap-x-8">
+                <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {% for company_user in user.company.get_active_users %}
-                        <li class="pt-2">
-                            <div class="space-y-4">
+                        <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
+                            <div class="flex flex-1 flex-col p-8">
                                 <div class="aspect-w-4 aspect-h-3">
-                                    <img class="rounded-lg object-cover shadow-lg" src="{{ company_user.profile_picture_url }}" alt="">
+                                    <img class="aspect-[3/2] w-full object-contain" src="{{ company_user.profile_picture_url }}" alt="">
                                 </div>
 
                                 <div class="space-y-2">
                                     <a href="{% url 'user_profile' company_user.email_prefix %}">
                                         <div class="space-y-1 text-lg font-medium leading-6">
+                                            <br>
                                             <h3>{{ company_user.name }}</h3>
                                             {% if company_user.title %}<p class="text-indigo-600">{{ company_user.title }}</p>{% endif %}
                                         </div>
                                     </a>
-                                    <ul role="list" class="flex space-x-5">
+                                    <ul role="list" class="flex space-x-5 justify-center">
                                         {% if company_user.linkedin %}
                                             <li>
                                                 <a href="https://www.linkedin.com/in/{{ company_user.linkedin }}" class="text-gray-400 hover:text-gray-500">
