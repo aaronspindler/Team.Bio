@@ -72,6 +72,7 @@ class Email(models.Model):
 
     template = models.CharField(max_length=255)
     subject = models.CharField(max_length=255)
+    parameters = models.TextField(blank=True, null=True)
 
     recipient = models.EmailField()
 
