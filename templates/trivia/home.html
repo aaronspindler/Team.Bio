@@ -30,6 +30,9 @@
                                                 <input value="{{option.text}}" name="{{question.pk}}" type="radio" {{question.disabled}} class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                             {% endif %}
                                             <dd class="text-sm font-medium leading-6 text-gray-900">{{option.text}}</dd>
+                                            {% if option.correct and question.disabled %}
+                                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Correct Answer</span>
+                                            {% endif %}
                                         </div>
                                     {% endfor %}
                                 </dl>
