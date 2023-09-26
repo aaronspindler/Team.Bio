@@ -1,3 +1,4 @@
+import json
 import logging
 
 import boto3
@@ -82,10 +83,12 @@ class Email(models.Model):
     text_body = models.TextField(blank=True, null=True)
     html_body = models.TextField(blank=True, null=True)
 
-    def send(self, parameters):
+    def send(self):
         if self.sent:
             logger.warning("Email already sent")
             return False
+
+        parameters = json.loads(self.parameters)
 
         text_body = render_to_string("email/{}.txt".format(self.template), parameters)
         html_body = render_to_string("email/{}.html".format(self.template), parameters)

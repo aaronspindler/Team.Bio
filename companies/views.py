@@ -1,8 +1,9 @@
+import json
 import urllib.parse
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.http import Http404
+from django.http import Http404, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
@@ -60,6 +61,12 @@ def create_company(request):
 
 @login_required
 @is_company_owner
+def bulk_invite(request):
+    pass
+
+
+@login_required
+@is_company_owner
 def invite(request):
     form = InviteForm()
     if request.method == "POST":
@@ -73,20 +80,23 @@ def invite(request):
                 instance.company = request.user.company
                 instance.save()
 
-                # Send an invitation email
-                email = Email.objects.create(
-                    recipient=instance.email,
-                    template="invite",
-                    subject=f"You have been invited by {request.user.name} to join your {request.user.company.name} co-workers on Team Bio",
-                )
                 parameters = {
                     "invite_sender_name": request.user.name,
                     "invite_sender_organization_name": request.user.company.name,
                     "action_url": f"https://www.team.bio{reverse('account_login')}",
                 }
-                email.send(parameters)
-            return redirect("company_settings")
-    return render(request, "companies/invite.html", {"form": form})
+                parameters = json.dumps(parameters)
+
+                # Send an invitation email
+                email = Email.objects.create(
+                    recipient=instance.email,
+                    template="invite",
+                    subject=f"You have been invited by {request.user.name} to join your {request.user.company.name} co-workers on Team Bio",
+                    parameters=parameters,
+                )
+                email.send()
+        return redirect("company_settings")
+    return HttpResponseNotAllowed(["POST"])
 
 
 @login_required
