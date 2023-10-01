@@ -43,7 +43,7 @@ kombu==5.3.2
 multidict==6.0.4
 nodeenv==1.8.0
 oauthlib==3.2.2
-openai==0.27.8
+openai==0.28.1
 packaging==23.1
 Pillow==10.0.0
 pillow-heif==0.13.0
