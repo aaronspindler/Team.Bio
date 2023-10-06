@@ -3,9 +3,7 @@ import logging
 
 import boto3
 from django.conf import settings
-from django.core.mail import send_mail
 from django.db import models
-from django.template.loader import render_to_string
 
 logger = logging.getLogger(__name__)
 
@@ -83,28 +81,9 @@ class Email(models.Model):
     text_body = models.TextField(blank=True, null=True)
     html_body = models.TextField(blank=True, null=True)
 
-    def send(self):
-        if self.sent:
-            logger.warning("Email already sent")
-            return False
-
-        parameters = json.loads(self.parameters)
-
-        text_body = render_to_string("email/{}.txt".format(self.template), parameters)
-        html_body = render_to_string("email/{}.html".format(self.template), parameters)
-
-        emails = [self.recipient]
-
-        send_mail(
-            self.subject,
-            text_body,
-            settings.DEFAULT_FROM_EMAIL,
-            emails,
-            html_message=html_body,
-            fail_silently=True,
-        )
-
-        self.text_body = text_body
-        self.html_body = html_body
-        self.sent = True
+    def set_parameters(self, parameters):
+        self.parameters = json.dumps(parameters)
         self.save()
+
+    def get_parameters(self):
+        return json.loads(self.parameters)

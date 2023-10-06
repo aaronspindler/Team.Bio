@@ -1,4 +1,3 @@
-import json
 import urllib.parse
 
 from django.contrib.auth.decorators import login_required
@@ -23,6 +22,7 @@ from companies.forms import (
 )
 from companies.models import Company, CompanyOwner, Invite, Link, Location, Team
 from utils.models import Email
+from utils.tasks import send_email
 
 
 @login_required
@@ -85,16 +85,15 @@ def invite(request):
                     "invite_sender_organization_name": request.user.company.name,
                     "action_url": f"https://www.team.bio{reverse('account_login')}",
                 }
-                parameters = json.dumps(parameters)
 
                 # Send an invitation email
                 email = Email.objects.create(
                     recipient=instance.email,
                     template="invite",
                     subject=f"You have been invited by {request.user.name} to join your {request.user.company.name} co-workers on Team Bio",
-                    parameters=parameters,
                 )
-                email.send()
+                email.set_parameters(parameters)
+                send_email.delay(email.pk)
         return redirect("company_settings")
     return HttpResponseNotAllowed(["POST"])
 
