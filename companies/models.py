@@ -9,6 +9,7 @@ from django.db.models import Avg
 from django.utils import timezone
 
 from billing.models import PromoCode, StripeCustomer
+from config.storage_backends import PrivateStorage
 
 
 class Company(models.Model):
@@ -206,6 +207,22 @@ class CompanyOwner(models.Model):
         unique_together = ("company", "owner")
         verbose_name = "Company Owner"
         verbose_name_plural = "Company Owners"
+
+
+class BulkInviteRequest(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    company = models.ForeignKey(Company, related_name="bulk_invite_requests", on_delete=models.CASCADE)
+    file = models.FileField(upload_to="bulk_invite_requests/", storage=PrivateStorage())
+    requested_by = models.ForeignKey("accounts.User", related_name="bulk_invite_requests", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.company} {self.file}"
+
+    class Meta:
+        verbose_name = "Bulk Invite Request"
+        verbose_name_plural = "Bulk Invite Requests"
 
 
 class Invite(models.Model):

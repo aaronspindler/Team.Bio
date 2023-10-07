@@ -1,5 +1,6 @@
 import urllib.parse
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import Http404, HttpResponseNotAllowed
@@ -13,6 +14,7 @@ from accounts.models import Pet, User
 from billing.models import PromoCode
 from companies.decorators import is_company_owner
 from companies.forms import (
+    BulkInviteRequestForm,
     CompanyFeatureForm,
     CompanyForm,
     InviteForm,
@@ -62,7 +64,18 @@ def create_company(request):
 @login_required
 @is_company_owner
 def bulk_invite(request):
-    pass
+    form = BulkInviteRequestForm()
+    if request.method == "POST":
+        form = BulkInviteRequestForm(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.company = request.user.company
+            instance.requested_by = request.user
+            instance.save()
+            messages.success(request, "Your bulk invite request has been submitted. We will email you when it has been processed.")
+            return redirect("company_settings")
+
+    return render(request, "companies/bulk_invite.html", {"form": form})
 
 
 @login_required
