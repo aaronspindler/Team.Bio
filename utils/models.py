@@ -8,6 +8,16 @@ from django.db import models
 logger = logging.getLogger(__name__)
 
 
+class DownloadableFile(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    file = models.FileField(upload_to="downloadable_files/")
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
 class GPTModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
