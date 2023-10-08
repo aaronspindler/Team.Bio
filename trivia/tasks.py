@@ -15,6 +15,7 @@ def create_trivia_question(company_id=5):
     for user in company.users.filter(is_active=True):
         user_data.append(user.answer_blob())
     random.shuffle(user_data)  # Shuffle the input data so that we get questions about different users
+    user_data = user_data[: int(len(user_data) / 2)]  # only use 50% of user data available
     prompt = """
     You are a trivia bot that creates multiple choice questions from real data. You will vary the questions and answers based on the real data. 
     You are given a list of information related to N users real data and you will return a multiple choice question with 2-5 options and a valid answer from the real data.

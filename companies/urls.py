@@ -8,6 +8,7 @@ from companies.views import (
     add_location,
     add_pet,
     add_team,
+    bulk_invite,
     company_settings,
     create_company,
     delete_link,
@@ -34,6 +35,7 @@ urlpatterns = [
     path("remove-owner/<str:email_prefix>", remove_owner, name="remove_owner"),
     path("revoke-invite/<str:email>", revoke_invite, name="revoke_invite"),
     path("invite", invite, name="invite"),
+    path("bulk-invite", bulk_invite, name="bulk_invite"),
     # Locations
     path("location/add", add_location, name="add_location"),
     path("location/<str:pk>/delete", delete_location, name="delete_location"),

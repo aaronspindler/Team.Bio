@@ -24,6 +24,10 @@ urlpatterns = [
     path("", include("pages.urls")),
 ]
 
+admin.site.site_header = "Team Bio Admin"
+admin.site.site_title = "Team Bio Admin"
+admin.site.index_title = "Team Bio Admin"
+
 if settings.DEBUG:
     import debug_toolbar
 
