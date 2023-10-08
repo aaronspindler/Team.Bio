@@ -23,6 +23,7 @@ from companies.forms import (
     TeamForm,
 )
 from companies.models import Company, CompanyOwner, Invite, Link, Location, Team
+from companies.tasks import process_bulk_invite_request
 from utils.models import Email
 from utils.tasks import send_email
 
@@ -72,6 +73,7 @@ def bulk_invite(request):
             instance.company = request.user.company
             instance.requested_by = request.user
             instance.save()
+            process_bulk_invite_request.delay(instance.pk)
             messages.success(request, "Your bulk invite request has been submitted. We will email you when it has been processed.")
             return redirect("company_settings")
 
