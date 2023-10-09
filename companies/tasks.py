@@ -21,9 +21,9 @@ def process_bulk_invite_request(bulk_invite_request_pk):
         email = row["Email"]
         # Check if the user exists already, or a pending invite already exists
         # If so, skip this row
-        if User.objects.filter(email=email).exists():
+        if User.objects.filter(email__icontains=email).exists():
             continue
-        if Invite.objects.filter(company=company, email=email).exists():
+        if Invite.objects.filter(company=company, email__icontains=email).exists():
             continue
         if row["Deactivated date (UTC)"] != "":
             continue
