@@ -90,7 +90,7 @@ def invite(request):
             instance = form.save(commit=False)
             email = instance.email.lower()
             # Check if this user already exists as a user or a previous invite
-            if not User.objects.filter(email=email).exists() and not Invite.objects.filter(email=email).exists():
+            if not User.objects.filter(email__icontains=email).exists() and not Invite.objects.filter(email__icontains=email).exists():
                 instance.email = email
                 instance.company = request.user.company
                 instance.save()
@@ -99,6 +99,7 @@ def invite(request):
                     "invite_sender_name": request.user.name,
                     "invite_sender_organization_name": request.user.company.name,
                     "action_url": f"https://www.team.bio{reverse('account_login')}",
+                    "recipient_email": email,
                 }
 
                 # Send an invitation email

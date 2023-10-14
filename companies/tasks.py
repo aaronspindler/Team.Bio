@@ -25,7 +25,7 @@ def process_bulk_invite_request(bulk_invite_request_pk):
         # If so, skip this row
         if User.objects.filter(email__icontains=email).exists():
             continue
-        if Invite.objects.filter(company=company, email__icontains=email).exists():
+        if Invite.objects.filter(email__icontains=email).exists():
             continue
         if row["Deactivated date (UTC)"] != "":
             continue
@@ -38,6 +38,7 @@ def process_bulk_invite_request(bulk_invite_request_pk):
             "invite_sender_name": requester.name,
             "invite_sender_organization_name": company.name,
             "action_url": f"https://www.team.bio{reverse('account_login')}",
+            "recipient_name": row["Name"],
         }
 
         # Send an invitation email
