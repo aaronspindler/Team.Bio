@@ -2,7 +2,8 @@ from colorfield.fields import ColorField
 from django import forms
 from django.forms import ModelForm
 
-from companies.models import Company, Invite, Link, Location, Team
+from companies.models import BulkInviteRequest, Company, Invite, Link, Location, Team
+from utils.constants import FILE_FIELD_CLASS
 
 
 class CompanyForm(ModelForm):
@@ -73,6 +74,22 @@ class InviteForm(ModelForm):
     class Meta:
         model = Invite
         fields = ["email"]
+
+
+class BulkInviteRequestForm(ModelForm):
+    file = forms.FileField(required=True, label="File", allow_empty_file=False)
+
+    class Meta:
+        model = BulkInviteRequest
+        fields = ["file"]
+
+    def __init__(self, *args, **kwargs):
+        super(BulkInviteRequestForm, self).__init__(*args, **kwargs)
+        self.fields["file"].widget.attrs.update(
+            {
+                "class": FILE_FIELD_CLASS,
+            }
+        )
 
 
 class LocationForm(ModelForm):

@@ -1,6 +1,14 @@
 from django.contrib import admin
 
-from companies.models import Company, CompanyOwner, Invite, Link, Location, Team
+from companies.models import (
+    BulkInviteRequest,
+    Company,
+    CompanyOwner,
+    Invite,
+    Link,
+    Location,
+    Team,
+)
 
 
 @admin.register(Company)
@@ -39,3 +47,10 @@ class LinkAdmin(admin.ModelAdmin):
     list_display = ["company", "name"]
     list_filter = ["company"]
     model = Link
+
+
+@admin.register(BulkInviteRequest)
+class BulkInviteRequestAdmin(admin.ModelAdmin):
+    list_display = ["company", "created", "file", "processed"]
+    list_filter = ["company"]
+    model = BulkInviteRequest

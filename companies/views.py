@@ -1,6 +1,6 @@
-import json
 import urllib.parse
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import Http404, HttpResponseNotAllowed
@@ -14,6 +14,7 @@ from accounts.models import Pet, User
 from billing.models import PromoCode
 from companies.decorators import is_company_owner
 from companies.forms import (
+    BulkInviteRequestForm,
     CompanyFeatureForm,
     CompanyForm,
     InviteForm,
@@ -22,7 +23,9 @@ from companies.forms import (
     TeamForm,
 )
 from companies.models import Company, CompanyOwner, Invite, Link, Location, Team
+from companies.tasks import process_bulk_invite_request
 from utils.models import Email
+from utils.tasks import send_email
 
 
 @login_required
@@ -62,7 +65,19 @@ def create_company(request):
 @login_required
 @is_company_owner
 def bulk_invite(request):
-    pass
+    form = BulkInviteRequestForm()
+    if request.method == "POST":
+        form = BulkInviteRequestForm(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.company = request.user.company
+            instance.requested_by = request.user
+            instance.save()
+            process_bulk_invite_request.delay(instance.pk)
+            messages.success(request, "Your bulk invite request has been submitted. We will email you when it has been processed.")
+            return redirect("company_settings")
+
+    return render(request, "companies/bulk_invite.html", {"form": form})
 
 
 @login_required
@@ -75,7 +90,7 @@ def invite(request):
             instance = form.save(commit=False)
             email = instance.email.lower()
             # Check if this user already exists as a user or a previous invite
-            if not User.objects.filter(email=email).exists() and not Invite.objects.filter(email=email).exists():
+            if not User.objects.filter(email__icontains=email).exists() and not Invite.objects.filter(email__icontains=email).exists():
                 instance.email = email
                 instance.company = request.user.company
                 instance.save()
@@ -84,17 +99,17 @@ def invite(request):
                     "invite_sender_name": request.user.name,
                     "invite_sender_organization_name": request.user.company.name,
                     "action_url": f"https://www.team.bio{reverse('account_login')}",
+                    "recipient_email": email,
                 }
-                parameters = json.dumps(parameters)
 
                 # Send an invitation email
                 email = Email.objects.create(
                     recipient=instance.email,
                     template="invite",
                     subject=f"You have been invited by {request.user.name} to join your {request.user.company.name} co-workers on Team Bio",
-                    parameters=parameters,
                 )
-                email.send()
+                email.set_parameters(parameters)
+                send_email.delay(email.pk)
         return redirect("company_settings")
     return HttpResponseNotAllowed(["POST"])
 

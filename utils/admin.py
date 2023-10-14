@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from utils.models import AdminEmail, AdminPhoneNumber, Email, GPTModel, TextMessage
+from utils.models import (
+    AdminEmail,
+    AdminPhoneNumber,
+    DownloadableFile,
+    Email,
+    GPTModel,
+    TextMessage,
+)
 
 
 class EmailAdmin(admin.ModelAdmin):
@@ -26,8 +33,13 @@ class GPTModelAdmin(admin.ModelAdmin):
     list_display = ["name", "primary"]
 
 
+class DownloadableFileAdmin(admin.ModelAdmin):
+    list_display = ["name", "file"]
+
+
 admin.site.register(TextMessage, TextMessageAdmin)
 admin.site.register(Email, EmailAdmin)
 admin.site.register(AdminPhoneNumber)
 admin.site.register(AdminEmail)
 admin.site.register(GPTModel, GPTModelAdmin)
+admin.site.register(DownloadableFile, DownloadableFileAdmin)

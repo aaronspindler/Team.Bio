@@ -1,0 +1,4 @@
+Howdy,
+    <p>Your recent bulk invite request has completed successfully.</p>
+    <p>Cheers,<br>The Team Bio Team</p>
+    <p>Need help? Either reply to this email, or reach out to our fantastic support at support@team.bio</p>
