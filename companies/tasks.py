@@ -1,6 +1,7 @@
 import csv
 from io import StringIO
 
+from celery import shared_task
 from django.urls import reverse
 
 from accounts.models import User
@@ -9,6 +10,7 @@ from utils.models import Email
 from utils.tasks import send_email
 
 
+@shared_task
 def process_bulk_invite_request(bulk_invite_request_pk):
     bulk_invite_request = BulkInviteRequest.objects.get(pk=bulk_invite_request_pk)
     if bulk_invite_request.processed:
