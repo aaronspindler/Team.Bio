@@ -51,6 +51,6 @@ class LinkAdmin(admin.ModelAdmin):
 
 @admin.register(BulkInviteRequest)
 class BulkInviteRequestAdmin(admin.ModelAdmin):
-    list_display = ["company", "created", "file"]
+    list_display = ["company", "created", "file", "processed"]
     list_filter = ["company"]
     model = BulkInviteRequest

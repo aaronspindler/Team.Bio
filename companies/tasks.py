@@ -11,6 +11,8 @@ from utils.tasks import send_email
 
 def process_bulk_invite_request(bulk_invite_request_pk):
     bulk_invite_request = BulkInviteRequest.objects.get(pk=bulk_invite_request_pk)
+    if bulk_invite_request.processed:
+        return False
 
     company = bulk_invite_request.company
     requester = bulk_invite_request.requested_by
@@ -29,7 +31,7 @@ def process_bulk_invite_request(bulk_invite_request_pk):
             continue
 
         # Create a new invite
-        Invite.objects.create(company=company, email=email)
+        # Invite.objects.create(company=company, email=email) # Commented out for testing
 
         # Email the invited user
         parameters = {
@@ -40,7 +42,7 @@ def process_bulk_invite_request(bulk_invite_request_pk):
 
         # Send an invitation email
         email_to_send = Email.objects.create(
-            recipient=email,
+            recipient="aaron@team.bio",  # Change this email after testing
             template="invite",
             subject=f"You have been invited by {requester.name} to join your {company.name} co-workers on Team Bio",
         )
@@ -54,3 +56,6 @@ def process_bulk_invite_request(bulk_invite_request_pk):
         subject=f"Team Bio Bulk Invite Processed Successfully For {company.name}",
     )
     send_email.delay(success_email_to_send.pk)
+
+    bulk_invite_request.processed = True
+    bulk_invite_request.save()

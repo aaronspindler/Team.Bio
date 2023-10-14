@@ -213,6 +213,8 @@ class BulkInviteRequest(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    processed = models.BooleanField(default=False)
+
     company = models.ForeignKey(Company, related_name="bulk_invite_requests", on_delete=models.CASCADE)
     file = models.FileField(upload_to="bulk_invite_requests/", storage=PrivateStorage())
     requested_by = models.ForeignKey("accounts.User", related_name="bulk_invite_requests", on_delete=models.CASCADE)
