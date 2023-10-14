@@ -33,7 +33,7 @@ def process_bulk_invite_request(bulk_invite_request_pk):
             continue
 
         # Create a new invite
-        Invite.objects.create(company=company, email=email)  # Commented out for testing
+        Invite.objects.create(company=company, email=email)
 
         # Email the invited user
         parameters = {
