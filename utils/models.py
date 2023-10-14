@@ -96,4 +96,5 @@ class Email(models.Model):
         self.save()
 
     def get_parameters(self):
-        return json.loads(self.parameters)
+        if self.parameters:
+            return json.loads(self.parameters)
