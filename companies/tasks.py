@@ -33,7 +33,7 @@ def process_bulk_invite_request(bulk_invite_request_pk):
             continue
 
         # Create a new invite
-        # Invite.objects.create(company=company, email=email) # Commented out for testing
+        Invite.objects.create(company=company, email=email)  # Commented out for testing
 
         # Email the invited user
         parameters = {
@@ -45,7 +45,7 @@ def process_bulk_invite_request(bulk_invite_request_pk):
 
         # Send an invitation email
         email_to_send = Email.objects.create(
-            recipient="aaron@team.bio",  # Change this email after testing
+            recipient=email,
             template="invite",
             subject=f"You have been invited by {requester.name} to join your {company.name} co-workers on Team Bio",
         )
