@@ -45,7 +45,7 @@ nodeenv==1.8.0
 oauthlib==3.2.2
 openai==0.28.1
 packaging==23.2
-Pillow==10.0.1
+Pillow==10.1.0
 pillow-heif==0.13.0
 platformdirs==3.10.0
 pre-commit==3.4.0
