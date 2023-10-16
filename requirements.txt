@@ -47,7 +47,7 @@ openai==0.28.1
 packaging==23.2
 Pillow==10.0.1
 pillow-heif==0.13.0
-platformdirs==3.10.0
+platformdirs==3.11.0
 pre-commit==3.4.0
 prompt-toolkit==3.0.39
 psycopg2-binary==2.9.9
