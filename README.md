@@ -5,12 +5,13 @@
 
 ### Local Setup
 
-1. Create virtual env
-2. Install requirements `pip install -r requirements.txt`
+1. Install requirements `pip install poetry`
+2. Install requirements `poetry install`
 3. Hook in pre-commit `pre-commit install`
 4. Copy .env.example to .env and fill in the values
-5. Run `python manage.py migrate`
-6. Run `python manage.py createsuperuser`
+5. run `poetry shell`
+6. Run `python manage.py migrate`
+7. Run `python manage.py createsuperuser`
 
 ### Icons
 
