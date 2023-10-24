@@ -68,7 +68,7 @@ soupsieve==2.5
 sqlparse==0.4.4
 tqdm==4.66.1
 stripe==6.7.0
-tldextract==3.6.0
+tldextract==5.0.1
 types-cryptography==3.3.23.2
 typing_extensions==4.8.0
 tzdata==2023.3
