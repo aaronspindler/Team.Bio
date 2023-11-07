@@ -39,7 +39,7 @@ gunicorn==21.2.0
 identify==2.5.31
 idna==3.4
 jmespath==1.0.1
-kombu==5.3.2
+kombu==5.3.3
 multidict==6.0.4
 nodeenv==1.8.0
 oauthlib==3.2.2
