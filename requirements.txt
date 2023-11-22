@@ -75,6 +75,6 @@ tzdata==2023.3
 urllib3==1.26.18
 vine==5.0.0
 virtualenv==20.24.6
-wcwidth==0.2.8
+wcwidth==0.2.12
 whitenoise==6.6.0
 yarl==1.9.2
