@@ -25,6 +25,8 @@ def create_trivia_question(company_id=5):
     You will be scored based on the quality of the questions and answers you generate.
     Do not use any fake names or information.
     Return only a single question and answer in json format.
+    Be creative with the questions!
+    You can come up with different trivia questions based on the real data.
 
     For example:
         Given the following information:
