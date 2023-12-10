@@ -77,4 +77,4 @@ vine==5.0.0
 virtualenv==20.24.6
 wcwidth==0.2.12
 whitenoise==6.6.0
-yarl==1.9.2
+yarl==1.9.4
