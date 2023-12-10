@@ -1,0 +1,36 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}
+  {{ user.company.name }} Trivia Leaderboard
+{% endblock %}
+
+{% block content %}
+  <div class="bg-white">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div class="space-y-12">
+        <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
+          <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">{{ user.company }} Trivia Leaderboard</h2>
+        </div>
+        <table class="min-w-full divide-y divide-gray-300">
+          <thead>
+            <tr>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Place</th>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">Name</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"># Correct Answers</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 bg-white">
+            {% for row in leaderboard %}
+              <tr>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ forloop.counter }}</td>
+                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">{{ row.name }}</td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ row.correct_answers }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
+from django.db.models import Count, Prefetch
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -37,3 +37,14 @@ def answer_trivia_question(request, question):
         TriviaUserAnswer.objects.create(user=request.user, question=question, selected_option=answer)
         return redirect("trivia_home")
     return HttpResponseNotAllowed(["POST"])
+
+
+@login_required
+def leaderboard(request):
+    leaderboard = TriviaUserAnswer.objects.filter(question__published=True, selected_option__correct=True, question__company=request.user.company).values("user__first_name", "user__last_name").annotate(correct_answers=Count("id")).order_by("-correct_answers")
+
+    results = []
+    for row in leaderboard:
+        results.append({"name": f'{row["user__first_name"]} {row["user__last_name"]}', "correct_answers": row["correct_answers"]})
+
+    return render(request, "trivia/leaderboard.html", {"leaderboard": results})

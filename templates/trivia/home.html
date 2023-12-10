@@ -10,6 +10,8 @@
                 <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
                     <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">{{ user.company }} Trivia</h2>
                 </div>
+                <br>
+                <a href="{% url 'trivia_leaderboard' %}"><span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-sm font-medium text-indigo-800">Leaderboard</span></a>
                 <div class="grid grid-cols-2 gap-4">
                     {% for question in questions %}
                         <form method="POST" action="{% url 'answer_trivia_question' question.pk%}">
