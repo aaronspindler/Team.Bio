@@ -1,6 +1,6 @@
 aiohttp==3.9.1
 aiosignal==1.3.1
-amqp==5.1.1
+amqp==5.2.0
 asgiref==3.7.2
 async-timeout==4.0.3
 attrs==23.1.0
@@ -37,13 +37,13 @@ frozenlist==1.4.0
 googlemaps==4.10.0
 gunicorn==21.2.0
 identify==2.5.31
-idna==3.4
+idna==3.6
 jmespath==1.0.1
 kombu==5.3.4
 multidict==6.0.4
 nodeenv==1.8.0
 oauthlib==3.2.2
-openai==0.28.1
+openai==1.4.0
 packaging==23.2
 Pillow==10.1.0
 pillow-heif==0.14.0
