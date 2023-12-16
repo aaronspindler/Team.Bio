@@ -12,6 +12,10 @@
                 </div>
                 <br>
                 <a href="{% url 'trivia_leaderboard' %}"><span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-sm font-medium text-indigo-800">Leaderboard</span></a>
+                
+                {% if is_company_owner %}
+                    <a href="{% url 'trivia_management' %}"><span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-sm font-medium text-indigo-800">Management</span></a>
+                {% endif %}
                 <div class="grid grid-cols-2 gap-4">
                     {% for question in questions %}
                         <form method="POST" action="{% url 'answer_trivia_question' question.pk%}">
