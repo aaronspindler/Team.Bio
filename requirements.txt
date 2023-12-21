@@ -10,7 +10,7 @@ beautifulsoup4==4.12.2
 billiard==4.2.0
 boto3==1.33.11
 botocore==1.33.11
-celery==5.3.4
+celery==5.3.6
 certifi==2023.7.22
 cffi==1.16.0
 cfgv==3.4.0
@@ -24,9 +24,9 @@ cryptography==41.0.7
 defusedxml==0.7.1
 distlib==0.3.7
 distro==1.8.0
-Django==4.2.7
+Django==4.2.8
 django-allauth==0.58.2
-django-colorfield==0.10.1
+django-colorfield==0.11.0
 django-crispy-forms==1.14.0
 django-debug-toolbar==4.2.0
 django-environ==0.11.2
@@ -56,7 +56,7 @@ Pillow==10.1.0
 pillow-heif==0.14.0
 platformdirs==3.11.0
 pre-commit==3.6.0
-prompt-toolkit==3.0.39
+prompt-toolkit==3.0.43
 psycopg2-binary==2.9.9
 pycparser==2.21
 pydantic==2.5.2
@@ -83,7 +83,7 @@ types-cryptography==3.3.23.2
 typing_extensions==4.9.0
 tzdata==2023.3
 urllib3==1.26.18
-vine==5.0.0
+vine==5.1.0
 virtualenv==20.24.6
 wcwidth==0.2.12
 whitenoise==6.6.0
