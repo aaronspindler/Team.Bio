@@ -9,7 +9,7 @@ from utils.ai import prompt_gpt
 
 
 @shared_task(time_limit=60)
-def create_trivia_question(company_id=5):
+def generate_trivia_question(company_id=5):
     company = Company.objects.get(pk=company_id)
     user_data = []
     for user in company.users.filter(is_active=True):

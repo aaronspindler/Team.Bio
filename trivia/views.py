@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from companies.decorators import is_company_owner
 from trivia.models import TriviaQuestion, TriviaQuestionOption, TriviaUserAnswer
+from trivia.tasks import generate_trivia_question
 
 
 @login_required
@@ -68,3 +69,38 @@ def delete_trivia_question(request, question):
         messages.success(request, "Trivia question was successfully deleted")
         return redirect("trivia_management")
     return HttpResponseNotAllowed(["POST"])
+
+
+@login_required
+@is_company_owner
+def publish_trivia_question(request, question):
+    if request.method == "POST":
+        question = get_object_or_404(TriviaQuestion, id=question, company=request.user.company)
+        question.published = True
+        question.save()
+        messages.success(request, "Trivia question was successfully pubished")
+        return redirect("trivia_management")
+    return HttpResponseNotAllowed(["POST"])
+
+
+@login_required
+@is_company_owner
+def edit_trivia_question(request, question):
+    question = get_object_or_404(TriviaQuestion, id=question, company=request.user.company)
+    if request.method == "POST":
+        pass
+    return render(request, "trivia/edit.html", {"question": question})
+
+
+@login_required
+@is_company_owner
+def create_trivia_question(request):
+    pass
+
+
+@login_required
+@is_company_owner
+def generate_question(request):
+    generate_trivia_question.delay(request.user.company.id)
+    messages.success(request, "Trivia question is being generated, check back soon for your new question!")
+    return redirect("trivia_management")
