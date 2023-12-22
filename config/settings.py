@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_tailwind",
     "colorfield",
+    "django_celery_beat",
     # Local
     "accounts",
     "pages",
