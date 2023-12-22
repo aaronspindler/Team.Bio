@@ -4,12 +4,16 @@ import random
 from celery import shared_task
 
 from companies.models import Company
-from trivia.models import TriviaQuestion, TriviaQuestionOption
+from trivia.models import (
+    TriviaQuestion,
+    TriviaQuestionGenerationRequest,
+    TriviaQuestionOption,
+)
 from utils.ai import prompt_gpt
 
 
 @shared_task(time_limit=60)
-def generate_trivia_question(company_id=5):
+def generate_trivia_question(company_id=5, trivia_question_generation_request_id=None):
     company = Company.objects.get(pk=company_id)
     user_data = []
     for user in company.users.filter(is_active=True):
@@ -134,6 +138,12 @@ def generate_trivia_question(company_id=5):
             if option == answer:
                 correct = True
             TriviaQuestionOption.objects.create(question=question_instance, text=option, correct=correct)
+
+        if trivia_question_generation_request_id:
+            requested_trivia_question = TriviaQuestionGenerationRequest.objects.get(pk=trivia_question_generation_request_id)
+            requested_trivia_question.question = question_instance
+            requested_trivia_question.completed = True
+            requested_trivia_question.save()
 
         print(question_text)
         print(options)

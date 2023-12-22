@@ -44,7 +44,7 @@
                     {% csrf_token %}
                   </form>
                 {% endif %}
-                <a href="{% url 'edit_trivia_question' question.pk %}" class="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Edit</a>
+                {% comment %} <a href="{% url 'edit_trivia_question' question.pk %}" class="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">Edit</a> {% endcomment %}
                 <form action="{% url 'delete_trivia_question' question.pk %}" method="POST">
                   <button type="submit" class="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-red-900 shadow-sm ring-1 ring-inset ring-red-900 hover:bg-gray-50 sm:block">Delete</button>
                   {% csrf_token %}

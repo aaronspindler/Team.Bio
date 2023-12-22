@@ -5,7 +5,12 @@ from django.http import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 
 from companies.decorators import is_company_owner
-from trivia.models import TriviaQuestion, TriviaQuestionOption, TriviaUserAnswer
+from trivia.models import (
+    TriviaQuestion,
+    TriviaQuestionGenerationRequest,
+    TriviaQuestionOption,
+    TriviaUserAnswer,
+)
 from trivia.tasks import generate_trivia_question
 
 
@@ -101,6 +106,13 @@ def create_trivia_question(request):
 @login_required
 @is_company_owner
 def generate_question(request):
-    generate_trivia_question.delay(request.user.company.id)
-    messages.success(request, "Trivia question is being generated, check back soon for your new question!")
-    return redirect("trivia_management")
+    if request.method == "POST":
+        print(request.user.company.has_recently_generated_trivia_question())
+        if request.user.company.has_recently_generated_trivia_question():
+            messages.error(request, "You have already generated a question recently, please wait a few minutes before generating another question")
+        else:
+            trivia_question_request = TriviaQuestionGenerationRequest.objects.create(company=request.user.company, requested_by=request.user)
+            generate_trivia_question.delay(request.user.company.id, trivia_question_request.id)
+            messages.success(request, "Trivia question is being generated, check back soon for your new question!")
+        return redirect("trivia_management")
+    return HttpResponseNotAllowed(["POST"])

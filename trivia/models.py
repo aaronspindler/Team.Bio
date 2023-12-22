@@ -1,6 +1,24 @@
 from django.db import models
 
 
+class TriviaQuestionGenerationRequest(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    company = models.ForeignKey("companies.Company", related_name="trivia_generation_requests", on_delete=models.CASCADE)
+    requested_by = models.ForeignKey("accounts.User", related_name="trivia_generation_requests", on_delete=models.CASCADE)
+    question = models.ForeignKey("trivia.TriviaQuestion", related_name="generation_requests", on_delete=models.SET_NULL, null=True, blank=True)
+
+    completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.company} - {self.requested_by}"
+
+    class Meta:
+        verbose_name = "Trivia Question Generation Request"
+        verbose_name_plural = "Trivia Question Generation Requests"
+
+
 class TriviaQuestion(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
