@@ -47,8 +47,8 @@ class Company(models.Model):
         super().save(*args, **kwargs)
 
     def has_recently_generated_trivia_question(self):
-        recent_trivia_questions = self.trivia_generation_requests.filter(created__gte=timezone.now() - timedelta(minutes=5))
-        return recent_trivia_questions.exists()
+        recent_trivia_questions = self.trivia_generation_requests.filter(completed=True, created__gte=timezone.now() - timedelta(minutes=5))
+        return recent_trivia_questions.count() >= 3
 
     def should_show_map(self):
         return self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False).exists() and self.map_enabled

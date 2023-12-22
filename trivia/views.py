@@ -61,7 +61,7 @@ def leaderboard(request):
 @login_required
 @is_company_owner
 def management(request):
-    questions = TriviaQuestion.objects.filter(company=request.user.company).order_by("-created", "-published")
+    questions = TriviaQuestion.objects.filter(company=request.user.company).prefetch_related("question_option").order_by("-created", "-published")
     return render(request, "trivia/management.html", {"questions": questions})
 
 
@@ -107,7 +107,6 @@ def create_trivia_question(request):
 @is_company_owner
 def generate_question(request):
     if request.method == "POST":
-        print(request.user.company.has_recently_generated_trivia_question())
         if request.user.company.has_recently_generated_trivia_question():
             messages.error(request, "You have already generated a question recently, please wait a few minutes before generating another question")
         else:

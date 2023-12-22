@@ -35,7 +35,16 @@
                   {% else %}
                     <p class="rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset text-yellow-700 bg-yellow-50 ring-yellow-600/20">Draft</p>
                   {% endif %}
+                  
                 </div>
+                {% for option in question.question_option.all %}
+                    <p class="text-sm leading-5 text-gray-500">
+                      {{ option.text }}
+                      {% if option.correct %}
+                        <span class="rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset text-green-700 bg-green-50 ring-green-600/20">Answer</span>
+                      {% endif %}
+                    </p>
+                  {% endfor %}
               </div>
               <div class="flex flex-none items-center gap-x-4">
                 {% if not question.published %}
