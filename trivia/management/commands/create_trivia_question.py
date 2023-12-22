@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand
 
-from trivia.tasks import create_trivia_question
+from trivia.tasks import generate_trivia_question
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        create_trivia_question()
+        generate_trivia_question()

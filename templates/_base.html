@@ -58,7 +58,7 @@
                             {% if user.company.trivia_enabled %}<a href="{% url 'trivia_home' %}" class="text-base font-medium text-white hover:text-indigo-50">Trivia</a>{% endif %}
                             <a href="{% url 'company_pets' %}" class="text-base font-medium text-white hover:text-indigo-50">Pets</a>
 
-                            {% if user.pk in user.company.get_owners %}
+                            {% if is_company_owner %}
                                 <a href="{% url 'company_settings' %}" class="text-base font-medium text-white hover:text-indigo-50">Settings</a>
                             {% endif %}
 
@@ -90,7 +90,7 @@
                     <a href="{% url 'company_home' %}" class="text-base font-medium text-white hover:text-indigo-50">Home</a>
                     {% if user.company.trivia_enabled %}<a href="{% url 'trivia_home' %}" class="text-base font-medium text-white hover:text-indigo-50">Trivia</a>{% endif %}
                     <a href="{% url 'company_pets' %}" class="text-base font-medium text-white hover:text-indigo-50">Pets</a>
-                    {% if user in user.company.get_owners %}
+                    {% if is_company_owner %}
                         <a href="{% url 'company_settings' %}" class="text-base font-medium text-white hover:text-indigo-50">Settings</a>
                     {% endif %}
                     {% if user.is_superuser %}

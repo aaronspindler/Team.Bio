@@ -1,6 +1,11 @@
 from django.contrib import admin
 
-from trivia.models import TriviaQuestion, TriviaQuestionOption, TriviaUserAnswer
+from trivia.models import (
+    TriviaQuestion,
+    TriviaQuestionGenerationRequest,
+    TriviaQuestionOption,
+    TriviaUserAnswer,
+)
 
 
 @admin.register(TriviaQuestion)
@@ -28,3 +33,10 @@ class TriviaUserAnswerAdmin(admin.ModelAdmin):
     list_display = ["user", "question", "selected_option"]
     list_filter = ["question", "question__company"]
     model = TriviaUserAnswer
+
+
+@admin.register(TriviaQuestionGenerationRequest)
+class TriviaQuestionGenerationRequestAdmin(admin.ModelAdmin):
+    list_display = ["company", "requested_by", "completed"]
+    list_filter = ["company", "requested_by", "completed"]
+    model = TriviaQuestionGenerationRequest

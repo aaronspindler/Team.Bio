@@ -247,8 +247,6 @@ class User(AbstractUser):
             self.title,
             self.profile_picture,
             self.short_bio,
-            self.general_location,
-            self.team,
             self.personality_type,
             self.zodiac_sign,
             self.chinese_zodiac,

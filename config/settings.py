@@ -107,6 +107,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "config.context_processors.export_required_vars",
+                "companies.context_processors.is_company_owner",
             ],
         },
     },

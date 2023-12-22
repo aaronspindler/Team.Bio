@@ -1,0 +1,63 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}
+  Trivia Management - Editing Question
+{% endblock %}
+
+{% block content %}
+  <div class="bg-white py-8">
+    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div class="space-y-12">
+        <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
+          <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">Trivia Management - Editing Question</h2>
+          <form action="{% url 'edit_trivia_question' question.pk %}" method="POST" class="space-y-4">
+            {% csrf_token %}
+            <p class="text-xl text-gray-500">Question</p>
+            <textarea id="question" name="question" rows="4" cols="50" class="form-input rounded-md shadow-sm mt-1 block w-full" placeholder="Question">{{ question.question }}</textarea>
+            <div class="flex items-center gap-x-2 mt-4">
+              <input type="text" name="answer" class="form-input rounded-md shadow-sm mt-1 block w-full" placeholder="Answer" />
+              <button type="submit" class="rounded-md bg-blue-500 text-white px-2 py-1 text-xs font-semibold shadow-sm hover:bg-blue-600">Add Answer</button>
+            </div>
+            <div class="flex items-center mt-8">
+              <table class="w-full table-auto">
+                <thead>
+                  <tr>
+                    <th class="px-4 py-2">Answer</th>
+                    <th class="px-4 py-2">Correct</th>
+                    <th class="px-4 py-2">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for option in question.question_option.all %}
+                    <tr>
+                      <td class="border px-4 py-2">
+                        <input type="text" name="answer" class="form-input rounded-md shadow-sm mt-1 block w-full" value="{{ option.text }}" />
+                      </td>
+                      <td class="border px-4 py-2">
+                        <form action="#" method="POST">
+                          {% csrf_token %}
+                          <label class="inline-flex items-center">
+                            <input type="checkbox" name="correct" class="form-checkbox rounded-md shadow-sm mt-1 block" />
+                            <span class="ml-2">Correct Answer</span>
+                          </label>
+                        </form>
+                      </td>
+                      <td class="border px-4 py-2">
+                        <form action="#" method="POST">
+                          {% csrf_token %}
+                          <button type="submit" class="rounded-md bg-red-500 text-white px-4 py-2 text-sm font-semibold shadow-sm hover:bg-red-600">Delete</button>
+                        </form>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <button type="submit" class="mt-2 rounded-md bg-blue-500 text-white px-4 py-2 text-sm font-semibold shadow-sm hover:bg-blue-600">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

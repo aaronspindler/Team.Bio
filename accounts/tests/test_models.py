@@ -145,10 +145,10 @@ class TestModels(BaseTestCase):
         user.short_bio = None
         user.title = None
         user.save()
-        self.assertEqual(user.profile_completion_percentage(), 32)
+        self.assertEqual(user.profile_completion_percentage(), 40)
         user.title = "CEO"
         user.save()
-        self.assertEqual(user.profile_completion_percentage(), 36)
+        self.assertEqual(user.profile_completion_percentage(), 45)
         user.short_bio = "I am a CEO"
         user.save()
-        self.assertEqual(user.profile_completion_percentage(), 40)
+        self.assertEqual(user.profile_completion_percentage(), 50)
