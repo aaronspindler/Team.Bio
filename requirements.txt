@@ -40,7 +40,7 @@ exceptiongroup==1.2.0
 factory-boy==3.3.0
 Faker==20.1.0
 filelock==3.13.1
-frozenlist==1.4.0
+frozenlist==1.4.1
 googlemaps==4.10.0
 gunicorn==21.2.0
 h11==0.14.0
