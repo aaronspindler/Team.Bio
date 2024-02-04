@@ -50,7 +50,7 @@ identify==2.5.33
 idna==3.6
 jmespath==1.0.1
 kombu==5.3.4
-multidict==6.0.4
+multidict==6.0.5
 nodeenv==1.8.0
 oauthlib==3.2.2
 openai==0.28.0
