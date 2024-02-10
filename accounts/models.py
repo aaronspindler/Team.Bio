@@ -126,6 +126,8 @@ class User(AbstractUser):
     favourite_food = models.TextField(blank=True, null=True)
     favourite_movie = models.TextField(blank=True, null=True)
     favourite_travel_destination = models.TextField(blank=True, null=True)
+    favourite_quote = models.TextField(blank=True, null=True)
+    favourite_quote_author = models.CharField(max_length=240, blank=True, null=True)
     
     pet_peeves = models.TextField(blank=True, null=True)
 
