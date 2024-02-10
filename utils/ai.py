@@ -1,9 +1,11 @@
-import openai
+from openai import OpenAI
 from django.conf import settings
 
 from utils.models import GPTModel
 
-openai.api_key = settings.OPENAI_KEY
+client = OpenAI(
+  api_key=settings.OPENAI_KEY
+)
 
 try:
     DEFAULT_MODEL = GPTModel.objects.get(primary=True).name
@@ -12,19 +14,12 @@ except GPTModel.DoesNotExist:
 
 
 def prompt_gpt(prompt, model=DEFAULT_MODEL, temperature=1.4):
-    completion = openai.ChatCompletion.create(
+    completion = client.chat.completions.create(
         model=model,
         messages=[
             {"role": "user", "content": prompt},
         ],
+        response_format={ "type": "json_object" },
         temperature=temperature,
-        stream=True,
     )
-    collected_messages = []
-    for chunk in completion:
-        chunk_message = chunk["choices"][0]["delta"]
-        if chunk_message == {}:
-            break
-        collected_messages.append(chunk_message)
-        print(chunk_message)
-    return "".join([m.get("content", "") for m in collected_messages])
+    return completion.choices[0].message.content
