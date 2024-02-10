@@ -107,13 +107,12 @@ def generate_trivia_question(company_id=5, trivia_question_generation_request_id
     prompt = prompt + str(user_data)
     prompt = prompt + '"""'
     response = prompt_gpt(prompt)
+    response = response.replace("```json", "").replace("```", "")
     try:
         message_json = json.loads(response)
     except Exception as e:
         print(response)
         print(e)
-        cleaned_response = response.replace("```json", "").replace("```", "")
-        message_json = json.loads(cleaned_response)
 
     try:
         question_text = message_json["question"] or None

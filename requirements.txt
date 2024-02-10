@@ -11,7 +11,7 @@ billiard==4.2.0
 boto3
 botocore
 celery==5.3.6
-certifi==2023.11.17
+certifi==2024.2.2
 cffi==1.16.0
 cfgv==3.4.0
 charset-normalizer==3.3.1
@@ -25,7 +25,7 @@ cryptography==42.0.2
 defusedxml==0.7.1
 distlib==0.3.7
 distro==1.8.0
-Django==4.2.9
+Django==4.2.10
 django-allauth==0.59.0
 django-celery-beat==2.5.0
 django-colorfield==0.11.0
@@ -85,7 +85,7 @@ tldextract==5.1.1
 tqdm==4.66.1
 types-cryptography==3.3.23.2
 typing_extensions==4.9.0
-tzdata==2023.3
+tzdata==2023.4
 urllib3==1.26.18
 vine==5.1.0
 virtualenv==20.25.0
