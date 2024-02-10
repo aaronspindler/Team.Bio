@@ -115,6 +115,13 @@ class User(AbstractUser):
         ("Pisces", "Pisces"),
     )
     zodiac_sign = models.CharField(max_length=240, blank=True, null=True, choices=ZODIAC_SIGN_CHOICES)
+    
+    
+    DAY_OR_NIGHT_CHOICES = (
+        ("Early Bird", "Early Bird"),
+        ("Night Owl", "Night Owl"),
+    )
+    day_or_night = models.CharField(max_length=240, blank=True, null=True, choice=DAY_OR_NIGHT_CHOICES)
 
     favourite_food = models.TextField(blank=True, null=True)
     favourite_movie = models.TextField(blank=True, null=True)
