@@ -1,11 +1,9 @@
-from openai import OpenAI
 from django.conf import settings
+from openai import OpenAI
 
 from utils.models import GPTModel
 
-client = OpenAI(
-  api_key=settings.OPENAI_KEY
-)
+client = OpenAI(api_key=settings.OPENAI_KEY)
 
 try:
     DEFAULT_MODEL = GPTModel.objects.get(primary=True).name
@@ -19,7 +17,7 @@ def prompt_gpt(prompt, model=DEFAULT_MODEL, temperature=1.4):
         messages=[
             {"role": "user", "content": prompt},
         ],
-        response_format={ "type": "json_object" },
+        response_format={"type": "json_object"},
         temperature=temperature,
     )
     return completion.choices[0].message.content
