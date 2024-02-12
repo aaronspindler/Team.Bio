@@ -22,7 +22,7 @@ click-repl==0.3.0
 crispy-tailwind==0.5.0
 cryptography==42.0.2
 defusedxml==0.7.1
-distlib==0.3.7
+distlib==0.3.8
 distro==1.8.0
 Django==4.2.10
 django-allauth==0.59.0
