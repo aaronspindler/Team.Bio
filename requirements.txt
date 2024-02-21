@@ -25,7 +25,7 @@ defusedxml==0.7.1
 distlib==0.3.8
 distro==1.8.0
 Django==4.2.10
-django-allauth==0.59.0
+django-allauth==0.61.1
 django-celery-beat==2.5.0
 django-colorfield==0.11.0
 django-crispy-forms==1.14.0
