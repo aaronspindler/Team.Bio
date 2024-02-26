@@ -88,7 +88,7 @@ typing_extensions==4.9.0
 tzdata==2023.4
 urllib3==1.26.18
 vine==5.1.0
-virtualenv==20.25.0
+virtualenv==20.25.1
 wcwidth==0.2.12
 whitenoise==6.6.0
 yarl==1.9.4
