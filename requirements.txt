@@ -86,7 +86,7 @@ tqdm==4.66.2
 types-cryptography==3.3.23.2
 typing_extensions==4.10.0
 tzdata==2024.1
-urllib3==1.26.18
+urllib3==2.2.1
 vine==5.1.0
 virtualenv==20.25.1
 wcwidth==0.2.13
