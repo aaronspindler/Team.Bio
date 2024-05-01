@@ -65,7 +65,7 @@ pydantic==2.5.2
 pydantic_core==2.14.5
 PyJWT==2.8.0
 python-crontab==3.0.0
-python-dateutil==2.8.2
+python-dateutil==2.9.0.post0
 python3-openid==3.2.0
 pytz==2024.1
 PyYAML==6.0.1
