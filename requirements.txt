@@ -37,7 +37,7 @@ django-storages==1.14.2
 django-timezone-field==6.1.0
 exceptiongroup==1.2.0
 factory-boy==3.3.0
-Faker==24.14.1
+Faker==25.3.0
 filelock==3.14.0
 frozenlist==1.4.1
 googlemaps==4.10.0
