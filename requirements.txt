@@ -53,7 +53,7 @@ multidict==6.0.5
 nodeenv==1.8.0
 oauthlib==3.2.2
 openai==1.35.3
-packaging==24.0
+packaging==24.1
 pillow==10.3.0
 pillow-heif==0.16.0
 platformdirs==4.2.2
