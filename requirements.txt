@@ -24,7 +24,7 @@ cryptography==42.0.8
 defusedxml==0.7.1
 distlib==0.3.8
 distro==1.9.0
-Django==4.2.13
+Django==4.2.14
 django-allauth==0.63.3
 django-celery-beat==2.6.0
 django-colorfield==0.11.0
