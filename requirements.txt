@@ -73,7 +73,7 @@ redis==5.0.7
 requests==2.32.3
 requests-file==2.1.0
 requests-oauthlib==2.0.0
-s3transfer==0.10.1
+s3transfer==0.10.2
 sentry-sdk==2.11.0
 setuptools==70.2.0
 six==1.16.0
