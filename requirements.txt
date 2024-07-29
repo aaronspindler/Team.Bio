@@ -57,7 +57,7 @@ packaging==24.1
 pillow==10.3.0
 pillow-heif==0.16.0
 platformdirs==4.2.2
-pre-commit==3.7.1
+pre-commit==3.8.0
 prompt-toolkit==3.0.47
 psycopg2-binary==2.9.9
 pycparser==2.22
