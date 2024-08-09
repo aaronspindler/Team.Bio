@@ -55,7 +55,7 @@ oauthlib==3.2.2
 openai==1.35.3
 packaging==24.1
 pillow==10.3.0
-pillow-heif==0.16.0
+pillow-heif==0.18.0
 platformdirs==4.2.2
 pre-commit==3.8.0
 prompt-toolkit==3.0.47
