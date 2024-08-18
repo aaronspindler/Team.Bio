@@ -59,9 +59,9 @@ class Company(models.Model):
             return 0.0, 0.0
 
         avg_values = users.aggregate(avg_lat=Avg("lat"), avg_lng=Avg("lng"))
-        self.midpoint_lat = avg_values['avg_lat']
-        self.midpoint_lng = avg_values['avg_lng']
-        self.save(update_fields=['midpoint_lat', 'midpoint_lng'])
+        self.midpoint_lat = avg_values["avg_lat"]
+        self.midpoint_lng = avg_values["avg_lng"]
+        self.save(update_fields=["midpoint_lat", "midpoint_lng"])
 
         return self.midpoint_lat, self.midpoint_lng
 
@@ -70,18 +70,13 @@ class Company(models.Model):
         if not users.exists():
             return ([0, 0], [0, 0])
 
-        aggregates = users.aggregate(
-            min_lat=models.Min('lat'),
-            max_lat=models.Max('lat'),
-            min_lng=models.Min('lng'),
-            max_lng=models.Max('lng')
-        )
+        aggregates = users.aggregate(min_lat=models.Min("lat"), max_lat=models.Max("lat"), min_lng=models.Min("lng"), max_lng=models.Max("lng"))
 
         padding = Decimal("0.25")
         for key, value in aggregates.items():
-            setattr(self, key, Decimal(value).quantize(Decimal("0.001")) + (-padding if 'min' in key else padding))
+            setattr(self, key, Decimal(value).quantize(Decimal("0.001")) + (-padding if "min" in key else padding))
 
-        self.save(update_fields=['min_lat', 'max_lat', 'min_lng', 'max_lng'])
+        self.save(update_fields=["min_lat", "max_lat", "min_lng", "max_lng"])
 
         return ([self.min_lng, self.min_lat], [self.max_lng, self.max_lat])
 
@@ -101,13 +96,8 @@ class Company(models.Model):
         for team in teams:
             team_name = team.name if team else "No Team"
             team_color = team.color.lower() if team else "#000000"
-            
-            user_points = self.users.filter(
-                is_active=True, 
-                lat__isnull=False, 
-                lng__isnull=False, 
-                team=team
-            ).values("lng", "lat", "first_name", "last_name", "city", "prov_state")
+
+            user_points = self.users.filter(is_active=True, lat__isnull=False, lng__isnull=False, team=team).values("lng", "lat", "first_name", "last_name", "city", "prov_state")
 
             cleaned_user_points = [
                 [
@@ -117,7 +107,7 @@ class Company(models.Model):
                 ]
                 for user in user_points
             ]
-            
+
             map_teams.append((team_name, team_color, cleaned_user_points))
 
         return {

@@ -20,17 +20,7 @@ def home(request):
     if not company.trivia_enabled:
         return redirect("company_home")
 
-    questions = TriviaQuestion.objects.filter(
-        company=company, 
-        published=True
-    ).prefetch_related(
-        Prefetch("question_option", to_attr="options"),
-        Prefetch(
-            "user_answers",
-            queryset=TriviaUserAnswer.objects.filter(user=request.user),
-            to_attr="user_answer"
-        )
-    ).order_by("-created")
+    questions = TriviaQuestion.objects.filter(company=company, published=True).prefetch_related(Prefetch("question_option", to_attr="options"), Prefetch("user_answers", queryset=TriviaUserAnswer.objects.filter(user=request.user), to_attr="user_answer")).order_by("-created")
 
     for question in questions:
         user_answer = question.user_answer[0] if question.user_answer else None
@@ -60,38 +50,26 @@ def answer_trivia_question(request, question):
 @login_required
 def leaderboard(request):
     # Get all answers for the company
-    all_answers = TriviaUserAnswer.objects.filter(
-        question__published=True,
-        question__company=request.user.company
-    ).values('user__id', 'user__first_name', 'user__last_name', 'selected_option__correct')
+    all_answers = TriviaUserAnswer.objects.filter(question__published=True, question__company=request.user.company).values("user__id", "user__first_name", "user__last_name", "selected_option__correct")
 
     # Calculate total answers and correct answers for each user
     user_stats = {}
     for answer in all_answers:
-        user_id = answer['user__id']
+        user_id = answer["user__id"]
         if user_id not in user_stats:
-            user_stats[user_id] = {
-                'name': f"{answer['user__first_name']} {answer['user__last_name']}",
-                'total_answers': 0,
-                'correct_answers': 0
-            }
-        user_stats[user_id]['total_answers'] += 1
-        if answer['selected_option__correct']:
-            user_stats[user_id]['correct_answers'] += 1
+            user_stats[user_id] = {"name": f"{answer['user__first_name']} {answer['user__last_name']}", "total_answers": 0, "correct_answers": 0}
+        user_stats[user_id]["total_answers"] += 1
+        if answer["selected_option__correct"]:
+            user_stats[user_id]["correct_answers"] += 1
 
     # Calculate accuracy and create results list
     results = []
     for user_id, stats in user_stats.items():
-        accuracy = (stats['correct_answers'] / stats['total_answers']) * 100 if stats['total_answers'] > 0 else 0
-        results.append({
-            'name': stats['name'],
-            'correct_answers': stats['correct_answers'],
-            'total_answers': stats['total_answers'],
-            'accuracy': round(accuracy, 2)
-        })
+        accuracy = (stats["correct_answers"] / stats["total_answers"]) * 100 if stats["total_answers"] > 0 else 0
+        results.append({"name": stats["name"], "correct_answers": stats["correct_answers"], "total_answers": stats["total_answers"], "accuracy": round(accuracy, 2)})
 
     # Sort results by correct answers (descending) and then by accuracy (descending)
-    results.sort(key=lambda x: (-x['correct_answers'], -x['accuracy']))
+    results.sort(key=lambda x: (-x["correct_answers"], -x["accuracy"]))
 
     return render(request, "trivia/leaderboard.html", {"leaderboard": results})
 
