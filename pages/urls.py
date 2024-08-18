@@ -10,10 +10,12 @@ from .views import (
     pricing,
     privacy_policy,
     terms_of_service,
+    faq,
 )
 
 urlpatterns = [
     path("", home, name="home"),
+    path("faq", faq, name="faq"),
     path("blog", blog, name="blog"),
     path("blog/feed", BlogFeed(), name="blog_feed"),
     path("blog/<slug:slug>", blog_post, name="blog_post"),

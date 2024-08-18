@@ -22,10 +22,6 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.css" rel="stylesheet"/>
         <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}
-    <script src="https://cdn.websitepolicies.io/lib/cconsent/cconsent.min.js" defer></script>
-    <script>window.addEventListener("load", function () {
-        window.wpcb.init({"border": "normal", "corners": "normal", "colors": {"popup": {"background": "#f6f6f6", "text": "#000000", "border": "#555555"}, "button": {"background": "#555555", "text": "#ffffff"}}, "content": {"href": "https://www.team.bio/privacy-policy"}, "position": "bottom"})
-    });</script>
 </head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8NMLTSTGZE"></script>
@@ -44,7 +40,7 @@
 <body>
 <script src="https://betteruptime.com/widgets/announcement.js" data-id="158950" async="async" type="text/javascript"></script>
 <main role="main">
-    <header class="bg-indigo-600">
+    <header class="bg-gradient-to-r from-indigo-500 to-purple-600">
         <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
             <div class="flex w-full items-center justify-between border-b border-indigo-500 py-6 lg:border-none">
                 <div class="flex items-center">
@@ -126,13 +122,10 @@
           {% endif %}
     </header>
 </main>
-
-<div class="container">
-    <br>
     {% block content %}
 
     {% endblock content %}
-</div>
+
 
 <footer class="bg-white">
     <div class="mx-auto max-w-7xl overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
@@ -148,6 +141,9 @@
             </div>
             <div class="px-5 py-2">
                 <a href="{% url 'blog' %}" class="text-base text-gray-500 hover:text-gray-900">Blog</a>
+            </div>
+            <div class="px-5 py-2">
+                <a href="{% url 'faq' %}" class="text-base text-gray-500 hover:text-gray-900">FAQ</a>
             </div>
             <div class="px-5 py-2">
                 <a href="{% url 'privacy_policy' %}" class="text-base text-gray-500 hover:text-gray-900">Privacy Policy</a>
