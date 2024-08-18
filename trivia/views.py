@@ -20,11 +20,21 @@ def home(request):
     if not company.trivia_enabled:
         return redirect("company_home")
 
-    user_answers_prefetch = Prefetch("user_answers", queryset=TriviaUserAnswer.objects.filter(user=request.user), to_attr="user_answer")
-    questions = TriviaQuestion.objects.filter(company=company, published=True).prefetch_related(Prefetch("question_option", to_attr="options"), user_answers_prefetch).order_by("-created")
+    questions = TriviaQuestion.objects.filter(
+        company=company, 
+        published=True
+    ).prefetch_related(
+        Prefetch("question_option", to_attr="options"),
+        Prefetch(
+            "user_answers",
+            queryset=TriviaUserAnswer.objects.filter(user=request.user),
+            to_attr="user_answer"
+        )
+    ).order_by("-created")
 
     for question in questions:
-        question.selected_option = question.user_answer[0].selected_option if question.user_answer else None
+        user_answer = question.user_answer[0] if question.user_answer else None
+        question.selected_option = user_answer.selected_option if user_answer else None
         question.disabled = "disabled" if question.selected_option else ""
 
     return render(request, "trivia/home.html", {"questions": questions})
