@@ -10,6 +10,7 @@ def home(request):
         return redirect("company_home")
     return render(request, "pages/home.html")
 
+
 def faq(request):
     price = round(settings.PRICE_PER_USER / 100, 2)
     default_trial_days = settings.DEFAULT_TRIAL_DAYS

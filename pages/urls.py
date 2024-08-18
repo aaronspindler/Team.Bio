@@ -6,11 +6,11 @@ from .views import (
     billing_inactive,
     blog,
     blog_post,
+    faq,
     home,
     pricing,
     privacy_policy,
     terms_of_service,
-    faq,
 )
 
 urlpatterns = [
