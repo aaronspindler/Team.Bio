@@ -59,11 +59,39 @@ def answer_trivia_question(request, question):
 
 @login_required
 def leaderboard(request):
-    leaderboard = TriviaUserAnswer.objects.filter(question__published=True, selected_option__correct=True, question__company=request.user.company).values("user__first_name", "user__last_name").annotate(correct_answers=Count("id")).order_by("-correct_answers")
+    # Get all answers for the company
+    all_answers = TriviaUserAnswer.objects.filter(
+        question__published=True,
+        question__company=request.user.company
+    ).values('user__id', 'user__first_name', 'user__last_name', 'selected_option__correct')
 
+    # Calculate total answers and correct answers for each user
+    user_stats = {}
+    for answer in all_answers:
+        user_id = answer['user__id']
+        if user_id not in user_stats:
+            user_stats[user_id] = {
+                'name': f"{answer['user__first_name']} {answer['user__last_name']}",
+                'total_answers': 0,
+                'correct_answers': 0
+            }
+        user_stats[user_id]['total_answers'] += 1
+        if answer['selected_option__correct']:
+            user_stats[user_id]['correct_answers'] += 1
+
+    # Calculate accuracy and create results list
     results = []
-    for row in leaderboard:
-        results.append({"name": f'{row["user__first_name"]} {row["user__last_name"]}', "correct_answers": row["correct_answers"]})
+    for user_id, stats in user_stats.items():
+        accuracy = (stats['correct_answers'] / stats['total_answers']) * 100 if stats['total_answers'] > 0 else 0
+        results.append({
+            'name': stats['name'],
+            'correct_answers': stats['correct_answers'],
+            'total_answers': stats['total_answers'],
+            'accuracy': round(accuracy, 2)
+        })
+
+    # Sort results by correct answers (descending) and then by accuracy (descending)
+    results.sort(key=lambda x: (-x['correct_answers'], -x['accuracy']))
 
     return render(request, "trivia/leaderboard.html", {"leaderboard": results})
 

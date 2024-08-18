@@ -4,62 +4,89 @@
 {% block title %}{{ user.company.name }} Trivia{% endblock title %}
 
 {% block content %}
-</br>
-    <div class="bg-white">
-        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div class="space-y-12">
-                <div class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
-                    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">{{ user.company }} Trivia</h2>
-                </div>
-                <br>
-                <a href="{% url 'trivia_leaderboard' %}"><span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-sm font-medium text-indigo-800">Leaderboard</span></a>
-                
-                {% if is_company_owner %}
-                    <a href="{% url 'trivia_management' %}"><span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-sm font-medium text-indigo-800">Management</span></a>
-                {% endif %}
-                <div class="grid grid-cols-2 gap-4">
-                    {% for question in questions %}
-                        <form method="POST" action="{% url 'answer_trivia_question' question.pk%}">
+<div class="bg-gray-100 min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+                {{ user.company.name }} Trivia
+            </h1>
+            <p class="mt-5 max-w-xl mx-auto text-xl text-gray-500">
+                Test your knowledge and compete with your colleagues!
+            </p>
+        </div>
+
+        <div class="mt-10 flex justify-center space-x-6">
+            <a href="{% url 'trivia_leaderboard' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Leaderboard
+            </a>
+            {% if is_company_owner %}
+                <a href="{% url 'trivia_management' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Management
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="mt-16 grid gap-8 lg:grid-cols-3">
+            {% for question in questions %}
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-3 py-4 sm:p-5">
+                        <form method="POST" action="{% url 'answer_trivia_question' question.pk %}">
                             {% csrf_token %}
-                            <div class="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
-                                <dl class="flex flex-wrap">
-                                    <div class="flex-auto pl-6 pt-6">
-                                        <dd class="mt-1 text-base font-semibold leading-6 text-gray-900">{{question.question}}</dd>
+                            <h3 class="text-base leading-6 font-medium text-gray-900 mb-3">
+                                {{ question.question }}
+                            </h3>
+                            <div class="mt-3 space-y-3">
+                                {% for option in question.options %}
+                                    <div class="flex items-center">
+                                        <input id="option-{{ question.pk }}-{{ forloop.counter }}" 
+                                               name="{{ question.pk }}" 
+                                               type="radio" 
+                                               value="{{ option.text }}"
+                                               {% if option == question.selected_option %}checked{% endif %}
+                                               {{ question.disabled }}
+                                               class="focus:ring-indigo-500 h-3 w-3 text-indigo-600 border-gray-300">
+                                        <label for="option-{{ question.pk }}-{{ forloop.counter }}" class="ml-2 text-sm text-gray-700">
+                                            {{ option.text }}
+                                        </label>
+                                        {% if option.correct and question.disabled %}
+                                            <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                Correct
+                                            </span>
+                                        {% endif %}
                                     </div>
-                                    <div class="flex-none self-end px-6 pt-4">
-                                        <dd class="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-600/20">{{question.created | timesince}} ago</dd>
-                                    </div>
-                                    {% for option in question.options %}
-                                        <div class="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
-                                            {% if option == question.selected_option %}
-                                                <input checked value="{{option.text}}" name="{{question.pk}}" type="radio" {{question.disabled}} value="" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                            {% else %}
-                                                <input value="{{option.text}}" name="{{question.pk}}" type="radio" {{question.disabled}} class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                                            {% endif %}
-                                            <dd class="text-sm font-medium leading-6 text-gray-900">{{option.text}}</dd>
-                                            {% if option.correct and question.disabled %}
-                                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Correct Answer</span>
-                                            {% endif %}
-                                        </div>
-                                    {% endfor %}
-                                </dl>
-                                    <div class="mt-6 border-t border-gray-900/5 px-6 py-6">
-                                        {%if not question.selected_option %}
-                                            <button type="submit"
-                                                class=" inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                                                Submit
-                                            </button>
-                                        {% else %}
-                                            <p class="text-sm text-gray-500">{{ question.number_of_answers }} team member{{question.number_of_answers | pluralize}} answered this question with {{question.percentage_of_correct_answers}}% accuracy</p>
-                                        {%endif%}             
-                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="mt-4">
+                                {% if not question.selected_option %}
+                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Submit Answer
+                                    </button>
+                                {% else %}
+                                    <p class="text-xs text-gray-500">
+                                        {{ question.number_of_answers }} team member{{ question.number_of_answers|pluralize }} answered this question with {{ question.percentage_of_correct_answers }}% accuracy
+                                    </p>
+                                {% endif %}
                             </div>
                         </form>
-                    {% empty %}
-                        <p class="text-sm text-gray-500">No trivia questions available</p>
-                    {% endfor %}
-                <div class="grid grid-cols-3 gap-4">
-            </div>
+                    </div>
+                    <div class="bg-gray-50 px-3 py-3 sm:px-5">
+                        <div class="text-xs">
+                            <span class="font-medium text-indigo-600 hover:text-indigo-500">
+                                Asked {{ question.created|timesince }} ago
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="text-center col-span-2">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">No trivia questions</h3>
+                    <p class="mt-1 text-sm text-gray-500">Get started by creating a new trivia question.</p>
+                </div>
+            {% endfor %}
         </div>
     </div>
+</div>
 {% endblock content %}
