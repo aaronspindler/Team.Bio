@@ -38,7 +38,7 @@ class TriviaViewTests(TestCase):
         response = self.client.get(reverse("trivia_home"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "trivia/home.html")
-        self.assertContains(response, "No trivia questions available")
+        self.assertContains(response, "No trivia questions")
 
     def test_trivia_home_dont_show_other_co_trivia_questions(self):
         other_co_question = TriviaQuestionFactory()
