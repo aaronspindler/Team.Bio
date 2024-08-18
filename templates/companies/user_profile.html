@@ -161,6 +161,12 @@
                                         <dd class="mt-1 text-sm text-gray-900">{{ company_user.personality_type_name }} ({{ company_user.personality_type }})</dd>
                                     </div>
                                 {% endif %}
+                                {% if company_user.day_or_night %}
+                                    <div class="sm:col-span-1">
+                                        <dt class="text-sm font-medium text-gray-500">Most Energetic Time of Day</dt>
+                                        <dd class="mt-1 text-sm text-gray-900">{{ company_user.day_or_night }}</dd>
+                                    </div>
+                                {% endif %}
                                 {% if company_user.chinese_zodiac %}
                                     <div class="sm:col-span-1">
                                         <dt class="text-sm font-medium text-gray-500">Chinese Zodiac</dt>

@@ -34,29 +34,7 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = [
-            "profile_picture",
-            "short_bio",
-            "first_name",
-            "last_name",
-            "title",
-            "general_location",
-            "team",
-            "personality_type",
-            "linkedin",
-            "twitter",
-            "github",
-            "chinese_zodiac",
-            "zodiac_sign",
-            "favourite_food",
-            "favourite_movie",
-            "favourite_travel_destination",
-            "address_1",
-            "city",
-            "prov_state",
-            "postal_code",
-            "country",
-        ]
+        fields = ["profile_picture", "short_bio", "first_name", "last_name", "title", "general_location", "team", "personality_type", "linkedin", "twitter", "github", "chinese_zodiac", "zodiac_sign", "favourite_food", "favourite_movie", "favourite_travel_destination", "address_1", "city", "prov_state", "postal_code", "country", "day_or_night"]
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop("company")
@@ -138,3 +116,5 @@ class UserProfileForm(forms.ModelForm):
         )
 
         self.fields["profile_picture"].widget.attrs.update({"class": PICTURE_FIELD_CLASS})
+
+        self.fields["day_or_night"].widget.attrs.update({"class": BASIC_FIELD_CLASS})
