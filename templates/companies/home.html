@@ -22,7 +22,7 @@
                     {% endfor %}
                 {% endif %}
                 {% if show_map %}
-                    <div id="map" width="100%" style='height:400px'></div>
+                    <div id="map" width="100%" style='height:400px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);'></div>
                     <script>
                         mapboxgl.accessToken = '{{ api_key }}';
                         const map = new mapboxgl.Map({
@@ -39,142 +39,99 @@
                                 closeButton: false,
                                 closeOnClick: false
                             });
-                            map.addSource('midpoint', {
-                                'type': 'geojson',
-                                'data': {
-                                    'type': 'FeatureCollection',
-                                    'features': [
-                                        {
-                                            'type': 'Feature',
-                                            'properties': {
-                                                'description':
-                                                    '<strong>Company Midpoint<br>({{ mid_lng|floatformat:4 }}, {{ mid_lat|floatformat:4 }})</strong>'
-                                            },
-                                            'geometry': {
-                                                'type': 'Point',
-                                                'coordinates': [{{ mid_lng }}, {{ mid_lat }}]
-                                            }
-                                        },
-                                    ]
-                                }
-                            });
-                            map.addLayer({
-                                'id': 'midpoint',
-                                'type': 'circle',
-                                'source': 'midpoint',
-                                'paint': {
-                                    'circle-color': '#ff1f1f',
-                                    'circle-radius': 6,
-                                    'circle-stroke-width': 2,
-                                    'circle-stroke-color': '#6b6b6b'
-                                }
-                            });
-                            map.on('mouseenter', 'midpoint', (e) => {
-                                map.getCanvas().style.cursor = 'pointer';
 
-                                // Copy coordinates array.
-                                const coordinates = e.features[0].geometry.coordinates.slice();
-                                const description = e.features[0].properties.description;
-
-                                // Ensure that if the map is zoomed out such that multiple
-                                // copies of the feature are visible, the popup appears
-                                // over the copy being pointed to.
-                                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                                }
-
-                                // Populate the popup and set its coordinates// based on the feature found.
-                                popup.setLngLat(coordinates).setHTML(description).addTo(map);
-                            });
-                            map.on('mouseleave', 'midpoint', () => {
-                                map.getCanvas().style.cursor = '';
-                                popup.remove();
-                            });
-                            map.fitBounds([
-                                {{sw_corner}}, // southwestern corner of the bounds
-                                {{ ne_corner }} // northeastern corner of the bounds
-                            ]);
-
-                            {% for team_name, color, user_points in map_teams %}
-                                map.addSource('{{ team_name }}', {
+                            const addPointToMap = (id, color, data) => {
+                                map.addSource(id, {
                                     'type': 'geojson',
                                     'data': {
                                         'type': 'FeatureCollection',
-                                        'features': [
-                                            {% for lng, lat, name in user_points %}
-                                                {
-                                                    'type': 'Feature',
-                                                    'properties': {
-                                                        'description':
-                                                            '<strong>{{ name | safe }}</strong>'
-                                                    },
-                                                    'geometry': {
-                                                        'type': 'Point',
-                                                        'coordinates': [{{ lng }}, {{ lat }}]
-                                                    }
-                                                },
-                                            {% endfor %}
-                                        ]
+                                        'features': data
                                     }
                                 });
                                 map.addLayer({
-                                    'id': '{{ team_name }}',
+                                    'id': id,
                                     'type': 'circle',
-                                    'source': '{{ team_name }}',
+                                    'source': id,
                                     'paint': {
-                                        'circle-color': '{{ color }}',
+                                        'circle-color': color,
                                         'circle-radius': 6,
                                         'circle-stroke-width': 2,
                                         'circle-stroke-color': '#6b6b6b'
                                     }
                                 });
-                                map.on('mouseenter', '{{ team_name }}', (e) => {
+                                map.on('mouseenter', id, (e) => {
                                     map.getCanvas().style.cursor = 'pointer';
-
-                                    // Copy coordinates array.
                                     const coordinates = e.features[0].geometry.coordinates.slice();
                                     const description = e.features[0].properties.description;
-
-                                    // Ensure that if the map is zoomed out such that multiple
-                                    // copies of the feature are visible, the popup appears
-                                    // over the copy being pointed to.
                                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                                         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                                     }
-
-                                    // Populate the popup and set its coordinates// based on the feature found.
                                     popup.setLngLat(coordinates).setHTML(description).addTo(map);
                                 });
-                                map.on('mouseleave', '{{ team_name }}', () => {
+                                map.on('mouseleave', id, () => {
                                     map.getCanvas().style.cursor = '';
                                     popup.remove();
                                 });
+                            };
+
+                            addPointToMap('midpoint', '#ff1f1f', [{
+                                'type': 'Feature',
+                                'properties': {
+                                    'description': '<strong>Company Midpoint<br>({{ mid_lng|floatformat:4 }}, {{ mid_lat|floatformat:4 }})</strong>'
+                                },
+                                'geometry': {
+                                    'type': 'Point',
+                                    'coordinates': [{{ mid_lng }}, {{ mid_lat }}]
+                                }
+                            }]);
+
+                            {% for team_name, color, user_points in map_teams %}
+                                addPointToMap('{{ team_name }}', '{{ color }}', [
+                                    {% for lng, lat, name in user_points %}
+                                        {
+                                            'type': 'Feature',
+                                            'properties': {
+                                                'description': '<strong>{{ name | safe }}</strong>'
+                                            },
+                                            'geometry': {
+                                                'type': 'Point',
+                                                'coordinates': [{{ lng }}, {{ lat }}]
+                                            }
+                                        },
+                                    {% endfor %}
+                                ]);
                             {% endfor %}
+
+                            map.fitBounds([
+                                {{sw_corner}},
+                                {{ ne_corner }}
+                            ]);
                         });
                     </script>
                 {% endif %}
                 <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {% for company_user in user.company.get_active_users %}
-                        <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
+                        <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow hover:shadow-lg transition-shadow duration-300">
                             <div class="flex flex-1 flex-col p-8">
-                                <div class="aspect-w-4 aspect-h-3">
-                                    <img class="aspect-[3/2] w-full object-contain" src="{{ company_user.profile_picture_url }}" alt="">
+                                <div class="aspect-w-4 aspect-h-3 mb-4">
+                                    <a href="{% url 'user_profile' company_user.email_prefix %}">
+                                        <img class="rounded-full w-32 h-32 mx-auto object-cover" src="{{ company_user.profile_picture_url }}" alt="{{ company_user.name }}" loading="lazy">
+                                    </a>
                                 </div>
 
                                 <div class="space-y-2">
-                                    <a href="{% url 'user_profile' company_user.email_prefix %}">
+                                    <a href="{% url 'user_profile' company_user.email_prefix %}" class="hover:text-indigo-600 transition-colors duration-300">
                                         <div class="space-y-1 text-lg font-medium leading-6">
-                                            <br>
-                                            <h3>{{ company_user.name }}</h3>
-                                            {% if company_user.title %}<p class="text-indigo-600">{{ company_user.title }}</p>{% endif %}
+                                            <h3 class="text-xl font-semibold">{{ company_user.name }}</h3>
+                                            {% if company_user.title %}<p class="text-indigo-600 text-sm">{{ company_user.title }}</p>{% endif %}
                                         </div>
                                     </a>
-                                    <ul role="list" class="flex space-x-5 justify-center">
+                                    <ul role="list" class="flex space-x-5 justify-center mt-4">
                                         {% if company_user.linkedin %}
                                             <li>
-                                                <a href="https://www.linkedin.com/in/{{ company_user.linkedin }}" class="text-gray-400 hover:text-gray-500">
+                                                <a href="https://www.linkedin.com/in/{{ company_user.linkedin }}" class="text-gray-400 hover:text-blue-500 transition-colors duration-300">
                                                     <span class="sr-only">LinkedIn</span>
-                                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                                                         <path fill-rule="evenodd"
                                                               d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z"
                                                               clip-rule="evenodd"/>
@@ -184,10 +141,9 @@
                                         {% endif %}
                                         {% if company_user.twitter %}
                                             <li>
-                                                <a href="https://www.twitter.com/{{ company_user.twitter }}/" class="text-gray-400 hover:text-gray-500">
-
+                                                <a href="https://www.twitter.com/{{ company_user.twitter }}/" class="text-gray-400 hover:text-blue-400 transition-colors duration-300">
                                                     <span class="sr-only">Twitter</span>
-                                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                                                         <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84"/>
                                                     </svg>
                                                 </a>
@@ -195,9 +151,9 @@
                                         {% endif %}
                                         {% if company_user.github %}
                                             <li>
-                                                <a href="https://www.github.com/{{ company_user.github }}/" class="text-gray-400 hover:text-gray-500">
+                                                <a href="https://www.github.com/{{ company_user.github }}/" class="text-gray-400 hover:text-gray-900 transition-colors duration-300">
                                                     <span class="sr-only">Github</span>
-                                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                                         <path fill-rule="evenodd"
                                                               d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
                                                               clip-rule="evenodd"/>
