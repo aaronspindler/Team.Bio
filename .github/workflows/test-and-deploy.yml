@@ -97,7 +97,7 @@ jobs:
         with:
           command: c
           cwd: "./"
-          files: "/"
+          files: "/*"
           outPath: deploy.tar
       - name: Deploy celery app
         uses: caprover/deploy-from-github@v1.0.1
