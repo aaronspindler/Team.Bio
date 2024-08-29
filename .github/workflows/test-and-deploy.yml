@@ -94,3 +94,9 @@ jobs:
           server: '${{ secrets.CAPROVER_SERVER }}'
           app: '${{ secrets.CAPROVER_WEB_APP_NAME }}'
           token: '${{ secrets.CAPROVER_WEB_APP_TOKEN }}'
+      - name: Deploy celery app to CapRover
+        uses: caprover/deploy-from-github@v1.0.1
+        with:
+          server: '${{ secrets.CAPROVER_SERVER }}'
+          app: '${{ secrets.CAPROVER_CELERY_APP_NAME }}'
+          token: '${{ secrets.CAPROVER_CELERY_APP_TOKEN }}'
