@@ -88,6 +88,13 @@ jobs:
         uses: joelwmale/webhook-action@master
         with:
           url: ${{ secrets.RENDER_CELERY_DEPLOY_HOOK }}
+      - uses: a7ul/tar-action@v1.1.0
+        with:
+          command: c
+          cwd: "./"
+          files: |
+            /
+          outPath: deploy.tar
       - name: Deploy web app to CapRover
         uses: caprover/deploy-from-github@v1.0.1
         with:
