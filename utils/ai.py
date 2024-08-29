@@ -7,7 +7,7 @@ client = OpenAI(api_key=settings.OPENAI_KEY)
 
 try:
     DEFAULT_MODEL = GPTModel.objects.get(primary=True).name
-except GPTModel.DoesNotExist:
+except Exception:
     DEFAULT_MODEL = "gpt-3.5-turbo-16k"
 
 
