@@ -93,8 +93,6 @@ jobs:
     # needs: [test, lint]
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: ls
-        run: ls -l
       - uses: a7ul/tar-action@v1.1.0
         with:
           command: c
@@ -102,7 +100,9 @@ jobs:
           files: |
             .
           outPath: deploy.tar
-      - name: Install Caprover
-        run: npm install -g caprover
-      - name: Deploy web app CLI
-        run: caprover deploy -h '${{ secrets.CAPROVER_SERVER }}' -a '${{ secrets.CAPROVER_WEB_APP_NAME }}' --appToken '${{ secrets.CAPROVER_WEB_APP_TOKEN }}' -t 'deploy.tar' -c 'captain-definition-web'
+      - name: Deploy celery app
+        uses: caprover/deploy-from-github@v1.0.1
+        with:
+          server: '${{ secrets.CAPROVER_SERVER }}'
+          app: '${{ secrets.CAPROVER_WEB_APP_NAME }}'
+          token: '${{ secrets.CAPROVER_WEB_APP_TOKEN }}'
