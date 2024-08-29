@@ -109,6 +109,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "config.context_processors.export_required_vars",
                 "companies.context_processors.is_company_owner",
+                "django.core.context_processors.csrf",
             ],
         },
     },
