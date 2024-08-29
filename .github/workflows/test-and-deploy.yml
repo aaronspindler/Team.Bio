@@ -103,7 +103,7 @@ jobs:
       - name: Install Caprover
         run: npm install -g caprover
       - name: Deploy web app CLI
-        run: caprover deploy -h '${{ secrets.CAPROVER_SERVER }}' -a '${{ secrets.CAPROVER_WEB_APP_NAME }}' -b 'main' --appToken '${{ secrets.CAPROVER_WEB_APP_TOKEN }}' -t 'deploy.tar'
+        run: caprover deploy -h '${{ secrets.CAPROVER_SERVER }}' -a '${{ secrets.CAPROVER_WEB_APP_NAME }}' --appToken '${{ secrets.CAPROVER_WEB_APP_TOKEN }}' -t 'deploy.tar'
       - name: Deploy celery app
         uses: caprover/deploy-from-github@v1.0.1
         with:
