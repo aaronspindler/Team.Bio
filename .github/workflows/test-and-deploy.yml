@@ -93,6 +93,8 @@ jobs:
     # needs: [test, lint]
     if: github.ref == 'refs/heads/main'
     steps:
+      - name: ls
+        run: ls -l
       - uses: a7ul/tar-action@v1.1.0
         with:
           command: c
