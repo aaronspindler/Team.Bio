@@ -90,7 +90,7 @@ jobs:
           url: ${{ secrets.RENDER_CELERY_DEPLOY_HOOK }}
   deploy-caprover:
     runs-on: ubuntu-latest
-    # needs: [test, lint]
+    needs: [test, lint]
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
