@@ -80,11 +80,17 @@ jobs:
     needs: [test, lint]
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Deploy App Webhook
+      - name: Deploy App Webhook Render
         uses: joelwmale/webhook-action@master
         with:
           url: ${{ secrets.RENDER_APP_DEPLOY_HOOK }}
-      - name: Deploy Celery Webhook
+      - name: Deploy Celery Webhook Render
         uses: joelwmale/webhook-action@master
         with:
           url: ${{ secrets.RENDER_CELERY_DEPLOY_HOOK }}
+      - name: Deploy web app to CapRover
+        uses: caprover/deploy-from-github@v1.0.1
+        with:
+          server: '${{ secrets.CAPROVER_SERVER }}'
+          app: '${{ secrets.CAPROVER_WEB_APP_NAME }}'
+          token: '${{ secrets.CAPROVER_WEB_APP_TOKEN }}'
