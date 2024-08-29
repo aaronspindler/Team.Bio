@@ -93,6 +93,14 @@ jobs:
     # needs: [test, lint]
     if: github.ref == 'refs/heads/main'
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: List all files
+        run: |
+          echo "Listing all files in the repository:"
+          find . -type f
+
       - uses: a7ul/tar-action@v1.1.0
         with:
           command: c
@@ -100,6 +108,7 @@ jobs:
           files: |
             .
           outPath: deploy.tar
+
       - name: Deploy celery app
         uses: caprover/deploy-from-github@v1.0.1
         with:
