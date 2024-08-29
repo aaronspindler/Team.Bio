@@ -40,6 +40,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "team.bio",
     "www.team.bio",
+    "teambio-web.spindlers.dev",
 ]
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if RENDER_EXTERNAL_HOSTNAME:
