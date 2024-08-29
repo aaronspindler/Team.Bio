@@ -11,7 +11,4 @@ COPY ./ /usr/src/app
 
 EXPOSE 80
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
-
 CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]
