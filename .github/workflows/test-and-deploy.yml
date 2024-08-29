@@ -94,13 +94,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: List all files
-        run: |
-          echo "Listing all files in the repository:"
-          find . -type f
-
+        uses: actions/checkout@v3
       - uses: a7ul/tar-action@v1.1.0
         with:
           command: c
@@ -108,10 +102,15 @@ jobs:
           files: |
             .
           outPath: deploy.tar
-
-      - name: Deploy celery app
+      - name: Deploy web app
         uses: caprover/deploy-from-github@v1.0.1
         with:
           server: '${{ secrets.CAPROVER_SERVER }}'
           app: '${{ secrets.CAPROVER_WEB_APP_NAME }}'
           token: '${{ secrets.CAPROVER_WEB_APP_TOKEN }}'
+      - name: Deploy celery app
+        uses: caprover/deploy-from-github@v1.0.1
+        with:
+          server: '${{ secrets.CAPROVER_SERVER }}'
+          app: '${{ secrets.CAPROVER_CELERY_APP_NAME }}'
+          token: '${{ secrets.CAPROVER_CELERY_APP_TOKEN }}'
