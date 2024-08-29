@@ -43,7 +43,7 @@ COPY ./requirements.txt /usr/src/app/
 RUN pip install --no-cache-dir -r requirements.txt
 COPY ./ /usr/src/app
 
-EXPOSE 80
+EXPOSE 8000
 
 RUN python manage.py collectstatic --no-input
 RUN python manage.py migrate --no-input
