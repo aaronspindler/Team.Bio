@@ -185,7 +185,7 @@ AUTH_USER_MODEL = "accounts.User"
 
 CSRF_TRUSTED_ORIGINS = ["https://*.team.bio", "https://*.spindlers.dev"]
 
-SITE_ID = 1
+SITE_ID = 4
 BASE_URL = "https://team.bio/"
 LOGIN_REDIRECT_URL = "company_home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
