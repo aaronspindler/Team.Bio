@@ -242,6 +242,32 @@ MAPBOX_API_KEY = env("MAPBOX_API_KEY")
 # OpenAI
 OPENAI_KEY = env("OPENAI_KEY")
 
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+    },
+}
+
+
 # Unsplash
 try:
     UNSPLASH_ACCESS_KEY = env("UNSPLASH_ACCESS_KEY")
