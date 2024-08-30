@@ -16,3 +16,4 @@ staticfiles/
 node_modules/
 package-lock.json
 .vscode/
+render_db_backup.json
