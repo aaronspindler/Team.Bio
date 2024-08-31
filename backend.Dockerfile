@@ -3,7 +3,6 @@ FROM library/python:3.12.2-alpine
 RUN apk update && apk upgrade && apk add --no-cache make g++ bash git openssh postgresql-dev curl
 
 # Define build-time arguments
-ARG PYTHON_VERSION
 ARG DATABASE_URL
 ARG REDIS_URL
 ARG DEBUG
@@ -20,7 +19,6 @@ ARG STRIPE_PRICE_ID
 ARG STRIPE_ENDPOINT_SECRET
 
 # Set environment variables
-ENV PYTHON_VERSION=${PYTHON_VERSION}
 ENV DATABASE_URL=${DATABASE_URL}
 ENV REDIS_URL=${REDIS_URL}
 ENV DEBUG=${DEBUG}
